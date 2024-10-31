@@ -799,6 +799,6 @@ const job = new CronJob('*/5 * * * *', async () => {
 });
 
 // Start the job
-job.start();
+// job.start();
 
 app.listen(4000, console.log(4000))
