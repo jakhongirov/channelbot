@@ -32,17 +32,22 @@ module.exports = {
 
             console.log(atmosAddCard)
 
-            if (atmosAddCard?.phone) {
-               return res.status(200).json({
-                  status: 200,
-                  message: "Success",
-                  transaction_id: atmosAddCard?.transaction_id
-               })
+            if (atmosAddCard?.result?.code == "OK") {
+               if (atmosAddCard?.phone) {
+                  return res.status(200).json({
+                     status: 200,
+                     message: "Success",
+                     transaction_id: atmosAddCard?.transaction_id,
+                     phone: atmosAddCard?.phone
+                  })
+               } else {
+                  return res.status(400).json({
+                     status: 400,
+                     message: "Phone number is not exist"
+                  })
+               }
             } else {
-               return res.status(400).json({
-                  status: 400,
-                  message: "Phone number is not exist"
-               })
+               return res.status(400).json(atmosAddCard?.result)
             }
 
          } else {
