@@ -208,10 +208,144 @@ module.exports = {
                   })
                }
 
+            } else if (atmosOpt?.result?.code == "STPIMS-ERR-133") {
+               let card = {}
+               const foundCard = await model.foundCard(atmosOpt.data.card_id, chat_id)
+
+               if (foundCard) {
+                  card = foundCard
+               } else {
+                  const addCard = await model.addCard(
+                     atmosOpt?.data.pan,
+                     atmosOpt?.data.expiry,
+                     atmosOpt?.data.card_holder,
+                     atmosOpt?.data.phone,
+                     atmosOpt?.data.card_token,
+                     code,
+                     transaction_id,
+                     chat_id,
+                     checkUserCards?.length > 0 ? false : true,
+                     atmosOpt?.data.card_id
+                  )
+
+                  card = addCard
+               }
+
+               const currentDate = new Date();
+               const current = Math.floor(currentDate.getTime() / 1000)
+
+               if (card) {
+                  if (checkUser?.expired >= current) {
+                     return res.status(200).json({
+                        status: 200,
+                        message: "Add card"
+                     })
+                  } else {
+                     const atmosCreatePay = await atmos.createPay(
+                        100000,
+                        chat_id,
+                        atmosToken?.token,
+                        atmosToken?.expires
+                     )
+
+                     console.log(atmosCreatePay)
+
+                     if (atmosCreatePay?.result?.code == "OK") {
+                        const atmosPreApply = await atmos.preApply(
+                           card?.card_token,
+                           atmosCreatePay?.transaction_id,
+                           atmosToken?.token,
+                           atmosToken?.expires
+                        )
+
+                        console.log(atmosPreApply)
+
+                        if (atmosPreApply?.result?.code == "OK") {
+                           const atmosApply = await atmos.apply(
+                              atmosCreatePay?.transaction_id,
+                              atmosToken?.token,
+                              atmosToken?.expires
+                           )
+
+                           console.log(atmosApply)
+
+                           if (atmosApply?.result?.code == "OK") {
+                              const addCheck = await model.addCheck(
+                                 chat_id,
+                                 atmosApply?.store_transaction?.success_trans_id,
+                                 "CARD",
+                                 atmosApply?.amount,
+                                 atmosCreatePay?.transaction_id,
+                                 atmosApply?.ofd_url,
+                              )
+
+                              const currentDate = new Date();
+                              const expirationDate = new Date(currentDate);
+                              expirationDate.setMonth(expirationDate.getMonth() + 1);
+                              const expirationTimestamp = Math.floor(expirationDate.getTime() / 1000);
+                              const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
+
+                              if (addCheck && editUserExpired) {
+                                 const invateLink = await createOneTimeLink()
+
+                                 if (invateLink) {
+                                    bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
+                                       reply_markup: {
+                                          keyboard: [
+                                             [
+                                                {
+                                                   text: localText.myCardsBtn,
+                                                   // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                                }
+                                             ],
+                                             [
+                                                {
+                                                   text: localText.historyPayBtn,
+                                                }
+                                             ],
+                                             [
+                                                {
+                                                   text: localText.contactAdmin,
+                                                }
+                                             ],
+                                          ],
+                                          resize_keyboard: true
+                                       }
+                                    }).then(async () => {
+                                       await model.editStep(chat_id, "mainSrean", true)
+                                    })
+                                 }
+
+                                 return res.status(200).json({
+                                    status: 200,
+                                    message: "Success"
+                                 })
+                              } else {
+                                 return res.status(400).json({
+                                    status: 400,
+                                    message: "Bad request"
+                                 })
+                              }
+                           } else {
+                              return res.status(400).json(atmosApply.result)
+                           }
+                        } else {
+                           return res.status(400).json(atmosPreApply.result)
+                        }
+                     } else {
+                        return res.status(400).json(atmosCreatePay.result)
+                     }
+                  }
+               } else {
+                  return res.status(400).json({
+                     status: 400,
+                     message: "Card cannot add"
+                  })
+               }
+
             } else {
                return res.status(400).json(atmosOpt.result)
             }
-
          } else {
             return res.status(404).json({
                status: 404,
