@@ -80,6 +80,8 @@ module.exports = {
                atmosToken?.expires
             )
 
+            console.log(atmosOpt)
+
             if (atmosOpt?.result?.code == "OK") {
                const checkUserCards = await model.checkUserCards(chat_id)
                const addCard = await model.addCard(
@@ -111,6 +113,8 @@ module.exports = {
                         atmosToken?.expires
                      )
 
+                     console.log(atmosCreatePay)
+
                      if (atmosCreatePay?.result?.code == "OK") {
                         const atmosPreApply = await atmos.preApply(
                            addCard?.card_token,
@@ -119,12 +123,16 @@ module.exports = {
                            atmosToken?.expires
                         )
 
+                        console.log(atmosPreApply)
+
                         if (atmosPreApply?.result?.code == "OK") {
                            const atmosApply = await atmos.apply(
                               atmosCreatePay?.transaction_id,
                               atmosToken?.token,
                               atmosToken?.expires
                            )
+
+                           console.log(atmosApply)
 
                            if (atmosApply?.result?.code == "OK") {
                               const addCheck = await model.addCheck(
