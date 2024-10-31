@@ -155,20 +155,19 @@ bot.on("callback_query", async (msg) => {
             reply_markup: {
                inline_keyboard: [
                   [{
+
                      text: localText.makeMainCardBtn,
                      callback_data: `main_card_${cardId}`
                   }],
                   [{
                      text: localText.deleteCardBtn,
                      callback_data: `delete_card_${cardId}`
-                  }]
-               ],
-               keyboard: [
+                  }],
                   [{
-                     text: localText.backBtn
+                     text: localText.backBtn,
+                     callback_data: `cancel_delete_card`
                   }]
-               ],
-               resize_keyboard: true
+               ]
             }
          }).then(async () => {
             await model.editStep(chatId, 'infoCard')
@@ -225,14 +224,8 @@ bot.on("callback_query", async (msg) => {
                   [{
                      text: localText.cancellationBtn,
                      callback_data: `cancel_delete_card`
-                  }]
-               ],
-               keyboard: [
-                  [{
-                     text: localText.backBtn
-                  }]
-               ],
-               resize_keyboard: true
+                  }],
+               ]
             }
          }).then(async () => {
             await model.editStep(chatId, 'askingDeleteCard')
@@ -406,7 +399,8 @@ bot.on('message', async (msg) => {
                [{
                   text: localText.backBtn,
                }]
-            ]
+            ],
+            resize_keyboard: true
          }
       }).then(async () => {
          await model.editStep(chatId, 'contactAdmin');
@@ -530,7 +524,8 @@ bot.on('message', async (msg) => {
                      [{
                         text: localText.backBtn
                      }]
-                  ]
+                  ],
+                  resize_keyboard: true
                }
             }), then(async () => {
                await model.editStep(chatId, 'historyPayment');
@@ -599,7 +594,8 @@ bot.on('message', async (msg) => {
                   [{
                      text: localText.backBtn
                   }]
-               ]
+               ],
+               resize_keyboard: true
             }
          }).then(async () => {
             await model.editStep(chatId, 'historyPayment');
@@ -617,7 +613,8 @@ bot.on('message', async (msg) => {
                   [{
                      text: localText.backBtn
                   }]
-               ]
+               ],
+               resize_keyboard: true
             }
          }).then(async () => {
             await model.editStep(chatId, 'historyPayment');
@@ -656,7 +653,8 @@ bot.on('message', async (msg) => {
                   [{
                      text: localText.contactAdmin,
                   }]
-               ]
+               ],
+               resize_keyboard: true
             }
          }).then(async () => {
             await model.editStep(chatId, "offDuration")
