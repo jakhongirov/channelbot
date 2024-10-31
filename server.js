@@ -109,7 +109,7 @@ bot.on('chat_join_request', async (msg) => {
             [{
                text: localText.agree,
                callback_data: "agreement",
-               url: 'https://t.me/botbotobtobt_bot?start'
+               url: 'https://t.me/botbotobtobt_bot?start=join_group'
             }],
          ],
       }
