@@ -26,14 +26,14 @@ CREATE TABLE cards (
    card_holder text,
    transaction_id int,
    main boolean DEFAULT false,
-   user_id int REFERENCES users(chat_id) ON DELETE CASCADE,
+   user_id bigint REFERENCES users(chat_id) ON DELETE CASCADE,
    active boolean DEFAULT true,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE checks (
    id bigserial PRIMARY KEY,
-   user_id int REFERENCES users(chat_id) ON DELETE CASCADE,
+   user_id bigint REFERENCES users(chat_id) ON DELETE CASCADE,
    success_trans_id text,
    method text,
    amount text,
