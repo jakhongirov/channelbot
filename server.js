@@ -43,7 +43,7 @@ bot.onText(/\/start/, async (msg) => {
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
 
-   if (!foundUser || usersCard?.length == 0) {
+   if (!foundUser) {
       bot.sendMessage(chatId, localText?.startText, {
          reply_markup: {
             inline_keyboard: [
@@ -65,6 +65,21 @@ bot.onText(/\/start/, async (msg) => {
             chatId,
             "start"
          )
+      }).catch(e => console.log(e))
+   } else if (usersCard?.length == 0 && foundUser) {
+      bot.sendMessage(chatId, localText.sendContact, {
+         reply_markup: {
+            keyboard: [
+               [{
+                  text: localText.sendContact,
+                  request_contact: true,
+                  one_time_keyboard: true
+               }]
+            ],
+            resize_keyboard: true
+         }
+      }).then(async () => {
+         await model.editStep(chatId, 'register')
       }).catch(e => console.log(e))
    } else {
       bot.sendMessage(chatId, localText.mainScreen, {
