@@ -5,7 +5,7 @@ const { bot } = require('../bot')
 const pay = async (user, userCard) => {
    const atmosToken = await model.atmosToken()
 
-   const createPay = atmos.createPay(
+   const createPay = await atmos.createPay(
       100000,
       user?.chat_id,
       atmosToken?.token,
@@ -104,7 +104,7 @@ const paySubcribe = async () => {
 
                const payed = await pay(user, card);
 
-               if (payed === 'Success') {
+               if (payed == 'Success') {
                   console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
                   success = true; // Set success to true to stop further processing for this user
                }
