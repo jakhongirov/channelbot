@@ -688,7 +688,7 @@ bot.on('message', async (msg) => {
                }
             }
          } else {
-            bot.sendMessage(chatId, "", {
+            bot.sendMessage(chatId, localText.addCardActivatingSubscriptionText, {
                reply_markup: {
                   keyboard: [
                      [{
@@ -710,7 +710,7 @@ bot.on('message', async (msg) => {
 
          if (success) {
             if (foundUser?.subscribe) {
-               bot.sendMessage(chatId, "Obuna faollashtirildi").then(async () => {
+               bot.sendMessage(chatId, localText.activatingSubscriptionText2).then(async () => {
                   await model.editStep(chatId, "paid")
                   await model.editDuration(chatId, true)
                })

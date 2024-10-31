@@ -29,6 +29,7 @@
    "dataNotFoundText": "Ma'lumot topilmadi",
 	"getLinkText": "Kanal kirish uchun link:",
 	"activatingSubscriptionText": "Obunani faollashtiring",
+	"activatingSubscriptionText2": "Obuna faollashtirildi",
    "unsubscribeText": "Obuna to'xtatildi",
    "waitText": "Biroz kuting",
    "addCardActivatingSubscriptionText": "Obuna faollashtirish uchun kartangizni qo'shing"
