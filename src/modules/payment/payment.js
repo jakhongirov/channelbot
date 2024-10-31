@@ -364,7 +364,7 @@ module.exports = {
 
    REMOVE_CARD: async (req, res) => {
       try {
-         const { card_id } = req.body
+         const { card_id, card_token } = req.body
          const foundCardByCard_id = await model.foundCardByCard_id(card_id)
 
          if (foundCardByCard_id) {
@@ -384,6 +384,20 @@ module.exports = {
                return res.json(removeCard)
             }
 
+         } else {
+            const removeCard = await atmos.removeCard(
+               card_id,
+               card_token,
+               atmosToken?.token,
+               atmosToken?.expires
+            )
+
+            console.log(removeCard)
+
+            if (removeCard?.result?.code == "OK") {
+
+               return res.json(removeCard)
+            }
          }
 
       } catch (error) {
