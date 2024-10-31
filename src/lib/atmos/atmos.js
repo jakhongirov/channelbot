@@ -1,5 +1,5 @@
 require('dotenv').config()
-const model = require('../postgres')
+const model = require('./model')
 const axios = require('axios');
 
 const getToken = async () => {
