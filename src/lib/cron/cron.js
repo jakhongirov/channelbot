@@ -66,14 +66,17 @@ const sendMessageBefore = async () => {
       const getUsersBefore2day = await model.getUsersBefore2day()
       const getUsersBefore1day = await model.getUsersBefore1day()
 
-      for (const user of getUsersBefore2day) {
-         bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 2 kun qoldi")
+      if (getUsersBefore2day?.length > 0) {
+         for (const user of getUsersBefore2day) {
+            bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 2 kun qoldi")
+         }
       }
 
-      for (const user of getUsersBefore1day) {
-         bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 1 kun qoldi. Ertaga oxirgi kun kartada pul yechib olinadi")
+      if (getUsersBefore1day?.length > 0) {
+         for (const user of getUsersBefore1day) {
+            bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 1 kun qoldi. Ertaga oxirgi kun kartada pul yechib olinadi")
+         }
       }
-
    } catch (error) {
       console.log(error)
    }
@@ -86,67 +89,85 @@ const paySubcribe = async () => {
       const getUsersAfter1days = await model.getUsersAfter1days()
       const getUserWithoutDuration = await model.getUserWithoutDuration()
 
-      for (const user of getUsers) {
-         const userCards = await model.userCards(user?.chat_id);
-         let success = false; // Flag to track successful payment for the current user
+      if (getUsers?.length > 0) {
+         for (const user of getUsers) {
+            const userCards = await model.userCards(user?.chat_id);
+            let success = false; // Flag to track successful payment for the current user
 
-         for (const card of userCards) {
-            if (success) break; // Skip further cards if payment was successful
+            for (const card of userCards) {
+               if (success) break; // Skip further cards if payment was successful
 
-            const payed = await pay(user, card);
+               const payed = await pay(user, card);
 
-            if (payed === 'Success') {
-               console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-               success = true; // Set success to true to stop further processing for this user
+               if (payed === 'Success') {
+                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                  success = true; // Set success to true to stop further processing for this user
+               }
             }
-         }
 
-         if (!success) {
-            console.log(`No successful payment for user ${user.chat_id}`);
-            bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+            if (!success) {
+               console.log(`No successful payment for user ${user.chat_id}`);
+               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+            }
          }
       }
 
-      for (const user of getUsersAfter1days) {
-         const userCards = await model.userCards(user?.chat_id);
-         let success = false; // Flag to track successful payment for the current user
+      if (getUsersAfter1days?.length > 0) {
+         for (const user of getUsersAfter1days) {
+            const userCards = await model.userCards(user?.chat_id);
+            let success = false; // Flag to track successful payment for the current user
 
-         for (const card of userCards) {
-            if (success) break; // Skip further cards if payment was successful
+            for (const card of userCards) {
+               if (success) break; // Skip further cards if payment was successful
 
-            const payed = await pay(user, card);
+               const payed = await pay(user, card);
 
-            if (payed === 'Success') {
-               console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-               success = true; // Set success to true to stop further processing for this user
+               if (payed === 'Success') {
+                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                  success = true; // Set success to true to stop further processing for this user
+               }
             }
-         }
 
-         if (!success) {
-            console.log(`No successful payment for user ${user.chat_id}`);
-            bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+            if (!success) {
+               console.log(`No successful payment for user ${user.chat_id}`);
+               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+            }
          }
       }
 
-      for (const user of getUsersAfter2days) {
-         const userCards = await model.userCards(user?.chat_id);
-         let success = false; // Flag to track successful payment for the current user
+      if (getUsersAfter2days?.length > 0) {
+         for (const user of getUsersAfter2days) {
+            const userCards = await model.userCards(user?.chat_id);
+            let success = false; // Flag to track successful payment for the current user
 
-         for (const card of userCards) {
-            if (success) break; // Skip further cards if payment was successful
+            for (const card of userCards) {
+               if (success) break; // Skip further cards if payment was successful
 
-            const payed = await pay(user, card);
+               const payed = await pay(user, card);
 
-            if (payed === 'Success') {
-               console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-               success = true; // Set success to true to stop further processing for this user
-               bot.sendMessage(user?.chat_id, "Tolov muvaffaqiyatli qabul qilindi")
+               if (payed === 'Success') {
+                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                  success = true; // Set success to true to stop further processing for this user
+                  bot.sendMessage(user?.chat_id, "Tolov muvaffaqiyatli qabul qilindi")
+               }
+            }
+
+            if (!success) {
+               console.log(`No successful payment for user ${user.chat_id}`);
+               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+               bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+                  .then(async () => {
+                     console.log(`User with ID ${user?.chat_id} has been removed `);
+                     await model.editUserSubcribe(user?.chat_id, false)
+                  })
+                  .catch(err => console.error('Error removing user:', err));
             }
          }
+      }
 
-         if (!success) {
-            console.log(`No successful payment for user ${user.chat_id}`);
-            bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+      if (getUserWithoutDuration?.length > 0) {
+         for (const user of getUserWithoutDuration) {
+            bot.sendMessage(user?.chat_id, "Obunangiz tugadi")
             bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
                .then(async () => {
                   console.log(`User with ID ${user?.chat_id} has been removed `);
@@ -154,16 +175,6 @@ const paySubcribe = async () => {
                })
                .catch(err => console.error('Error removing user:', err));
          }
-      }
-
-      for (const user of getUserWithoutDuration) {
-         bot.sendMessage(user?.chat_id, "Obunangiz tugadi")
-         bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
-            .then(async () => {
-               console.log(`User with ID ${user?.chat_id} has been removed `);
-               await model.editUserSubcribe(user?.chat_id, false)
-            })
-            .catch(err => console.error('Error removing user:', err));
       }
 
 
