@@ -700,7 +700,8 @@ bot.on('message', async (msg) => {
                      [{
                         text: localText.backBtn
                      }]
-                  ]
+                  ],
+                  resize_keyboard: true
                }
             }).then(async () => {
                await model.editStep(chatId, "onSubcribe")
@@ -755,7 +756,8 @@ bot.on('message', async (msg) => {
                   [{
                      text: localText.backBtn
                   }]
-               ]
+               ],
+               resize_keyboard: true
             }
          }).then(async () => {
             await model.editStep(chatId, "onSubcribe")
