@@ -366,9 +366,9 @@ module.exports = {
       try {
          const { card_id, card_token } = req.body
          const foundCardByCard_id = await model.foundCardByCard_id(card_id)
+         const atmosToken = await model.atmosToken()
 
          if (foundCardByCard_id) {
-            const atmosToken = await model.atmosToken()
             const removeCard = await atmos.removeCard(
                foundCardByCard_id?.card_id,
                foundCardByCard_id?.card_token,
