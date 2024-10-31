@@ -12,6 +12,8 @@ const pay = async (user, userCard) => {
       atmosToken?.expires
    )
 
+   console.log(createPay)
+
    if (createPay?.result?.code == "OK") {
       const preApply = await atmos.preApply(
          userCard?.card_token,
@@ -19,6 +21,7 @@ const pay = async (user, userCard) => {
          atmosToken?.token,
          atmosToken?.expires
       )
+      console.log(preApply)
 
       if (preApply?.result?.code == "OK") {
          const apply = await atmos.apply(
@@ -26,6 +29,8 @@ const pay = async (user, userCard) => {
             atmosToken?.token,
             atmosToken?.expires
          )
+         console.log(apply)
+
 
          if (apply?.result?.code == "OK") {
             const addCheck = await model.addCheck(
@@ -121,6 +126,7 @@ const paySubcribe = async () => {
                if (success) break; // Skip further cards if payment was successful
 
                const payed = await pay(user, card);
+               console.log(payed)
 
                if (payed === 'Success') {
                   console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
