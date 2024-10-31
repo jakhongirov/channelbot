@@ -97,31 +97,34 @@ bot.on('chat_join_request', async (msg) => {
    const chatId = msg.chat.id;
    const userId = msg.from.id;
 
-   bot.onText(/\/start/, async (startMsg) => {
-      const privateChatId = startMsg.chat.id;
-      const foundUser = await model.foundUser(userId);
-
-      await bot.sendMessage(privateChatId, localText?.startText, {
-         reply_markup: {
-            inline_keyboard: [
-               [{
-                  text: localText?.offerLink,
-                  web_app: { url: `https://www.instagram.com/` }
-               }],
-               [{
-                  text: localText.agree,
-                  callback_data: "agreement"
-               }],
-            ],
-         }
-      });
+   bot.sendMessage(userId, localText?.startText, {
+      reply_markup: {
+         inline_keyboard: [
+            [{
+               text: localText?.offerLink,
+               web_app: {
+                  url: `https://www.instagram.com/`
+               }
+            }],
+            [{
+               text: localText.agree,
+               callback_data: "agreement",
+               url: 'https://t.me/botbotobtobt_bot?start'
+            }],
+         ],
+      }
+   }).then(async () => {
+      const foundUser = await model.foundUser(userId)
 
       if (!foundUser) {
-         await model.createUser(userId, "start");
+         await model.createUser(
+            userId,
+            "start"
+         )
       } else {
-         await model.editStep(userId, 'start');
+         await model.editStep(userId, 'start')
       }
-   });
+   }).catch(e => console.log(e))
 });
 
 bot.on("callback_query", async (msg) => {
