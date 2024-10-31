@@ -41,8 +41,9 @@ if (!fs.existsSync(imagesFolderPath)) {
 bot.onText(/\/start/, async (msg) => {
    const chatId = msg.chat.id;
    const foundUser = await model.foundUser(chatId)
+   const usersCard = await model.userCard(chatId)
 
-   if (!foundUser) {
+   if (!foundUser || usersCard?.length == 0) {
       bot.sendMessage(chatId, localText?.startText, {
          reply_markup: {
             inline_keyboard: [
