@@ -58,7 +58,7 @@ module.exports = {
       }
    },
 
-   OPT: async (req, res) => {
+   OTP: async (req, res) => {
       try {
          const { chat_id } = req.params
          const { code, transaction_id } = req.body
