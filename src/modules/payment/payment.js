@@ -107,7 +107,7 @@ module.exports = {
                      })
                   } else {
                      const atmosCreatePay = await atmos.createPay(
-                        4900000,
+                        100000,
                         chat_id,
                         atmosToken?.token,
                         atmosToken?.expires
@@ -351,6 +351,39 @@ module.exports = {
                status: 404,
                message: "Not found"
             })
+         }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
+   REMOVE_CARD: async (req, res) => {
+      try {
+         const { card_id } = req.body
+         const foundCardByCard_id = await model.foundCardByCard_id(card_id)
+
+         if (foundCardByCard_id) {
+            const atmosToken = await model.atmosToken()
+            const removeCard = await atmos.removeCard(
+               foundCardByCard_id?.card_id,
+               foundCardByCard_id?.card_token,
+               atmosToken?.token,
+               atmosToken?.expires
+            )
+
+            console.log(removeCard)
+
+            if (removeCard?.result?.code == "OK") {
+               await model.deleteCard(foundCardByCard_id?.card_id)
+
+               return res.json(removeCard)
+            }
+
          }
 
       } catch (error) {

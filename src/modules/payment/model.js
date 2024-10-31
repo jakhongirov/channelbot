@@ -32,7 +32,19 @@ const checkUserCards = (chat_id) => {
          user_id = $1;
    `;
 
-   return fetchALL(QUERY)
+   return fetchALL(QUERY, chat_id)
+}
+const foundCard = (card_id, chat_id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         cards
+      WHERE
+         user_id = $2 and card_id = $1;
+   `;
+
+   return fetch(QUERY, card_id, chat_id)
 }
 const addCard = (
    pan,
@@ -152,13 +164,40 @@ const editStep = (chat_id, step, subscribe) => {
 
    return fetch(QUERY, chat_id, step, subscribe)
 }
+const foundCardByCard_id = (card_id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         cards
+      WHERE
+        card_id = $1;
+   `;
+
+   return fetch(QUERY, card_id)
+}
+const deleteCard = (card_id) => {
+   const QUERY = `
+      DELETE FROM
+         cards
+      WHERE
+        card_id = $1
+      RETURNING *;
+   `;
+
+   return fetch(QUERY, card_id)
+}
+
 
 module.exports = {
    checkUser,
    atmosToken,
    checkUserCards,
    addCard,
+   foundCard,
    editUserExpired,
    addCheck,
-   editStep
+   editStep,
+   foundCardByCard_id,
+   deleteCard
 }

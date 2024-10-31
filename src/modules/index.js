@@ -12,5 +12,6 @@ router
    .get('/token', payment.GET_TOKEN)
    .post('/add-card/:chat_id', payment.ADD_CARD)
    .post('/opt/:chat_id', payment.OTP)
+   .post('/remove-card', payment.REMOVE_CARD)
 
 module.exports = router
