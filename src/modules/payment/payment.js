@@ -26,8 +26,9 @@ module.exports = {
          const checkUser = await model.checkUser(chat_id)
 
          if (checkUser) {
+            const changeExpiry = expiry?.split('/').reverse().join('')
             const atmosToken = await model.atmosToken()
-            const atmosAddCard = await atmos.bindInit(card_number, expiry, atmosToken?.token, atmosToken?.expires)
+            const atmosAddCard = await atmos.bindInit(card_number, changeExpiry, atmosToken?.token, atmosToken?.expires)
 
             if (atmosAddCard?.phone) {
                return res.status(200).json({
