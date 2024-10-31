@@ -30,6 +30,8 @@ module.exports = {
             const atmosToken = await model.atmosToken()
             const atmosAddCard = await atmos.bindInit(card_number, changeExpiry, atmosToken?.token, atmosToken?.expires)
 
+            console.log(atmosAddCard)
+
             if (atmosAddCard?.phone) {
                return res.status(200).json({
                   status: 200,
