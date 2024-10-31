@@ -772,10 +772,7 @@ app.use(express.urlencoded({
    extended: true
 }));
 app.use('/public', express.static(path.resolve(__dirname, 'public')))
-// app.use("/api/v1", router);
-app.get("/api/v1/hello", (req, res) => {
-   res.send('ok')
-});
+app.use("/api/v1", router);
 
 // Job that runs every 2 minutes
 const job = new CronJob('*/2 * * * *', async () => {
