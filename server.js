@@ -550,7 +550,7 @@ bot.on('message', async (msg) => {
                      text: localText.historyPayBtn,
                   }],
                   [{
-                     text: localText.contactAdminlocalText.contactAdmin,
+                     text: localText.contactAdmin,
                   }],
                ],
                resize_keyboard: true
