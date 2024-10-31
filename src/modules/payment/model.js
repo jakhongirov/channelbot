@@ -1,4 +1,4 @@
-const { fetch } = require('../../lib/postgres')
+const { fetch, fetchALL } = require('../../lib/postgres')
 
 const checkUser = (chat_id) => {
    const QUERY = `
@@ -21,6 +21,18 @@ const atmosToken = () => {
    `;
 
    return fetch(QUERY)
+}
+const checkUserCards = (chat_id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         cards
+      WHERE
+         user_id = $1;
+   `;
+
+   return fetchALL(QUERY)
 }
 const addCard = (
    pan,
@@ -144,6 +156,7 @@ const editStep = (chat_id, step, subscribe) => {
 module.exports = {
    checkUser,
    atmosToken,
+   checkUserCards,
    addCard,
    editUserExpired,
    addCheck,
