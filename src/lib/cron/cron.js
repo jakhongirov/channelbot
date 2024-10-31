@@ -6,7 +6,7 @@ const pay = async (user, userCard) => {
    const atmosToken = await model.atmosToken()
 
    const createPay = atmos.createPay(
-      4900000,
+      100000,
       user?.chat_id,
       atmosToken?.token,
       atmosToken?.expires
