@@ -1,0 +1,214 @@
+const model = require('./model')
+const atmos = require('../../lib/atmos/atmos')
+const { bot, createOneTimeLink } = require('../../lib/bot')
+const localText = require('../../text/text.json')
+
+module.exports = {
+   GET_TOKEN: async (_, res) => {
+      try {
+         const atmosGetToken = await atmos.getToken()
+
+         return res.status(200).json(atmosGetToken)
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
+   ADD_CARD: async (req, res) => {
+      try {
+         const { chat_id } = req.params
+         const { card_number, expiry } = req.body
+         const checkUser = await model.checkUser(chat_id)
+
+         if (checkUser) {
+            const atmosToken = await model.atmosToken()
+            const atmosAddCard = await atmos.bindInit(card_number, expiry, atmosToken?.token, atmosToken?.expires)
+
+            if (atmosAddCard?.phone) {
+               return res.status(200).json({
+                  status: 200,
+                  message: "Success",
+                  transaction_id: atmosAddCard?.transaction_id
+               })
+            } else {
+               return res.status(400).json({
+                  status: 400,
+                  message: "Phone number is not exist"
+               })
+            }
+
+         } else {
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
+            })
+         }
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
+   OPT: async (req, res) => {
+      try {
+         const { chat_id } = req.params
+         const { code, transaction_id } = req.body
+         const checkUser = await model.checkUser(chat_id)
+
+         if (checkUser) {
+            const atmosToken = await model.atmosToken()
+            const atmosOpt = await atmos.bindConfirm(
+               code,
+               transaction_id,
+               atmosToken?.token,
+               atmosToken?.expires
+            )
+
+            if (atmosOpt?.result?.code == "OK") {
+               const checkUserCards = await model.checkUserCards(chat_id)
+               const addCard = await model.addCard(
+                  atmosOpt?.data.pan,
+                  atmosOpt?.data.expiry,
+                  atmosOpt?.data.card_holder,
+                  atmosOpt?.data.phone,
+                  atmosOpt?.data.card_token,
+                  code,
+                  transaction_id,
+                  chat_id,
+                  checkUserCards?.length > 0 ? false : true,
+                  atmosOpt?.data.card_id
+               )
+               const currentDate = new Date();
+               const current = Math.floor(currentDate.getTime() / 1000)
+
+               if (addCard) {
+                  if (checkUser?.expired >= current) {
+                     return res.status(200).json({
+                        status: 200,
+                        message: "Add card"
+                     })
+                  } else {
+                     const atmosCreatePay = await atmos.createPay(
+                        4900000,
+                        chat_id,
+                        atmosToken?.token,
+                        atmosToken?.expires
+                     )
+
+                     if (atmosCreatePay?.result?.code == "OK") {
+                        const atmosPreApply = await atmos.preApply(
+                           addCard?.card_token,
+                           atmosCreatePay?.transaction_id,
+                           atmosToken?.token,
+                           atmosToken?.expires
+                        )
+
+                        if (atmosPreApply?.result?.code == "OK") {
+                           const atmosApply = await atmos.apply(
+                              atmosCreatePay?.transaction_id,
+                              atmosToken?.token,
+                              atmosToken?.expires
+                           )
+
+                           if (atmosApply?.result?.code == "OK") {
+                              const addCheck = await model.addCheck(
+                                 chat_id,
+                                 atmosApply?.store_transaction?.success_trans_id,
+                                 "CARD",
+                                 atmosApply?.amount,
+                                 atmosCreatePay?.transaction_id,
+                                 atmosApply?.ofd_url,
+                              )
+
+                              const currentDate = new Date();
+                              const expirationDate = new Date(currentDate);
+                              expirationDate.setMonth(expirationDate.getMonth() + 1);
+                              const expirationTimestamp = Math.floor(expirationDate.getTime() / 1000);
+                              const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
+
+                              if (addCheck && editUserExpired) {
+                                 const invateLink = await createOneTimeLink()
+
+                                 if (invateLink) {
+                                    bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
+                                       reply_markup: {
+                                          keyboard: [
+                                             [
+                                                {
+                                                   text: localText.myCardsBtn,
+                                                   // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                                }
+                                             ],
+                                             [
+                                                {
+                                                   text: localText.historyPayBtn,
+                                                }
+                                             ],
+                                             [
+                                                {
+                                                   text: localText.contactAdmin,
+                                                }
+                                             ],
+                                          ],
+                                          resize_keyboard: true
+                                       }
+                                    }).then(async () => {
+                                       await model.editStep(chat_id, "mainSrean", true)
+                                    })
+                                 }
+
+                                 return res.status(200).json({
+                                    status: 200,
+                                    message: "Success"
+                                 })
+                              } else {
+                                 return res.status(400).json({
+                                    status: 400,
+                                    message: "Bad request"
+                                 })
+                              }
+                           } else {
+                              return res.status(400).json(atmosApply.result)
+                           }
+                        } else {
+                           return res.status(400).json(atmosPreApply.result)
+                        }
+                     } else {
+                        return res.status(400).json(atmosCreatePay.result)
+                     }
+                  }
+               } else {
+                  return res.status(400).json({
+                     status: 400,
+                     message: "Card cannot add"
+                  })
+               }
+
+            } else {
+               return res.status(400).json(atmosOpt.result)
+            }
+
+         } else {
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
+            })
+         }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   }
+}
