@@ -93,9 +93,18 @@ const getUsers = () => {
       FROM 
          users
       WHERE 
-         expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()))
-         AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '1 day') AND duration = true AND  subscribe = true;  
+         duration = true AND  subscribe = true;  
    `;
+
+   // const QUERY = `
+   //    SELECT 
+   //       *
+   //    FROM 
+   //       users
+   //    WHERE 
+   //       expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()))
+   //       AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '1 day') AND duration = true AND  subscribe = true;  
+   // `;
 
    return fetchALL(QUERY)
 }
