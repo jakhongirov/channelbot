@@ -47,7 +47,7 @@ bot.onText(/\/start/, async (msg) => {
    if (!foundUser) {
       bot.sendMessage(chatId, localText?.startTextFromBot, {
          reply_markup: {
-            inline_keyboard: [
+            keyboard: [
                [{
                   text: localText?.offerLink,
                   web_app: {
@@ -56,7 +56,7 @@ bot.onText(/\/start/, async (msg) => {
                }],
                [{
                   text: localText.agree,
-                  callback_data: "agreement"
+                  // url: 'https://t.me/botbotobtobt_bot?start=join_group'
                }],
             ],
             resize_keyboard: true
