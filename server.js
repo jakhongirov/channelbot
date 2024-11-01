@@ -62,11 +62,34 @@ bot.onText(/\/start/, async (msg) => {
             resize_keyboard: true
          }
       }).then(async () => {
-         await model.createUser(
-            chatId,
-            "start"
-         )
+         if (!foundUser) {
+            await model.createUser(
+               chatId,
+               "start"
+            )
+         } else {
+            await model.editStep(chatId, 'start');
+         }
       }).catch(e => console.log(e))
+   } else if (foundUser?.step == 'webpage' && foundUser?.phone) {
+      bot.sendMessage(chatId, localText.registeredSuccessText, {
+         reply_markup: {
+            keyboard: [
+               [{
+                  text: localText.activationBtn,
+                  web_app: {
+                     url: `https://web-page-one-theta.vercel.app/${chatId}`
+                  }
+               }],
+               [{
+                  text: localText.contactAdmin,
+               }],
+            ],
+            resize_keyboard: true
+         }
+      }).then(async () => {
+         await model.editStep(chatId, 'webpage');
+      }).catch(e => console.log(e));
    } else {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
