@@ -71,7 +71,7 @@ bot.onText(/\/start/, async (msg) => {
             await model.editStep(chatId, 'start');
          }
       }).catch(e => console.log(e))
-   } else if (foundUser?.step == 'webpage' && foundUser?.phone) {
+   } else if (foundUser?.step == 'webpage' && foundUser?.phone_number) {
       bot.sendMessage(chatId, localText.registeredSuccessText, {
          reply_markup: {
             keyboard: [
