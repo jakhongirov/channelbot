@@ -702,7 +702,22 @@ bot.on('message', async (msg) => {
 
          if (success) {
             if (foundUser?.subscribe) {
-               bot.sendMessage(chatId, localText.activatingSubscriptionText2).then(async () => {
+               bot.sendMessage(chatId, localText.activatingSubscriptionText2, {
+                  reply_markup: {
+                     keyboard: [
+                        [{
+                           text: localText.myCardsBtn,
+                        }],
+                        [{
+                           text: localText.historyPayBtn,
+                        }],
+                        [{
+                           text: localText.contactAdmin,
+                        }],
+                     ],
+                     resize_keyboard: true
+                  }
+               }).then(async () => {
                   await model.editStep(chatId, "historyPayment")
                   await model.editDuration(chatId, true)
                })
@@ -736,7 +751,22 @@ bot.on('message', async (msg) => {
             })
          }
       } else if (current < foundUser?.expired) {
-         bot.sendMessage(chatId, localText.activatingSubscriptionText2).then(async () => {
+         bot.sendMessage(chatId, localText., {
+            reply_markup: {
+               keyboard: [
+                  [{
+                     text: localText.myCardsBtn,
+                  }],
+                  [{
+                     text: localText.historyPayBtn,
+                  }],
+                  [{
+                     text: localText.contactAdmin,
+                  }],
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
             await model.editStep(chatId, "paid")
             await model.editDuration(chatId, true)
          })
