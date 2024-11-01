@@ -435,7 +435,7 @@ bot.on('message', async (msg) => {
       if (foundUser?.step == "contactAdmin") {
          const userCard = await model.userCard(chatId)
          if (userCard?.length > 0) {
-            bot.sendMessage(chatId, localText.startText, {
+            bot.sendMessage(chatId, localText.startTextFromBot, {
                reply_markup: {
                   keyboard: [
                      [{
@@ -461,17 +461,27 @@ bot.on('message', async (msg) => {
                      foundUser?.duration == false ? (
                         [{
                            text: localText.activatingSubscriptionBtn
+                        }],
+                        [{
+                           text: localText.myCardsBtn,
+                        }],
+                        [{
+                           text: localText.historyPayBtn,
+                        }],
+                        [{
+                           text: localText.contactAdmin,
                         }]
-                     ) : [],
-                     [{
-                        text: localText.myCardsBtn,
-                     }],
-                     [{
-                        text: localText.historyPayBtn,
-                     }],
-                     [{
-                        text: localText.contactAdmin,
-                     }],
+                     ) : (
+                        [{
+                           text: localText.myCardsBtn,
+                        }],
+                        [{
+                           text: localText.historyPayBtn,
+                        }],
+                        [{
+                           text: localText.contactAdmin,
+                        }]
+                     )
                   ],
                   resize_keyboard: true
                }
