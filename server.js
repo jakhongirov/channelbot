@@ -110,35 +110,47 @@ bot.onText(/\/start/, async (msg) => {
 bot.on('chat_join_request', async (msg) => {
    const chatId = msg.chat.id;
    const userId = msg.from.id;
+   const foundUser = await model.foundUser(userId)
+   const currentDate = new Date();
+   const current = Math.floor(currentDate.getTime() / 1000)
 
-   bot.sendMessage(userId, localText?.startTextFromChannel, {
-      reply_markup: {
-         keyboard: [
-            [{
-               text: localText?.offerLink,
-               web_app: {
-                  url: `https://www.instagram.com/`
-               }
-            }],
-            [{
-               text: localText.agree,
-               // url: 'https://t.me/botbotobtobt_bot?start=join_group'
-            }],
-         ],
-         resize_keyboard: true
-      }
-   }).then(async () => {
-      const foundUser = await model.foundUser(userId)
+   if (!foundUser) {
+      bot.sendMessage(userId, localText?.startTextFromChannel, {
+         reply_markup: {
+            keyboard: [
+               [{
+                  text: localText?.offerLink,
+                  web_app: {
+                     url: `https://www.instagram.com/`
+                  }
+               }],
+               [{
+                  text: localText.agree,
+                  // url: 'https://t.me/botbotobtobt_bot?start=join_group'
+               }],
+            ],
+            resize_keyboard: true
+         }
+      }).then(async () => {
+         const foundUser = await model.foundUser(userId)
 
-      if (!foundUser) {
-         await model.createUser(
-            userId,
-            "start"
-         )
-      } else {
-         await model.editStep(userId, 'start')
+         if (!foundUser) {
+            await model.createUser(
+               userId,
+               "start"
+            )
+         } else {
+            await model.editStep(userId, 'start')
+         }
+      }).catch(e => console.log(e))
+   } else if (foundUser?.expired > current) {
+      try {
+         await msg.approveChatJoinRequest(userId);
+         console.log(`User @${username} approved to join.`);
+      } catch (error) {
+         console.error('Error approving join request:', error);
       }
-   }).catch(e => console.log(e))
+   }
 });
 
 bot.on('chat_member', async (ctx) => {
@@ -150,9 +162,7 @@ bot.on('chat_member', async (ctx) => {
    if (chatMember.new_chat_member && chatMember.invite_link) {
       const inviteLink = chatMember.invite_link.invite_link;
       const userId = chatMember.new_chat_member.user.id;
-      const foundUser = await model.foundUser(userId)
-      const currentDate = new Date();
-      const current = Math.floor(currentDate.getTime() / 1000)
+
 
       if (!foundUser || foundUser?.expired == 0 || current > foundUser?.expired) {
          await removeUserFromChannel(userId)
