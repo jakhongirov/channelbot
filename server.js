@@ -67,21 +67,6 @@ bot.onText(/\/start/, async (msg) => {
             "start"
          )
       }).catch(e => console.log(e))
-   } else if (usersCard?.length == 0 && foundUser) {
-      bot.sendMessage(chatId, localText.sendContact, {
-         reply_markup: {
-            keyboard: [
-               [{
-                  text: localText.sendContact,
-                  request_contact: true,
-                  one_time_keyboard: true
-               }]
-            ],
-            resize_keyboard: true
-         }
-      }).then(async () => {
-         await model.editStep(chatId, 'register')
-      }).catch(e => console.log(e))
    } else {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
