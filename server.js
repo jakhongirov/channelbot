@@ -44,7 +44,26 @@ bot.onText(/\/start/, async (msg) => {
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
 
-   if (!foundUser || foundUser?.expired == 0) {
+   if (foundUser?.step == 'webpage' && foundUser?.phone_number) {
+      bot.sendMessage(chatId, localText.registeredSuccessText, {
+         reply_markup: {
+            keyboard: [
+               [{
+                  text: localText.activationBtn,
+                  web_app: {
+                     url: `https://web-page-one-theta.vercel.app/${chatId}`
+                  }
+               }],
+               [{
+                  text: localText.contactAdmin,
+               }],
+            ],
+            resize_keyboard: true
+         }
+      }).then(async () => {
+         await model.editStep(chatId, 'webpage');
+      }).catch(e => console.log(e));
+   } else if (!foundUser || foundUser?.expired == 0) {
       bot.sendMessage(chatId, localText?.startTextFromBot, {
          reply_markup: {
             keyboard: [
@@ -71,25 +90,6 @@ bot.onText(/\/start/, async (msg) => {
             await model.editStep(chatId, 'start');
          }
       }).catch(e => console.log(e))
-   } else if (foundUser?.step == 'webpage' && foundUser?.phone_number) {
-      bot.sendMessage(chatId, localText.registeredSuccessText, {
-         reply_markup: {
-            keyboard: [
-               [{
-                  text: localText.activationBtn,
-                  web_app: {
-                     url: `https://web-page-one-theta.vercel.app/${chatId}`
-                  }
-               }],
-               [{
-                  text: localText.contactAdmin,
-               }],
-            ],
-            resize_keyboard: true
-         }
-      }).then(async () => {
-         await model.editStep(chatId, 'webpage');
-      }).catch(e => console.log(e));
    } else {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
