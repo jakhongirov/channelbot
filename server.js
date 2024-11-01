@@ -44,7 +44,7 @@ bot.onText(/\/start/, async (msg) => {
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
 
-   if (!foundUser) {
+   if (!foundUser || foundUser?.expired == 0) {
       bot.sendMessage(chatId, localText?.startTextFromBot, {
          reply_markup: {
             keyboard: [
