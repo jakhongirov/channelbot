@@ -144,6 +144,8 @@ bot.on('chat_join_request', async (msg) => {
 bot.on('chat_member', async (ctx) => {
    const chatMember = ctx.chatMember;
 
+   console.log(ctx)
+
    // Check if the user joined the channel using an invite link
    if (chatMember.new_chat_member && chatMember.invite_link) {
       const inviteLink = chatMember.invite_link.invite_link;
@@ -152,7 +154,7 @@ bot.on('chat_member', async (ctx) => {
       const currentDate = new Date();
       const current = Math.floor(currentDate.getTime() / 1000)
 
-      if (!foundUser || foundUser?.expired < current) {
+      if (!foundUser || foundUser?.expired == 0 || current > foundUser?.expired) {
          await removeUserFromChannel(userId)
       }
 
