@@ -475,7 +475,8 @@ bot.on('message', async (msg) => {
          }
       } else if (
          foundUser?.step == 'myCards' ||
-         foundUser?.step == 'historyPayment'
+         foundUser?.step == 'historyPayment' ||
+         foundUser?.step == "getLink"
       ) {
          bot.sendMessage(chatId, localText.mainScreen, {
             reply_markup: {
@@ -544,18 +545,10 @@ bot.on('message', async (msg) => {
          bot.sendMessage(chatId, localText.mainScreen, {
             reply_markup: {
                keyboard: [
-                  [{
-                     text: localText.activatingSubscriptionBtn,
-                  }],
-                  [{
-                     text: localText.myCardsBtn,
-                  }],
-                  [{
-                     text: localText.historyPayBtn,
-                  }],
-                  [{
-                     text: localText.contactAdmin,
-                  }],
+                  ...(foundUser?.duration === false ? [[{ text: localText.activatingSubscriptionBtn }]] : []),
+                  [{ text: localText.myCardsBtn }],
+                  [{ text: localText.historyPayBtn }],
+                  [{ text: localText.contactAdmin }]
                ],
                resize_keyboard: true
             }
