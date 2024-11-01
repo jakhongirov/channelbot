@@ -145,30 +145,11 @@ bot.on('chat_join_request', async (msg) => {
       }).catch(e => console.log(e))
    } else if (foundUser?.expired > current) {
       try {
-         await msg.approveChatJoinRequest(userId);
+         await await bot.approveChatJoinRequest(chatId, userId);
          console.log(`User @${username} approved to join.`);
       } catch (error) {
          console.error('Error approving join request:', error);
       }
-   }
-});
-
-bot.on('chat_member', async (ctx) => {
-   const chatMember = ctx.chatMember;
-
-   console.log(ctx)
-
-   // Check if the user joined the channel using an invite link
-   if (chatMember.new_chat_member && chatMember.invite_link) {
-      const inviteLink = chatMember.invite_link.invite_link;
-      const userId = chatMember.new_chat_member.user.id;
-
-
-      if (!foundUser || foundUser?.expired == 0 || current > foundUser?.expired) {
-         await removeUserFromChannel(userId)
-      }
-
-      console.log(`User with ID ${userId} joined using the link: ${inviteLink}`);
    }
 });
 
@@ -723,7 +704,7 @@ bot.on('message', async (msg) => {
          if (success) {
             if (foundUser?.subscribe) {
                bot.sendMessage(chatId, localText.activatingSubscriptionText2).then(async () => {
-                  await model.editStep(chatId, "paid")
+                  await model.editStep(chatId, "historyPayment")
                   await model.editDuration(chatId, true)
                })
             } else {
@@ -752,7 +733,7 @@ bot.on('message', async (msg) => {
             }
          } else {
             bot.sendMessage(chatId, localText.deletedCardError).then(async () => {
-               await model.editStep(chatId, "paid")
+               await model.editStep(chatId, "historyPayment")
             })
          }
       } else if (current < foundUser?.expired) {
