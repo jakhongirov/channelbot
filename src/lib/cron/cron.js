@@ -111,8 +111,14 @@ const paySubcribe = async () => {
             }
 
             if (!success) {
-               console.log(`No successful payment for user ${user.chat_id}`);
                bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+               bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+                  .then(async () => {
+                     console.log(`User with ID ${user?.chat_id} has been removed `);
+                     await model.editUserSubcribe(user?.chat_id, false)
+                  })
+                  .catch(err => console.error('Error removing user:', err));
+               console.log(`No successful payment for user ${user.chat_id}`);
             }
          }
       }
