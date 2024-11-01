@@ -751,7 +751,7 @@ bot.on('message', async (msg) => {
             })
          }
       } else if (current < foundUser?.expired) {
-         bot.sendMessage(chatId, localText., {
+         bot.sendMessage(chatId, localText.activatingSubscriptionText2, {
             reply_markup: {
                keyboard: [
                   [{
