@@ -5,7 +5,6 @@ const createOneTimeLink = async () => {
    try {
       const link = await bot.createChatInviteLink(process.env.CHANNEL_ID, {
          expire_date: Math.floor(Date.now() / 1000) + (60 * 60), // Link expires in 1 hour (adjust as needed)
-         member_limit: 1, // Link can be used only once
          creates_join_request: true // Enables the "Request to Join" feature
       });
       console.log('Request Join Link:', link.invite_link);
