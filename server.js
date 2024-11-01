@@ -408,7 +408,7 @@ bot.on('message', async (msg) => {
          reply_markup: {
             keyboard: [
                [{
-                  text: localText.sendContact,
+                  text: localText.sendContactBtn,
                   request_contact: true,
                   one_time_keyboard: true
                }]
