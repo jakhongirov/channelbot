@@ -71,21 +71,30 @@ bot.onText(/\/start/, async (msg) => {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
             keyboard: [
-
                foundUser?.duration == false ? (
                   [{
                      text: localText.activatingSubscriptionBtn
+                  }],
+                  [{
+                     text: localText.myCardsBtn,
+                  }],
+                  [{
+                     text: localText.historyPayBtn,
+                  }],
+                  [{
+                     text: localText.contactAdmin,
                   }]
-               ) : [],
-               [{
-                  text: localText.myCardsBtn,
-               }],
-               [{
-                  text: localText.historyPayBtn,
-               }],
-               [{
-                  text: localText.contactAdmin,
-               }],
+               ) : (
+                  [{
+                     text: localText.myCardsBtn,
+                  }],
+                  [{
+                     text: localText.historyPayBtn,
+                  }],
+                  [{
+                     text: localText.contactAdmin,
+                  }]
+               )
             ],
             resize_keyboard: true
          }
@@ -299,22 +308,27 @@ bot.on("callback_query", async (msg) => {
                                     web_app: {
                                        url: `https://web-page-one-theta.vercel.app/${chatId}`
                                     }
+                                 }],
+                                 [{
+                                    text: localText.historyPayBtn,
+                                 }],
+                                 [{
+                                    text: localText.contactAdmin,
                                  }]
-                              ) : [],
-                              [{
-                                 text: localText.historyPayBtn,
-                              }],
-                              [{
-                                 text: localText.contactAdmin,
-                              }],
+                              ) : (
+                                 [{
+                                    text: localText.historyPayBtn,
+                                 }],
+                                 [{
+                                    text: localText.contactAdmin,
+                                 }]
+                              )
                            ],
                            resize_keyboard: true
                         }
                      })
                   }
                }
-
-
             }
          } else {
             bot.sendMessage(chatId, localText.deletedCardError).then(async () => {
@@ -500,17 +514,27 @@ bot.on('message', async (msg) => {
                   foundUser?.duration == false ? (
                      [{
                         text: localText.activatingSubscriptionBtn
+                     }],
+                     [{
+                        text: localText.myCardsBtn,
+                     }],
+                     [{
+                        text: localText.historyPayBtn,
+                     }],
+                     [{
+                        text: localText.contactAdmin,
                      }]
-                  ) : [],
-                  [{
-                     text: localText.myCardsBtn,
-                  }],
-                  [{
-                     text: localText.historyPayBtn,
-                  }],
-                  [{
-                     text: localText.contactAdmin,
-                  }],
+                  ) : (
+                     [{
+                        text: localText.myCardsBtn,
+                     }],
+                     [{
+                        text: localText.historyPayBtn,
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }]
+                  )
                ],
                resize_keyboard: true
             }
