@@ -8,7 +8,8 @@ const router = require("./src/modules");
 const localText = require('./src/text/text.json')
 const {
    bot,
-   createOneTimeLink
+   createOneTimeLink,
+   removeUserFromChannel
 } = require('./src/lib/bot')
 const model = require('./model');
 const {
@@ -44,7 +45,7 @@ bot.onText(/\/start/, async (msg) => {
    const usersCard = await model.userCard(chatId)
 
    if (!foundUser) {
-      bot.sendMessage(chatId, localText?.startText, {
+      bot.sendMessage(chatId, localText?.startTextFromBot, {
          reply_markup: {
             inline_keyboard: [
                [{
@@ -113,9 +114,9 @@ bot.on('chat_join_request', async (msg) => {
    const chatId = msg.chat.id;
    const userId = msg.from.id;
 
-   bot.sendMessage(userId, localText?.startText, {
+   bot.sendMessage(userId, localText?.startTextFromChannel, {
       reply_markup: {
-         inline_keyboard: [
+         keyboard: [
             [{
                text: localText?.offerLink,
                web_app: {
@@ -124,10 +125,10 @@ bot.on('chat_join_request', async (msg) => {
             }],
             [{
                text: localText.agree,
-               callback_data: "agreement",
-               url: 'https://t.me/botbotobtobt_bot?start=join_group'
+               // url: 'https://t.me/botbotobtobt_bot?start=join_group'
             }],
          ],
+         resize_keyboard: true
       }
    }).then(async () => {
       const foundUser = await model.foundUser(userId)
@@ -143,27 +144,35 @@ bot.on('chat_join_request', async (msg) => {
    }).catch(e => console.log(e))
 });
 
+bot.on('chat_member', async (ctx) => {
+   const chatMember = ctx.chatMember;
+
+   // Check if the user joined the channel using an invite link
+   if (chatMember.new_chat_member && chatMember.invite_link) {
+      const inviteLink = chatMember.invite_link.invite_link;
+      const userId = chatMember.new_chat_member.user.id;
+      const foundUser = await model.foundUser(userId)
+      const currentDate = new Date();
+      const current = Math.floor(currentDate.getTime() / 1000)
+
+      if (!foundUser || foundUser?.expired < current) {
+         await removeUserFromChannel(userId)
+      }
+
+      console.log(`User with ID ${userId} joined using the link: ${inviteLink}`);
+   }
+});
+
 bot.on("callback_query", async (msg) => {
    const chatId = msg.message.chat.id;
    const data = msg.data;
    const foundUser = await model.foundUser(chatId)
 
-   if (data === 'agreement') {
-      bot.sendMessage(chatId, localText.sendContact, {
-         reply_markup: {
-            keyboard: [
-               [{
-                  text: localText.sendContact,
-                  request_contact: true,
-                  one_time_keyboard: true
-               }]
-            ],
-            resize_keyboard: true
-         }
-      }).then(async () => {
-         await model.editStep(chatId, 'register')
-      }).catch(e => console.log(e))
-   } else if (data.startsWith('card_')) {
+   // if (data === 'agreement') {
+
+   // } else 
+
+   if (data.startsWith('card_')) {
       const cardId = data?.split('card_')[1]
       const card = await model.card(cardId)
 
@@ -409,7 +418,22 @@ bot.on('message', async (msg) => {
    const text = msg.text;
    const foundUser = await model.foundUser(Number(chatId))
 
-   if (text == localText.contactAdmin) {
+   if (text == localText.agree) {
+      bot.sendMessage(chatId, localText.sendContact, {
+         reply_markup: {
+            keyboard: [
+               [{
+                  text: localText.sendContact,
+                  request_contact: true,
+                  one_time_keyboard: true
+               }]
+            ],
+            resize_keyboard: true
+         }
+      }).then(async () => {
+         await model.editStep(chatId, 'register')
+      }).catch(e => console.log(e))
+   } else if (text == localText.contactAdmin) {
       bot.sendMessage(chatId, localText.contactAdminText, {
          reply_markup: {
             keyboard: [
@@ -758,6 +782,11 @@ bot.on('message', async (msg) => {
                await model.editStep(chatId, "paid")
             })
          }
+      } else if (current < foundUser?.expired) {
+         bot.sendMessage(chatId, localText.activatingSubscriptionText2).then(async () => {
+            await model.editStep(chatId, "paid")
+            await model.editDuration(chatId, true)
+         })
       } else {
          bot.sendMessage(chatId, localText.addCardActivatingSubscriptionText, {
             reply_markup: {
