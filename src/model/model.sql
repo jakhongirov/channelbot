@@ -1,3 +1,10 @@
+CREATE TABLE admins (
+   admin_id bigserial PRiMARY KEY,
+   admin_email text not null,
+   admin_password text not null,
+   admin_create_at timestamptz DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE users (
    id bigserial,
    chat_id bigint PRIMARY KEY,
@@ -36,8 +43,15 @@ CREATE TABLE checks (
    user_id bigint REFERENCES users(chat_id) ON DELETE CASCADE,
    success_trans_id text,
    method text,
-   amount text,
+   amount int,
    transaction_id int,
    ofd_url text,
+   create_at timestamptz DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE prices (
+   id bigserial PRIMARY KEY,
+   name text,
+   price bigint,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );

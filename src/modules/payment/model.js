@@ -99,6 +99,16 @@ const addCard = (
       card_id
    )
 }
+const price = () => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         prices;
+   `;
+
+   return fetch(QUERY)
+}
 const editUserExpired = (chat_id, expirationTimestamp, duration) => {
    const QUERY = `
       UPDATE
@@ -195,6 +205,7 @@ module.exports = {
    checkUserCards,
    addCard,
    foundCard,
+   price,
    editUserExpired,
    addCheck,
    editStep,

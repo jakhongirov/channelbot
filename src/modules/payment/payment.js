@@ -106,8 +106,9 @@ module.exports = {
                         message: "Add card"
                      })
                   } else {
+                     const price = await model.price()
                      const atmosCreatePay = await atmos.createPay(
-                        100000,
+                        price?.price,
                         chat_id,
                         atmosToken?.token,
                         atmosToken?.expires
@@ -139,7 +140,7 @@ module.exports = {
                                  chat_id,
                                  atmosApply?.store_transaction?.success_trans_id,
                                  "CARD",
-                                 atmosApply?.amount,
+                                 atmosApply?.store_transaction?.amount,
                                  atmosCreatePay?.transaction_id,
                                  atmosApply?.ofd_url,
                               )
@@ -241,8 +242,9 @@ module.exports = {
                         message: "Add card"
                      })
                   } else {
+                     const price = await model.price()
                      const atmosCreatePay = await atmos.createPay(
-                        100000,
+                        price?.price,
                         chat_id,
                         atmosToken?.token,
                         atmosToken?.expires
@@ -274,7 +276,7 @@ module.exports = {
                                  chat_id,
                                  atmosApply?.store_transaction?.success_trans_id,
                                  "CARD",
-                                 atmosApply?.amount,
+                                 atmosApply?.store_transaction?.amount,
                                  atmosCreatePay?.transaction_id,
                                  atmosApply?.ofd_url,
                               )

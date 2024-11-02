@@ -10,6 +10,16 @@ const atmosToken = () => {
 
    return fetch(QUERY)
 }
+const price = () => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         prices;
+   `;
+
+   return fetch(QUERY)
+}
 const addCheck = (
    chat_id,
    success_trans_id,
@@ -178,6 +188,7 @@ const editUserSubcribe = (chat_id, subscribe) => {
 
 module.exports = {
    atmosToken,
+   price,
    addCheck,
    editUserExpired,
    getUsersBefore2day,

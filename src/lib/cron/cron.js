@@ -4,9 +4,10 @@ const { bot } = require('../bot')
 
 const pay = async (user, userCard) => {
    const atmosToken = await model.atmosToken()
+   const price = await model.price()
 
    const createPay = await atmos.createPay(
-      100000,
+      price?.price,
       user?.chat_id,
       atmosToken?.token,
       atmosToken?.expires
@@ -37,7 +38,7 @@ const pay = async (user, userCard) => {
                user?.chat_id,
                apply?.store_transaction?.success_trans_id,
                "CARD",
-               apply?.amount,
+               apply?.store_transaction?.amount,
                createPay?.transaction_id,
                apply?.ofd_url
             )
