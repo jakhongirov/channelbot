@@ -451,7 +451,7 @@ bot.on('message', async (msg) => {
    } else if (text == localText.backBtn) {
       if (foundUser?.step == "contactAdmin") {
          const userCard = await model.userCard(chatId)
-         if (userCard?.length == 0 || foundUser?.expired == 0) {
+         if (userCard?.length == 0 && foundUser?.expired == 0) {
             bot.sendMessage(chatId, localText.startTextFromBot, {
                reply_markup: {
                   keyboard: [
