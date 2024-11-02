@@ -78,7 +78,7 @@ const getUsersBefore2day = () => {
          users
       WHERE 
          expired <= EXTRACT(EPOCH FROM NOW() + INTERVAL '2 days')
-         AND expired > EXTRACT(EPOCH FROM NOW()) AND subscribe = true;
+         AND expired > EXTRACT(EPOCH FROM NOW());
    `;
 
    return fetchALL(QUERY)
@@ -91,7 +91,7 @@ const getUsersBefore1day = () => {
          users
       WHERE 
          expired <= EXTRACT(EPOCH FROM NOW() + INTERVAL '1 days')
-         AND expired > EXTRACT(EPOCH FROM NOW()) AND subscribe = true;
+         AND expired > EXTRACT(EPOCH FROM NOW());
    `;
 
    return fetchALL(QUERY)
