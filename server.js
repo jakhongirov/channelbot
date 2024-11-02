@@ -39,6 +39,13 @@ if (!fs.existsSync(imagesFolderPath)) {
    console.log('Images folder already exists within the public folder.');
 }
 
+function formatBalanceWithSpaces(balance) {
+   return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+   }).format(balance / 100).replace(/,/g, ' ');
+}
+
 bot.onText(/\/start/, async (msg) => {
    const chatId = msg.chat.id;
    const foundUser = await model.foundUser(chatId)
@@ -552,7 +559,11 @@ bot.on('message', async (msg) => {
          const checksUser = await model.checksUser(chatId)
 
          if (checksUser?.length > 0) {
-            const checks = checksUser.map((check, index) => `${index + 1}. ${check?.ofd_url}`).join("\n");
+            const checks = checksUser.map(
+               (check, index) => {
+                  `${index + 1}. Sana:${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+               }
+            ).join("\n\n");
 
             bot.sendMessage(chatId, checks, {
                reply_markup: {

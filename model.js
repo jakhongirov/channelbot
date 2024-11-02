@@ -174,7 +174,8 @@ const editDuration = (chatId, duration) => {
 const checksUser = (chatId) => {
    const QUERY = `
       SELECT
-         *
+         *,
+         to_char(your_timestamp_column, 'YYYY-MM-DD HH24:MI') AS formatted_time
       FROM
          checks
       WHERE
