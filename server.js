@@ -560,9 +560,8 @@ bot.on('message', async (msg) => {
 
          if (checksUser?.length > 0) {
             const checks = checksUser.map(
-               (check, index) => {
-                  `${index + 1}. Sana:${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
-               }
+               (check, index) =>
+               `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
             ).join("\n\n");
 
             bot.sendMessage(chatId, checks, {
