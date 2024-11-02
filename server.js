@@ -145,7 +145,9 @@ bot.on('chat_join_request', async (msg) => {
       }).catch(e => console.log(e))
    } else if (foundUser?.expired > current) {
       try {
-         await await bot.approveChatJoinRequest(chatId, userId);
+         await await bot.approveChatJoinRequest(chatId, userId).then(async () => {
+            await model.editSubcribe(userId, true)
+         });
       } catch (error) {
          console.error('Error approving join request:', error);
       }
