@@ -635,7 +635,11 @@ bot.on('message', async (msg) => {
       const checksUser = await model.checksUser(chatId)
 
       if (checksUser?.length > 0) {
-         const checks = checksUser.map((check, index) => `${index + 1}. ${check?.ofd_url}`).join("\n");
+         const checks = checksUser.map(
+            (check, index) => {
+               `${index + 1}. Sana:${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+            }
+         ).join("\n\n");
 
          bot.sendMessage(chatId, checks, {
             reply_markup: {
