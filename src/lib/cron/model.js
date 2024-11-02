@@ -180,7 +180,7 @@ const editUserSubcribe = (chat_id, subscribe) => {
          subscribe = $2
       WHERE
          chat_id = $1
-      RETURNONG *;
+      RETURNING *;
    `;
 
    return fetch(QUERY, chat_id, subscribe)
