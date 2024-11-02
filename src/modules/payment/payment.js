@@ -1,6 +1,12 @@
 const model = require('./model')
 const atmos = require('../../lib/atmos/atmos')
-const { bot, createOneTimeLink } = require('../../lib/bot')
+const {
+   bot,
+   createOneTimeLink
+} = require('../../lib/bot')
+const {
+   addOneMonthToCurrentDate
+} = require('../../config')
 const localText = require('../../text/text.json')
 
 module.exports = {
@@ -21,8 +27,13 @@ module.exports = {
 
    ADD_CARD: async (req, res) => {
       try {
-         const { chat_id } = req.params
-         const { card_number, expiry } = req.body
+         const {
+            chat_id
+         } = req.params
+         const {
+            card_number,
+            expiry
+         } = req.body
          const checkUser = await model.checkUser(chat_id)
 
          if (checkUser) {
@@ -67,8 +78,13 @@ module.exports = {
 
    OTP: async (req, res) => {
       try {
-         const { chat_id } = req.params
-         const { code, transaction_id } = req.body
+         const {
+            chat_id
+         } = req.params
+         const {
+            code,
+            transaction_id
+         } = req.body
          const checkUser = await model.checkUser(chat_id)
 
          if (checkUser) {
@@ -96,8 +112,8 @@ module.exports = {
                   checkUserCards?.length > 0 ? false : true,
                   atmosOpt?.data.card_id
                )
-               const currentDate = new Date();
-               const current = Math.floor(currentDate.getTime() / 1000)
+
+               const current = new Date().toISOString().split('T')[0];
 
                if (addCard) {
                   if (checkUser?.expired >= current) {
@@ -145,10 +161,7 @@ module.exports = {
                                  atmosApply?.ofd_url,
                               )
 
-                              const currentDate = new Date();
-                              const expirationDate = new Date(currentDate);
-                              expirationDate.setMonth(expirationDate.getMonth() + 1);
-                              const expirationTimestamp = Math.floor(expirationDate.getTime() / 1000);
+                              const expirationTimestamp = addOneMonthToCurrentDate()
                               const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
 
                               if (addCheck && editUserExpired) {
@@ -158,22 +171,16 @@ module.exports = {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
                                        reply_markup: {
                                           keyboard: [
-                                             [
-                                                {
-                                                   text: localText.myCardsBtn,
-                                                   // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
-                                                }
-                                             ],
-                                             [
-                                                {
-                                                   text: localText.historyPayBtn,
-                                                }
-                                             ],
-                                             [
-                                                {
-                                                   text: localText.contactAdmin,
-                                                }
-                                             ],
+                                             [{
+                                                text: localText.myCardsBtn,
+                                                // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                             }],
+                                             [{
+                                                text: localText.historyPayBtn,
+                                             }],
+                                             [{
+                                                text: localText.contactAdmin,
+                                             }],
                                           ],
                                           resize_keyboard: true
                                        }
@@ -294,22 +301,16 @@ module.exports = {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
                                        reply_markup: {
                                           keyboard: [
-                                             [
-                                                {
-                                                   text: localText.myCardsBtn,
-                                                   // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
-                                                }
-                                             ],
-                                             [
-                                                {
-                                                   text: localText.historyPayBtn,
-                                                }
-                                             ],
-                                             [
-                                                {
-                                                   text: localText.contactAdmin,
-                                                }
-                                             ],
+                                             [{
+                                                text: localText.myCardsBtn,
+                                                // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                             }],
+                                             [{
+                                                text: localText.historyPayBtn,
+                                             }],
+                                             [{
+                                                text: localText.contactAdmin,
+                                             }],
                                           ],
                                           resize_keyboard: true
                                        }
@@ -366,7 +367,10 @@ module.exports = {
 
    REMOVE_CARD: async (req, res) => {
       try {
-         const { card_id, card_token } = req.body
+         const {
+            card_id,
+            card_token
+         } = req.body
          const foundCardByCard_id = await model.foundCardByCard_id(card_id)
          const atmosToken = await model.atmosToken()
 

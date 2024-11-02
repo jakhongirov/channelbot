@@ -1,4 +1,7 @@
-const { fetch, fetchALL } = require('../postgres')
+const {
+   fetch,
+   fetchALL
+} = require('../postgres')
 
 const atmosToken = () => {
    const QUERY = `
@@ -77,8 +80,9 @@ const getUsersBefore2day = () => {
       FROM 
          users
       WHERE 
-         expired <= EXTRACT(EPOCH FROM NOW() + INTERVAL '2 days')
-         AND expired > EXTRACT(EPOCH FROM NOW());
+         expired::date = (CURRENT_DATE + INTERVAL '2 day') 
+         AND duration = true 
+         AND subscribe = true;
    `;
 
    return fetchALL(QUERY)
@@ -90,8 +94,9 @@ const getUsersBefore1day = () => {
       FROM 
          users
       WHERE 
-         expired <= EXTRACT(EPOCH FROM NOW() + INTERVAL '1 days')
-         AND expired > EXTRACT(EPOCH FROM NOW());
+         expired::date = (CURRENT_DATE + INTERVAL '1 day')
+         AND duration = true 
+         AND subscribe = true;
    `;
 
    return fetchALL(QUERY)
@@ -103,17 +108,18 @@ const getUsers = () => {
       FROM 
          users
       WHERE 
-         duration = true AND  subscribe = true;  
+         duration = true AND subscribe = true;  
    `;
 
    // const QUERY = `
-   //    SELECT 
+   //    SELECT
    //       *
-   //    FROM 
+   //    FROM
    //       users
-   //    WHERE 
-   //       expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()))
-   //       AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '1 day') AND duration = true AND  subscribe = true;  
+   //    WHERE
+   //       expired::date = CURRENT_DATE
+   //       AND duration = true
+   //       AND subscribe = true;
    // `;
 
    return fetchALL(QUERY)
@@ -125,8 +131,9 @@ const getUsersAfter2days = () => {
       FROM 
          users
       WHERE 
-         expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '2 days')
-         AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '3 days') AND duration = true AND  subscribe = true;
+         expired::date = (CURRENT_DATE - INTERVAL '2 days')
+         AND duration = true 
+         AND subscribe = true;
    `;
 
    return fetchALL(QUERY)
@@ -138,22 +145,24 @@ const getUsersAfter1days = () => {
       FROM 
          users
       WHERE 
-         expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '2 days')
-         AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '3 days') AND duration = true AND  subscribe = true;
+         expired::date = (CURRENT_DATE - INTERVAL '1 days')
+         AND duration = true 
+         AND subscribe = true;
    `;
 
    return fetchALL(QUERY)
 }
 const getUserWithoutDuration = () => {
    const QUERY = `
-   SELECT 
-      *
-   FROM 
-      users
-   WHERE 
-      expired >= EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()))
-      AND expired < EXTRACT(EPOCH FROM DATE_TRUNC('day', NOW()) + INTERVAL '1 day') AND duration = false AND  subscribe = true;  
-`;
+      SELECT
+         *
+      FROM
+         users
+      WHERE
+         expired::date = CURRENT_DATE
+         AND duration = true
+         AND subscribe = true;  
+   `;
 
    return fetchALL(QUERY)
 }

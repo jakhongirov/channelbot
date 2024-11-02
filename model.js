@@ -17,20 +17,23 @@ const foundUser = (chatId) => {
 }
 const createUser = (
    chatId,
-   step
+   step,
+   source
 ) => {
    const QUERY = `
       INSERT INTO
          users (
             chat_id,
-            step
+            step,
+            source
          ) VALUES (
             $1, 
-            $2 
+            $2,
+            $3
          ) RETURNING *;
    `;
 
-   return fetch(QUERY, chatId, step)
+   return fetch(QUERY, chatId, step,source)
 }
 const editStep = (chatId, step) => {
    const QUERY = `

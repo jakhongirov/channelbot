@@ -12,6 +12,7 @@ CREATE TABLE users (
    step text DEFAULT 'start',
    subscribe boolean DEFAULT false,
    expired int DEFAULT 0,
+   source text,
    duration boolean DEFAULT false,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );

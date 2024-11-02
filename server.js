@@ -46,12 +46,13 @@ function formatBalanceWithSpaces(balance) {
    }).format(balance / 100).replace(/,/g, ' ');
 }
 
-bot.onText(/\/start/, async (msg) => {
+bot.onText(/\/start ?(.*)?/, async (msg) => {
    const chatId = msg.chat.id;
+   const param = match[1]?.trim();
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
 
-   if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == 0) {
+   if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == null) {
       bot.sendMessage(chatId, localText.registeredSuccessText, {
          reply_markup: {
             keyboard: [
@@ -70,7 +71,7 @@ bot.onText(/\/start/, async (msg) => {
       }).then(async () => {
          await model.editStep(chatId, 'webpage');
       }).catch(e => console.log(e));
-   } else if (!foundUser || foundUser?.expired == 0) {
+   } else if (!foundUser || foundUser?.expired == null) {
       bot.sendMessage(chatId, localText?.startTextFromBot, {
          reply_markup: {
             keyboard: [
@@ -91,7 +92,8 @@ bot.onText(/\/start/, async (msg) => {
          if (!foundUser) {
             await model.createUser(
                chatId,
-               "start"
+               "start",
+               param ? param : "organic"
             )
          } else {
             await model.editStep(chatId, 'start');
@@ -128,8 +130,7 @@ bot.on('chat_join_request', async (msg) => {
    const chatId = msg.chat.id;
    const userId = msg.from.id;
    const foundUser = await model.foundUser(userId)
-   const currentDate = new Date();
-   const current = Math.floor(currentDate.getTime() / 1000)
+   const current = new Date().toISOString().split('T')[0];
 
    if (!foundUser) {
       bot.sendMessage(userId, localText?.startTextFromChannel, {
@@ -153,8 +154,9 @@ bot.on('chat_join_request', async (msg) => {
 
          if (!foundUser) {
             await model.createUser(
-               userId,
-               "start"
+               chatId,
+               "start",
+               "channel_link"
             )
          } else {
             await model.editStep(userId, 'start')
@@ -458,7 +460,7 @@ bot.on('message', async (msg) => {
    } else if (text == localText.backBtn) {
       if (foundUser?.step == "contactAdmin") {
          const userCard = await model.userCard(chatId)
-         if (userCard?.length == 0 && foundUser?.expired == 0) {
+         if (userCard?.length == 0 && foundUser?.expired == null) {
             bot.sendMessage(chatId, localText.startTextFromBot, {
                reply_markup: {
                   keyboard: [
@@ -678,8 +680,7 @@ bot.on('message', async (msg) => {
          })
       }
    } else if (text == localText.getLinkBtn) {
-      const currentDate = new Date();
-      const current = Math.floor(currentDate.getTime() / 1000)
+      const current = new Date().toISOString().split('T')[0];
 
       if (foundUser?.expired > current) {
          const invateLink = await createOneTimeLink()
@@ -719,8 +720,7 @@ bot.on('message', async (msg) => {
       }
    } else if (text == localText.activatingSubscriptionBtn) {
       const getUserCards = await model.userCard(chatId)
-      const currentDate = new Date();
-      const current = Math.floor(currentDate.getTime() / 1000)
+      const current = new Date().toISOString().split('T')[0];
 
       if (current >= foundUser?.expired && getUserCards?.length > 0) {
          let success = false;

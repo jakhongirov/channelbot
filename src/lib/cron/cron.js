@@ -43,11 +43,8 @@ const pay = async (user, userCard) => {
                apply?.ofd_url
             )
 
-            const currentDate = new Date();
-            const expirationDate = new Date(currentDate);
-            expirationDate.setMonth(expirationDate.getMonth() + 1);
-            const expirationTimestamp = Math.floor(expirationDate.getTime() / 1000);
-            const editUserExpired = await model.editUserExpired(user?.chat_id, expirationTimestamp)
+            const expirationTimestamp = addOneMonthToCurrentDate()
+            const editUserExpired = await model.editUserExpired(user?.chat_id, expirationTimestamp, true)
 
             if (addCheck && editUserExpired) {
                return "Success"
