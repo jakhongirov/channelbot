@@ -94,10 +94,20 @@ bot.onText(/\/start/, async (msg) => {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
             keyboard: [
-               ...(foundUser?.duration === false ? [[{ text: localText.activatingSubscriptionBtn }]] : []),
-               [{ text: localText.myCardsBtn }],
-               [{ text: localText.historyPayBtn }],
-               [{ text: localText.contactAdmin }]
+               ...(foundUser?.duration === false ? [
+                  [{
+                     text: localText.activatingSubscriptionBtn
+                  }]
+               ] : []),
+               [{
+                  text: localText.myCardsBtn
+               }],
+               [{
+                  text: localText.historyPayBtn
+               }],
+               [{
+                  text: localText.contactAdmin
+               }]
             ],
             resize_keyboard: true
          }
@@ -168,14 +178,16 @@ bot.on("callback_query", async (msg) => {
       const card = await model.card(cardId)
 
       if (card) {
+         const userCard = await model.userCard(chatId)
          bot.sendMessage(chatId, `${card?.card_number_hash}\n${card?.card_holder}`, {
             reply_markup: {
                inline_keyboard: [
-                  [{
-
-                     text: localText.makeMainCardBtn,
-                     callback_data: `main_card_${cardId}`
-                  }],
+                  ...(userCard?.length > 1 ? [
+                     [{
+                        text: localText.makeMainCardBtn,
+                        callback_data: `main_card_${cardId}`
+                     }]
+                  ] : []),
                   [{
                      text: localText.deleteCardBtn,
                      callback_data: `delete_card_${cardId}`
@@ -305,9 +317,15 @@ bot.on("callback_query", async (msg) => {
                                     url: `https://web-page-one-theta.vercel.app/${chatId}`
                                  }
                               }] : []),
-                              [{ text: localText.myCardsBtn }],
-                              [{ text: localText.historyPayBtn }],
-                              [{ text: localText.contactAdmin }]
+                              [{
+                                 text: localText.myCardsBtn
+                              }],
+                              [{
+                                 text: localText.historyPayBtn
+                              }],
+                              [{
+                                 text: localText.contactAdmin
+                              }]
                            ],
                            resize_keyboard: true
                         }
@@ -456,10 +474,20 @@ bot.on('message', async (msg) => {
             bot.sendMessage(chatId, localText.mainScreen, {
                reply_markup: {
                   keyboard: [
-                     ...(foundUser?.duration === false ? [[{ text: localText.activatingSubscriptionBtn }]] : []),
-                     [{ text: localText.myCardsBtn }],
-                     [{ text: localText.historyPayBtn }],
-                     [{ text: localText.contactAdmin }]
+                     ...(foundUser?.duration === false ? [
+                        [{
+                           text: localText.activatingSubscriptionBtn
+                        }]
+                     ] : []),
+                     [{
+                        text: localText.myCardsBtn
+                     }],
+                     [{
+                        text: localText.historyPayBtn
+                     }],
+                     [{
+                        text: localText.contactAdmin
+                     }]
                   ],
                   resize_keyboard: true
                }
@@ -475,10 +503,20 @@ bot.on('message', async (msg) => {
          bot.sendMessage(chatId, localText.mainScreen, {
             reply_markup: {
                keyboard: [
-                  ...(foundUser?.duration === false ? [[{ text: localText.activatingSubscriptionBtn }]] : []),
-                  [{ text: localText.myCardsBtn }],
-                  [{ text: localText.historyPayBtn }],
-                  [{ text: localText.contactAdmin }]
+                  ...(foundUser?.duration === false ? [
+                     [{
+                        text: localText.activatingSubscriptionBtn
+                     }]
+                  ] : []),
+                  [{
+                     text: localText.myCardsBtn
+                  }],
+                  [{
+                     text: localText.historyPayBtn
+                  }],
+                  [{
+                     text: localText.contactAdmin
+                  }]
                ],
                resize_keyboard: true
             }
@@ -539,10 +577,20 @@ bot.on('message', async (msg) => {
          bot.sendMessage(chatId, localText.mainScreen, {
             reply_markup: {
                keyboard: [
-                  ...(foundUser?.duration === false ? [[{ text: localText.activatingSubscriptionBtn }]] : []),
-                  [{ text: localText.myCardsBtn }],
-                  [{ text: localText.historyPayBtn }],
-                  [{ text: localText.contactAdmin }]
+                  ...(foundUser?.duration === false ? [
+                     [{
+                        text: localText.activatingSubscriptionBtn
+                     }]
+                  ] : []),
+                  [{
+                     text: localText.myCardsBtn
+                  }],
+                  [{
+                     text: localText.historyPayBtn
+                  }],
+                  [{
+                     text: localText.contactAdmin
+                  }]
                ],
                resize_keyboard: true
             }
