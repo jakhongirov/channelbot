@@ -46,7 +46,7 @@ function formatBalanceWithSpaces(balance) {
    }).format(balance / 100).replace(/,/g, ' ');
 }
 
-bot.onText(/\/start ?(.*)?/, async (msg) => {
+bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const chatId = msg.chat.id;
    const param = match[1]?.trim();
    const foundUser = await model.foundUser(chatId)
