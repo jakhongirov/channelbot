@@ -56,3 +56,10 @@ CREATE TABLE prices (
    price bigint,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE channel_admin (
+   id bigserial PRIMARY KEY,
+   title text,
+   username text,
+   create_at timestamptz DEFAULT CURRENT_TIMESTAMP
+);

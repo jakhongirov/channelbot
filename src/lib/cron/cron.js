@@ -1,6 +1,10 @@
 const model = require('./model')
 const atmos = require('../atmos/atmos')
-const { bot } = require('../bot')
+const {
+   bot
+} = require('../bot')
+const localText = require('../../text/text.json')
+
 
 const pay = async (user, userCard) => {
    const atmosToken = await model.atmosToken()
@@ -71,13 +75,13 @@ const sendMessageBefore = async () => {
 
       if (getUsersBefore2day?.length > 0) {
          for (const user of getUsersBefore2day) {
-            bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 2 kun qoldi")
+            bot.sendMessage(user?.chat_id, localText.cronTextBefore2day)
          }
       }
 
       if (getUsersBefore1day?.length > 0) {
          for (const user of getUsersBefore1day) {
-            bot.sendMessage(user?.chat_id, "Sizning obunangiz tugashiga 1 kun qoldi. Ertaga oxirgi kun kartada pul yechib olinadi")
+            bot.sendMessage(user?.chat_id, localText.cronTextBefore1day)
          }
       }
    } catch (error) {
@@ -109,14 +113,10 @@ const paySubcribe = async () => {
             }
 
             if (!success) {
-               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
-               bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
-                  .then(async () => {
-                     console.log(`User with ID ${user?.chat_id} has been removed `);
-                     await model.editUserSubcribe(user?.chat_id, false)
-                  })
-                  .catch(err => console.error('Error removing user:', err));
+               bot.sendMessage(user?.chat_id, localText.cronTextError)
                console.log(`No successful payment for user ${user.chat_id}`);
+            } else {
+               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
             }
          }
       }
@@ -139,8 +139,10 @@ const paySubcribe = async () => {
             }
 
             if (!success) {
+               bot.sendMessage(user?.chat_id, localText.cronTextError)
                console.log(`No successful payment for user ${user.chat_id}`);
-               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+            } else {
+               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
             }
          }
       }
@@ -163,21 +165,23 @@ const paySubcribe = async () => {
             }
 
             if (!success) {
-               console.log(`No successful payment for user ${user.chat_id}`);
-               bot.sendMessage(user?.chat_id, "Xatolik yuz berdi to'lov qabul qilinmadi.")
+               bot.sendMessage(user?.chat_id, localText.cronTextError)
                bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
                   .then(async () => {
                      console.log(`User with ID ${user?.chat_id} has been removed `);
                      await model.editUserSubcribe(user?.chat_id, false)
                   })
                   .catch(err => console.error('Error removing user:', err));
+               console.log(`No successful payment for user ${user.chat_id}`);
+            } else {
+               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
             }
          }
       }
 
       if (getUserWithoutDuration?.length > 0) {
          for (const user of getUserWithoutDuration) {
-            bot.sendMessage(user?.chat_id, "Obunangiz tugadi")
+            bot.sendMessage(user?.chat_id, localText.cronDurationOffEndDate)
             bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
                .then(async () => {
                   console.log(`User with ID ${user?.chat_id} has been removed `);

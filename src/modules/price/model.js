@@ -11,7 +11,7 @@ const price = () => {
          prices
    `;
 
-   return fetchALL(QUERY)
+   return fetch(QUERY)
 }
 const addPrice = (name, price) => {
    const QUERY = `

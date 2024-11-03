@@ -1,15 +1,15 @@
 const model = require('./model')
 
 module.exports = {
-   GET: async (_, res) => {
+   GET: async (req, res) => {
       try {
-         const price = await model.price()
+         const channelAdmin = await model.channelAdmin()
 
-         if (price) {
+         if (channelAdmin) {
             return res.status(200).json({
                status: 200,
                message: "Success",
-               data: price
+               data: channelAdmin
             })
          } else {
             return res.status(404).json({
@@ -27,28 +27,27 @@ module.exports = {
       }
    },
 
-   ADD_PRICE: async (req, res) => {
+   ADD_ADMIN: async (req, res) => {
       try {
          const {
-            name,
-            price
+            title,
+            username
          } = req.body
 
-         const addPrice = await model.addPrice(name, price)
+         const addAdmin = await model.addAdmin(title, username)
 
-         if (addPrice) {
+         if (addAdmin) {
             return res.status(200).json({
                status: 200,
                message: "Success",
-               data: addPrice
+               data: addAdmin
             })
          } else {
-            return res.status(400).json({
-               status: 400,
-               message: "Bad request"
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
             })
          }
-
       } catch (error) {
          console.log(error);
          return res.status(500).json({
@@ -58,28 +57,27 @@ module.exports = {
       }
    },
 
-   EDIT_PRICE: async (req, res) => {
+   EDIT_ADMIN: async (req, res) => {
       try {
          const {
             id,
-            price
+            username
          } = req.body
 
-         const editPrice = await model.editPrice(id, price)
+         const editAdmin = await model.editAdmin(id, username)
 
-         if (editPrice) {
+         if (editAdmin) {
             return res.status(200).json({
                status: 200,
                message: "Success",
-               data: editPrice
+               data: editAdmin
             })
          } else {
-            return res.status(400).json({
-               status: 400,
-               message: "Bad request"
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
             })
          }
-
       } catch (error) {
          console.log(error);
          return res.status(500).json({

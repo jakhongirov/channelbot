@@ -13,6 +13,7 @@ const payment = require('./payment/payment')
 const price = require('./price/price')
 const users = require('./users/users')
 const transaction = require('./transaction/transaction')
+const channelAdmin = require('./channelAdmin/channelAdmin')
 
 router
 
@@ -42,5 +43,9 @@ router
    .get('/transactions/filter', AUTH, transaction.GET_FILTER)
    .get('/transactions/user', AUTH, transaction.GET_USER_ID)
    .post('/transaction/add', AUTH, transaction.ADD_TRANSACTION)
+
+   .get('/channel-admin', AUTH, channelAdmin.GET)
+   .post('/channel-admin/add', AUTH, channelAdmin.ADD_ADMIN)
+   .put('/channel-admin/edit', AUTH, channelAdmin.EDIT_ADMIN)
 
 module.exports = router

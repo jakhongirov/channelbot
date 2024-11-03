@@ -33,5 +33,10 @@
 	"activatingSubscriptionText2": "Obuna faollashtirildi",
    "unsubscribeText": "Obunangiz to'xtatildi. Muddati tugaganidan so'ng kanaldan chiqarilasiz",
    "waitText": "Biroz kuting",
-   "addCardActivatingSubscriptionText": "Obunani faollashtirish uchun karta qo'shishingiz lozim"
+   "addCardActivatingSubscriptionText": "Obunani faollashtirish uchun karta qo'shishingiz lozim",
+	"cronTextBefore2day": "Sizning obunangiz tugashiga 2 kun qoldi",
+	"cronTextBefore1day": "Sizning obunangiz tugashiga 1 kun qoldi. Ertaga oxirgi kun kartada pul yechib olinadi",
+	"cronTextSuccess": "Muaffaqiyatli to'lov qabul qilindi",
+	"cronTextError": "Xatolik yuz berdi to'lov qabul qilinmadi.",
+	"cronDurationOffEndDate": "Obunangiz tugadi"
 }
