@@ -6,6 +6,7 @@ const credentials = {
    database: "test_bot",
    password: "behad2024",
    port: 5432,
+   timezone: 'Asia/Tashkent'
 };
 
 const pool = new Pool(credentials);
