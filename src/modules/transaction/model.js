@@ -17,12 +17,7 @@ const transaction = (limit, page) => {
 
    return fetchALL(QUERY)
 }
-const transactionsFilter = (
-   limit,
-   page,
-   month,
-   year
-) => {
+const transactionsFilter = (limit, page, month, year) => {
    const QUERY = `
       SELECT
          *
@@ -33,10 +28,12 @@ const transactionsFilter = (
          AND EXTRACT(YEAR FROM create_at) = $2
       ORDER BY
          id DESC
-      LIMIT ${limit}
-      OFFSET ${Number((page - 1) * limit)};`;
+      LIMIT $3
+      OFFSET $4;
+   `;
 
-   return fetchALL(QUERY, month, year)
+   // Pass `limit` and `offset` as additional parameters
+   return fetchALL(QUERY, month, year, limit, (page - 1) * limit);
 }
 const transactionsAmount = (month, year) => {
    const QUERY = `
