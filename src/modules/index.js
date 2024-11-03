@@ -44,8 +44,11 @@ router
    .get('/transactions/user', AUTH, transaction.GET_USER_ID)
    .post('/transaction/add', AUTH, transaction.ADD_TRANSACTION)
 
+   // CHANNEL ADMIN
    .get('/channel-admin', AUTH, channelAdmin.GET)
    .post('/channel-admin/add', AUTH, channelAdmin.ADD_ADMIN)
    .put('/channel-admin/edit', AUTH, channelAdmin.EDIT_ADMIN)
+
+   
 
 module.exports = router
