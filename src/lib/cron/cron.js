@@ -98,84 +98,109 @@ const paySubcribe = async () => {
 
       if (getUsers?.length > 0) {
          for (const user of getUsers) {
-            const userCards = await model.userCards(user?.chat_id);
-            let success = false; // Flag to track successful payment for the current user
+            bot.getChatMember(process.env.CHANNEL_ID, user?.chat_id)
+               .then(async (member) => {
+                  // Check the user's membership status
+                  if (['member', 'administrator', 'creator'].includes(member.status)) {
+                     const userCards = await model.userCards(user?.chat_id);
+                     let success = false; // Flag to track successful payment for the current user
 
-            for (const card of userCards) {
-               if (success) break; // Skip further cards if payment was successful
+                     for (const card of userCards) {
+                        if (success) break; // Skip further cards if payment was successful
 
-               const payed = await pay(user, card);
+                        const payed = await pay(user, card);
+                        console.log(payed)
 
-               if (payed == 'Success') {
-                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-                  success = true; // Set success to true to stop further processing for this user
-               }
-            }
+                        if (payed === 'Success') {
+                           console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                           success = true; // Set success to true to stop further processing for this user
+                        }
+                     }
 
-            if (!success) {
-               bot.sendMessage(user?.chat_id, localText.cronTextError)
-               console.log(`No successful payment for user ${user.chat_id}`);
-            } else {
-               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
-            }
+                     if (!success) {
+                        bot.sendMessage(user?.chat_id, localText.cronTextError)
+                        console.log(`No successful payment for user ${user.chat_id}`);
+                     } else {
+                        bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
+                     }
+                  }
+               })
+               .catch((error) => {
+                  console.error('Error checking membership:', error);
+                  bot.sendMessage(msg.chat.id, 'Unable to verify your membership at this time.');
+               });
          }
       }
 
       if (getUsersAfter1days?.length > 0) {
          for (const user of getUsersAfter1days) {
-            const userCards = await model.userCards(user?.chat_id);
-            let success = false; // Flag to track successful payment for the current user
+            bot.getChatMember(process.env.CHANNEL_ID, user?.chat_id)
+               .then(async (member) => {
+                  // Check the user's membership status
+                  if (['member', 'administrator', 'creator'].includes(member.status)) {
+                     const userCards = await model.userCards(user?.chat_id);
+                     let success = false; // Flag to track successful payment for the current user
 
-            for (const card of userCards) {
-               if (success) break; // Skip further cards if payment was successful
+                     for (const card of userCards) {
+                        if (success) break; // Skip further cards if payment was successful
 
-               const payed = await pay(user, card);
-               console.log(payed)
+                        const payed = await pay(user, card);
+                        console.log(payed)
 
-               if (payed === 'Success') {
-                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-                  success = true; // Set success to true to stop further processing for this user
-               }
-            }
+                        if (payed === 'Success') {
+                           console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                           success = true; // Set success to true to stop further processing for this user
+                        }
+                     }
 
-            if (!success) {
-               bot.sendMessage(user?.chat_id, localText.cronTextError)
-               console.log(`No successful payment for user ${user.chat_id}`);
-            } else {
-               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
-            }
+                     if (!success) {
+                        bot.sendMessage(user?.chat_id, localText.cronTextError)
+                        console.log(`No successful payment for user ${user.chat_id}`);
+                     } else {
+                        bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
+                     }
+                  }
+               })
+               .catch((error) => {
+                  console.error('Error checking membership:', error);
+                  bot.sendMessage(msg.chat.id, 'Unable to verify your membership at this time.');
+               });
          }
       }
 
       if (getUsersAfter2days?.length > 0) {
          for (const user of getUsersAfter2days) {
-            const userCards = await model.userCards(user?.chat_id);
-            let success = false; // Flag to track successful payment for the current user
+            bot.getChatMember(process.env.CHANNEL_ID, user?.chat_id)
+               .then(async (member) => {
+                  // Check the user's membership status
+                  if (['member', 'administrator', 'creator'].includes(member.status)) {
+                     const userCards = await model.userCards(user?.chat_id);
+                     let success = false; // Flag to track successful payment for the current user
 
-            for (const card of userCards) {
-               if (success) break; // Skip further cards if payment was successful
+                     for (const card of userCards) {
+                        if (success) break; // Skip further cards if payment was successful
 
-               const payed = await pay(user, card);
+                        const payed = await pay(user, card);
+                        console.log(payed)
 
-               if (payed === 'Success') {
-                  console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
-                  success = true; // Set success to true to stop further processing for this user
-                  bot.sendMessage(user?.chat_id, "Tolov muvaffaqiyatli qabul qilindi")
-               }
-            }
+                        if (payed === 'Success') {
+                           console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
+                           success = true; // Set success to true to stop further processing for this user
+                        }
+                     }
 
-            if (!success) {
-               bot.sendMessage(user?.chat_id, localText.cronTextError)
-               bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
-                  .then(async () => {
-                     console.log(`User with ID ${user?.chat_id} has been removed `);
-                     await model.editUserSubcribe(user?.chat_id, false)
-                  })
-                  .catch(err => console.error('Error removing user:', err));
-               console.log(`No successful payment for user ${user.chat_id}`);
-            } else {
-               bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
-            }
+                     if (!success) {
+                        bot.sendMessage(user?.chat_id, localText.cronTextError)
+                        console.log(`No successful payment for user ${user.chat_id}`);
+                     } else {
+                        bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
+                     }
+                  }
+               })
+               .catch((error) => {
+                  console.error('Error checking membership:', error);
+                  bot.sendMessage(msg.chat.id, 'Unable to verify your membership at this time.');
+               });
          }
       }
 
