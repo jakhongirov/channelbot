@@ -14,6 +14,7 @@ const price = require('./price/price')
 const users = require('./users/users')
 const transaction = require('./transaction/transaction')
 const channelAdmin = require('./channelAdmin/channelAdmin')
+const news = require('./news/news')
 
 router
 
@@ -49,6 +50,8 @@ router
    .post('/channel-admin/add', AUTH, channelAdmin.ADD_ADMIN)
    .put('/channel-admin/edit', AUTH, channelAdmin.EDIT_ADMIN)
 
-   
+   // NEWS
+   .post('/news/all/users', AUTH, news.ALL_USERS)
+   .post('/news/single/user', AUTH, news.SINGLE_USER)
 
 module.exports = router

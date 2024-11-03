@@ -64,6 +64,18 @@ const transactionsUserId = (user_id) => {
 
    return fetchALL(QUERY, user_id)
 }
+const foundUser = (user_id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         users
+      WHERE
+         chat_id = $1
+   `;
+
+   return fetch(QUERY, user_id)
+}
 const addTransaction = (
    user_id,
    method,
@@ -89,11 +101,26 @@ const addTransaction = (
       amount
    )
 }
+const expiredDate = (user_id, expiredDate) => {
+   const QUERY = `
+      UPDATE
+         users
+      SET
+         expired = $2
+      WHERE
+         chat_id = $1
+      RETURNING *;
+   `;
+
+   return fetch(QUERY, user_id, expiredDate)
+}
 
 module.exports = {
    transaction,
    transactionsFilter,
    transactionsAmount,
    transactionsUserId,
-   addTransaction
+   foundUser,
+   addTransaction,
+   expiredDate
 }

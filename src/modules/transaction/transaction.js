@@ -1,5 +1,16 @@
 const model = require('./model')
 
+function monthToCurrentDate(expire_month) {
+   const date = new Date();
+   date.setMonth(date.getMonth() + 1);
+
+   const year = date.getUTCFullYear();
+   const month = String(date.getUTCMonth() + Number(expire_month)).padStart(2, '0');
+   const day = String(date.getUTCDate()).padStart(2, '0');
+
+   return `${year}-${month}-${day}`;
+}
+
 module.exports = {
    GET: async (req, res) => {
       try {
@@ -122,21 +133,32 @@ module.exports = {
          const {
             user_id,
             method,
-            amount
+            amount,
+            month
          } = req.body
+         const foundUser = await model.foundUser(user_id)
 
-         const addTransaction = await model.addTransaction(
-            user_id,
-            method,
-            amount
-         )
+         if (foundUser) {
+            const expiredDate = monthToCurrentDate(month)
+            const addTransaction = await model.addTransaction(
+               user_id,
+               method,
+               amount
+            )
+            const editExpired = await model.expiredDate(user_id, expiredDate)
 
-         if (addTransaction) {
-            return res.status(200).json({
-               status: 200,
-               message: "Success",
-               data: addTransaction
-            })
+            if (addTransaction && editExpired) {
+               return res.status(200).json({
+                  status: 200,
+                  message: "Success",
+                  data: addTransaction
+               })
+            } else {
+               return res.status(400).json({
+                  status: 400,
+                  message: "Bad request"
+               })
+            }
          } else {
             return res.status(404).json({
                status: 404,
