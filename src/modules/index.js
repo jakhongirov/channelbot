@@ -51,7 +51,7 @@ router
    .put('/channel-admin/edit', AUTH, channelAdmin.EDIT_ADMIN)
 
    // NEWS
-   .post('/news/all/users', AUTH, news.ALL_USERS)
-   .post('/news/single/user', AUTH, news.SINGLE_USER)
+   .post('/news/all/users', AUTH, FileUpload.single('photo'), news.ALL_USERS)
+   .post('/news/single/user', AUTH, FileUpload.single('photo'), news.SINGLE_USER)
 
 module.exports = router
