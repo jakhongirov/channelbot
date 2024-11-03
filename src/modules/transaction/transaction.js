@@ -59,6 +59,7 @@ module.exports = {
             month,
             year
          } = req.query
+         console.log(req.query)
 
          if (limit && page) {
             const transactionsFilter = await model.transactionsFilter(

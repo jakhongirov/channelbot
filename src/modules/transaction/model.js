@@ -29,8 +29,8 @@ const transactionsFilter = (
       FROM
          checks
       WHERE
-         EXTRACT(YEAR FROM create_at) = $2
-         and EXTRACT(MONTH FROM create_at) = $1
+         EXTRACT(MONTH FROM create_at) = $1 
+         AND EXTRACT(YEAR FROM create_at) = $2
       ORDER BY
          id DESC
       LIMIT ${limit}
