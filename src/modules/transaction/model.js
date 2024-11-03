@@ -18,6 +18,9 @@ const transaction = (limit, page) => {
    return fetchALL(QUERY)
 }
 const transactionsFilter = (limit, page, month, year) => {
+
+   console.log(limit, page, month, year)
+
    const QUERY = `
       SELECT
          *
@@ -31,8 +34,6 @@ const transactionsFilter = (limit, page, month, year) => {
       LIMIT $3
       OFFSET $4;
    `;
-
-   // Pass `limit` and `offset` as additional parameters
    return fetchALL(QUERY, month, year, limit, (page - 1) * limit);
 }
 const transactionsAmount = (month, year) => {
@@ -42,8 +43,9 @@ const transactionsAmount = (month, year) => {
       FROM
          checks
       WHERE
-         EXTRACT(YEAR FROM create_at) = 2024
-         and EXTRACT(MONTH FROM create_at) = 10;`;
+         EXTRACT(MONTH FROM create_at) = $1 
+         AND EXTRACT(YEAR FROM create_at) = $2;
+   `;
 
    return fetch(QUERY, month, year)
 }
