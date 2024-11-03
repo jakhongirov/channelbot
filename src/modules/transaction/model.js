@@ -18,9 +18,6 @@ const transaction = (limit, page) => {
    return fetchALL(QUERY)
 }
 const transactionsFilter = (limit, page, month, year) => {
-
-   console.log(limit, page, month, year)
-
    const QUERY = `
       SELECT
          *
