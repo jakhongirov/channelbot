@@ -32,7 +32,7 @@ const editPrice = (id, price) => {
       UPDATE
          prices
       SET
-         price
+         price = $2
       WHERE
          id = $1
       RETURNING *;
