@@ -128,12 +128,11 @@ module.exports = {
       }
    },
 
-   GET_ID: async () => {
+   GET_ID: async (req, res) => {
       try {
          const {
             id
          } = req.params
-
          const foundTransaction = await model.foundTransaction(id)
 
          if (foundTransaction) {
