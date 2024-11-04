@@ -46,7 +46,9 @@ module.exports = {
             }
          } else {
             for (const user of users) {
-               bot.sendMessage(user?.chat_id, text)
+               bot.sendMessage(user?.chat_id, text, {
+                  parse_mode: "HTML"
+               })
             }
          }
 
@@ -96,7 +98,9 @@ module.exports = {
                })
             }
          } else {
-            bot.sendMessage(chat_id, text)
+            bot.sendMessage(chat_id, text, {
+               parse_mode: "HTML"
+            })
          }
 
          return res.status(200).json({
