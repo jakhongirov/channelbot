@@ -201,5 +201,41 @@ module.exports = {
             message: "Interval Server Error"
          })
       }
+   },
+
+   GET_STATIC_MONTHS: async (req, res) => {
+      try {
+         const now = new Date();
+         const currentMonth = now.getMonth() + 1; // Current month (1-12)
+         const currentMonthYear = now.getFullYear(); // Current year
+
+         // Calculate previous month and year
+         let previousMonth, previousMonthYear;
+
+         if (currentMonth === 1) { // If it's January
+            previousMonth = 12; // Previous month is December
+            previousMonthYear = currentMonthYear - 1; // Year is last year
+         } else {
+            previousMonth = currentMonth - 1; // Previous month
+            previousMonthYear = currentMonthYear; // Same year as current
+         }
+
+         const currentMonthData = await model.transactionsAmount(currentMonth, currentMonthYear)
+         const previousMonthData = await model.transactionsAmount(previousMonth, previousMonthYear)
+
+         return res.status(200).json({
+            status: 200,
+            message: "Success",
+            current_month: currentMonthData,
+            previous_month: previousMonthData
+         })
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
    }
 }
