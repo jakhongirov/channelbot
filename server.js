@@ -445,7 +445,8 @@ bot.on('message', async (msg) => {
          await model.editStep(chatId, 'register')
       }).catch(e => console.log(e))
    } else if (text == localText.contactAdmin) {
-      bot.sendMessage(chatId, localText.contactAdminText, {
+      const adminUsername = await model.adminUsername()
+      bot.sendMessage(chatId, adminUsername?.username, {
          reply_markup: {
             keyboard: [
                [{

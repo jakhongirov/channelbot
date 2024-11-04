@@ -33,7 +33,7 @@ const createUser = (
          ) RETURNING *;
    `;
 
-   return fetch(QUERY, chatId, step,source)
+   return fetch(QUERY, chatId, step, source)
 }
 const editStep = (chatId, step) => {
    const QUERY = `
@@ -189,6 +189,16 @@ const checksUser = (chatId) => {
 
    return fetchALL(QUERY, chatId)
 }
+const adminUsername = () => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         channel_admin;
+   `;
+
+   return fetch(QUERY)
+}
 
 module.exports = {
    foundUser,
@@ -204,5 +214,6 @@ module.exports = {
    atmosToken,
    deleteCard,
    editDuration,
-   checksUser
+   checksUser,
+   adminUsername
 }
