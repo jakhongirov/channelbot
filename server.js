@@ -173,20 +173,13 @@ bot.on('chat_join_request', async (msg) => {
    }
 });
 
-bot.on('update', (msg) => {
-   if (msg.chat_member) { // Check if the update is a chat member update
-      const chatId = msg.chat_member.chat.id;
-      const userId = msg.chat_member.from.id;
-      const newStatus = msg.chat_member.new_chat_member.status;
+bot.on('chat_member', (msg) => {
+   const chatId = msg.chat.id;
+   const userId = msg.from.id;
+   const newStatus = msg.new_chat_member.status;
 
-      console.log(msg);
-
-
-      if (newStatus === 'left' || newStatus === 'kicked') {
-         // User has left or been removed from the channel
-         console.log(`User ${userId} has left the channel ${chatId}`);
-         // Perform any additional actions like updating your database
-      }
+   if (newStatus === 'left' || newStatus === 'kicked') {
+      console.log(`User ${userId} has left the channel ${chatId}`);
    }
 });
 
