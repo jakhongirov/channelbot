@@ -178,6 +178,8 @@ bot.on('chat_member', (msg) => {
    const userId = msg.from.id;
    const newStatus = msg.new_chat_member.status;
 
+   console.log(msg)
+
    if (newStatus === 'left' || newStatus === 'kicked') {
       console.log(`User ${userId} has left the channel ${chatId}`);
    }
