@@ -45,9 +45,9 @@ module.exports = {
    GET_ID: async (req, res) => {
       try {
          const {
-            user_id
+            chat_id
          } = req.params
-         const foundUser = await model.foundUser(user_id)
+         const foundUser = await model.foundUser(chat_id)
 
          if (foundUser) {
             return res.status(200).json({
