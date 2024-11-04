@@ -25,7 +25,7 @@ const users = (limit, page, phone) => {
 
    return fetchALL(QUERY)
 }
-const foundUser = (user_id) => {
+const foundUser = (chat_id) => {
    const QUERY = `
       SELECT
          *
@@ -35,7 +35,7 @@ const foundUser = (user_id) => {
          chat_id = $1;
    `;
 
-   return fetch(QUERY, user_id)
+   return fetch(QUERY, chat_id)
 }
 
 module.exports = {
