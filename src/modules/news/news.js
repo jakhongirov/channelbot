@@ -81,8 +81,6 @@ module.exports = {
             .replace(/<p>/g, '')
             .replace(/<\/p>/g, '\n')
             .replace(/<br\s*\/?>/g, '\n');
-         console.log(req)
-         console.log(req.file)
 
          if (uploadPhoto) {
             const fileName = uploadPhoto?.filename;
