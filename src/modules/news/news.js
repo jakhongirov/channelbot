@@ -16,6 +16,7 @@ module.exports = {
             text
          } = req.body
          const users = await model.users(user_subcribe)
+         const formattedText = text.replace(/<\/?p>/g, '');
 
          if (uploadPhoto) {
             const fileName = uploadPhoto?.filename;
@@ -26,7 +27,7 @@ module.exports = {
                for (const user of users) {
                   bot.sendPhoto(user?.chat_id, fs.readFileSync(imagePath), {
                      parse_mode: "HTML",
-                     caption: text
+                     caption: formattedText
                   }).then(async () => {
                      const deleteImg = new FS(path.resolve(__dirname, '..', '..', '..', 'public', 'images', `${fileName}`))
                      deleteImg.delete()
@@ -37,7 +38,7 @@ module.exports = {
                for (const user of users) {
                   bot.sendVideo(user?.chat_id, fs.readFileSync(videoPath), {
                      parse_mode: "HTML",
-                     caption: text
+                     caption: formattedText
                   }).then(async () => {
                      const deleteVideo = new FS(path.resolve(__dirname, '..', '..', '..', 'public', 'images', `${fileName}`))
                      deleteVideo.delete()
@@ -45,10 +46,10 @@ module.exports = {
                }
             }
          } else {
-            for (const user of users) {
-               bot.sendMessage(user?.chat_id, text, {
+            for (const user of users) { // Remove <p> tags
+               bot.sendMessage(user?.chat_id, formattedText, {
                   parse_mode: "HTML"
-               })
+               });
             }
          }
 
@@ -73,34 +74,35 @@ module.exports = {
             chat_id,
             text
          } = req.body
+         const formattedText = text.replace(/<\/?p>/g, ''); // Remove <p> tags
 
          if (uploadPhoto) {
             const fileName = uploadPhoto?.filename;
             const mimeType = req.file.mimetype;
-
             if (mimeType.startsWith('image/')) {
                const imagePath = path.resolve(__dirname, '..', '..', '..', 'public', 'images', fileName);
                bot.sendPhoto(chat_id, fs.readFileSync(imagePath), {
                   parse_mode: "HTML",
-                  caption: text
+                  caption: formattedText
                }).then(async () => {
                   const deleteImg = new FS(path.resolve(__dirname, '..', '..', '..', 'public', 'images', `${fileName}`))
                   deleteImg.delete()
                })
             } else if (mimeType.startsWith('video/')) {
                const videoPath = path.resolve(__dirname, '..', '..', '..', 'public', 'images', fileName);
+
                bot.sendVideo(chat_id, fs.readFileSync(videoPath), {
                   parse_mode: "HTML",
-                  caption: text
+                  caption: formattedText
                }).then(async () => {
                   const deleteVideo = new FS(path.resolve(__dirname, '..', '..', '..', 'public', 'images', `${fileName}`))
                   deleteVideo.delete()
                })
             }
          } else {
-            bot.sendMessage(chat_id, text, {
+            bot.sendMessage(chat_id, formattedText, {
                parse_mode: "HTML"
-            })
+            });
          }
 
          return res.status(200).json({
