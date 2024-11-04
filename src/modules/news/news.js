@@ -76,6 +76,7 @@ module.exports = {
          } = req.body
          const formattedText = text.replace(/<\/?p>/g, ''); // Remove <p> tags
          console.log(req)
+         console.log(req.file)
 
          if (uploadPhoto) {
             const fileName = uploadPhoto?.filename;
