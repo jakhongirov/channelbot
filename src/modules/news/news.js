@@ -16,7 +16,10 @@ module.exports = {
             text
          } = req.body
          const users = await model.users(user_subcribe)
-         const formattedText = text.replace(/<\/?p>/g, '');
+         const formattedText = text
+            .replace(/<p>/g, '') // Remove opening <p> tags
+            .replace(/<\/p>/g, '\n') // Replace closing </p> tags with new lines
+            .replace(/<br\s*\/?>/g, '\n');
 
          if (uploadPhoto) {
             const fileName = uploadPhoto?.filename;
@@ -74,7 +77,10 @@ module.exports = {
             chat_id,
             text
          } = req.body
-         const formattedText = text.replace(/<\/?p>/g, ''); // Remove <p> tags
+         const formattedText = text
+            .replace(/<p>/g, '') // Remove opening <p> tags
+            .replace(/<\/p>/g, '\n') // Replace closing </p> tags with new lines
+            .replace(/<br\s*\/?>/g, '\n'); // Remove <p> tags
          console.log(req)
          console.log(req.file)
 
