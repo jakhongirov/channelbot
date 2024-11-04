@@ -123,6 +123,8 @@ const paySubcribe = async () => {
                      } else {
                         bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
                      }
+                  } else {
+                     await model.editUserSubcribe(user?.chat_id, false)
                   }
                })
                .catch((error) => {
@@ -159,6 +161,8 @@ const paySubcribe = async () => {
                      } else {
                         bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
                      }
+                  } else {
+                     await model.editUserSubcribe(user?.chat_id, false)
                   }
                })
                .catch((error) => {
@@ -200,6 +204,8 @@ const paySubcribe = async () => {
                      } else {
                         bot.sendMessage(user?.chat_id, localText.cronTextSuccess)
                      }
+                  } else {
+                     await model.editUserSubcribe(user?.chat_id, false)
                   }
                })
                .catch((error) => {
