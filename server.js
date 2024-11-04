@@ -173,6 +173,18 @@ bot.on('chat_join_request', async (msg) => {
    }
 });
 
+bot.on('chat_member', (msg) => {
+   const chatId = msg.chat.id;
+   const userId = msg.from.id;
+   const newStatus = msg.new_chat_member.status;
+
+   if (newStatus === 'left' || newStatus === 'kicked') {
+      // User has left or been removed from the channel
+      console.log(`User ${userId} has left the channel ${chatId}`);
+      // You can perform additional actions here, such as updating your database
+   }
+});
+
 bot.on("callback_query", async (msg) => {
    const chatId = msg.message.chat.id;
    const data = msg.data;
