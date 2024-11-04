@@ -190,7 +190,12 @@ const paySubcribe = async () => {
                      }
 
                      if (!success) {
-                        bot.sendMessage(user?.chat_id, localText.cronTextError)
+                        bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+                           .then(async () => {
+                              console.log(`User with ID ${user?.chat_id} has been removed `);
+                              await model.editUserSubcribe(user?.chat_id, false)
+                           })
+                           .catch(err => console.error('Error removing user:', err));
                         console.log(`No successful payment for user ${user.chat_id}`);
                      } else {
                         bot.sendMessage(user?.chat_id, localText.cronTextSuccess)

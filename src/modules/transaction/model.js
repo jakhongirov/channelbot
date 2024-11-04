@@ -60,6 +60,18 @@ const transactionsUserId = (user_id) => {
 
    return fetchALL(QUERY, user_id)
 }
+const foundTransaction = (id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         checks
+      WHERE
+         id = $1;
+   `;
+
+   return fetch(QUERY, id)
+}
 const foundUser = (user_id) => {
    const QUERY = `
       SELECT
@@ -116,6 +128,7 @@ module.exports = {
    transactionsFilter,
    transactionsAmount,
    transactionsUserId,
+   foundTransaction,
    foundUser,
    addTransaction,
    expiredDate

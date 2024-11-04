@@ -128,6 +128,36 @@ module.exports = {
       }
    },
 
+   GET_ID: async () => {
+      try {
+         const {
+            id
+         } = req.params
+
+         const foundTransaction = await model.foundTransaction(id)
+
+         if (foundTransaction) {
+            return res.status(200).json({
+               status: 200,
+               message: "Success",
+               data: foundTransaction
+            })
+         } else {
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
+            })
+         }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
    ADD_TRANSACTION: async (req, res) => {
       try {
          const {

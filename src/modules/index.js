@@ -38,10 +38,12 @@ router
 
    // USERS
    .get('/users/list', AUTH, users.GET)
+   .get('/user/:chat_id', AUTH, users.GET_ID)
 
    // TRANSACTION
    .get('/transactions/list', AUTH, transaction.GET)
    .get('/transactions/filter', AUTH, transaction.GET_FILTER)
+   .get('/transaction/:id', AUTH, transaction.GET_ID)
    .get('/transactions/user', AUTH, transaction.GET_USER_ID)
    .post('/transaction/add', AUTH, transaction.ADD_TRANSACTION)
 
