@@ -173,7 +173,7 @@ bot.on('chat_join_request', async (msg) => {
    }
 });
 
-bot.on('chat_member', (msg) => {
+bot.on("chat_member_updated", (msg) => {
    const chatId = msg.chat.id;
    const userId = msg.from.id;
    const newStatus = msg.new_chat_member.status;
