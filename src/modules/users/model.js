@@ -37,8 +37,30 @@ const foundUser = (chat_id) => {
 
    return fetch(QUERY, chat_id)
 }
+const allUser = () => {
+   const QUERY = `
+      SELECT
+         count(chat_id)
+      FROM
+         users;
+   `;
+
+   return fetch(QUERY)
+}
+const payedUsers = () => {
+   const QUERY = `
+      SELECT 
+         COUNT(DISTINCT user_id)
+      FROM
+         checks;
+   `;
+
+   return fetch(QUERY)
+}
 
 module.exports = {
    users,
-   foundUser
+   foundUser,
+   allUser,
+   payedUsers
 }

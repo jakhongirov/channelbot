@@ -1,4 +1,7 @@
 const model = require('./model')
+const {
+   bot
+} = require('../../lib/bot')
 
 module.exports = {
    GET: async (req, res) => {
@@ -61,6 +64,31 @@ module.exports = {
                message: "Not found"
             })
          }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
+   USER_STATIS: async (req, res) => {
+      try {
+         const allUser = await model.allUser()
+         const payedUsers = await model.payedUsers()
+         const count = await bot.getChatMembersCount(process.env.CHANNEL_ID);
+
+         return res.status(200).json({
+            status: 200,
+            message: "Success",
+            data: {
+               all_user: allUser?.count,
+               payed_user: payedUsers?.count,
+               bot_members: count
+            }
+         })
 
       } catch (error) {
          console.log(error);
