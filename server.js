@@ -76,7 +76,7 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          reply_markup: {
             keyboard: [
                [{
-                  text: localText?.offerLink,
+                  text: localText?.ofertaLink,
                   web_app: {
                      url: `https://atmos.uz/documents/`
                   }
@@ -137,7 +137,7 @@ bot.on('chat_join_request', async (msg) => {
          reply_markup: {
             keyboard: [
                [{
-                  text: localText?.offerLink,
+                  text: localText?.ofertaLink,
                   web_app: {
                      url: `https://atmos.uz/documents/`
                   }
