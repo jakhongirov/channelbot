@@ -84,8 +84,8 @@ module.exports = {
             status: 200,
             message: "Success",
             data: {
-               all_user: allUser?.count,
-               payed_user: payedUsers?.count,
+               all_user: Number(allUser?.count),
+               payed_user: Number(payedUsers?.count),
                bot_members: count
             }
          });
