@@ -125,7 +125,7 @@ const expiredDate = (user_id, expiredDate) => {
 const statisticsMonths = () => {
    const QUERY = `
       SELECT
-         TO_CHAR(month, 'Month YYYY') AS month,
+         TO_CHAR(month, 'Month') AS month,
          COALESCE(SUM(c.amount), 0) AS total_amount
       FROM
          GENERATE_SERIES(
