@@ -97,5 +97,24 @@ module.exports = {
             message: "Internal Server Error"
          });
       }
+   },
+
+   STATISTICS_SOURCE: async (req, res) => {
+      try {
+         const statisticsSource = await model.statisticsSource()
+
+         return res.status(200).json({
+            status: 200,
+            message: "Success",
+            data: statisticsSource
+         });
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Internal Server Error"
+         });
+      }
    }
 }

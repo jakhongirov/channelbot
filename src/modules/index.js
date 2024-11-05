@@ -40,6 +40,7 @@ router
    .get('/users/list', AUTH, users.GET)
    .get('/user/:chat_id', AUTH, users.GET_ID)
    .get('/users/statistics', AUTH, users.USER_STATIS)
+   .get('/users/statistics/source', AUTH, users.STATISTICS_SOURCE)
 
    // TRANSACTION
    .get('/transactions/list', AUTH, transaction.GET)
