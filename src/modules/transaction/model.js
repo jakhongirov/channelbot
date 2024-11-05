@@ -177,7 +177,7 @@ const statisticsIncrease = () => {
             monthly_totals mt ON all_months.month = mt.month
       )
       SELECT
-         TO_CHAR(month, 'Month YYYY') AS month,
+         TO_CHAR(month, 'Month') AS month,
          total_amount,
          CASE
             WHEN previous_total = 0 OR total_amount = 0 THEN NULL
