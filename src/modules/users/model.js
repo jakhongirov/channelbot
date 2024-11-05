@@ -57,10 +57,26 @@ const payedUsers = () => {
 
    return fetch(QUERY)
 }
+const statisticsSource = () => {
+   const QUERY = `
+      SELECT
+         source,
+         ROUND((COUNT(*) * 100.0) / (SELECT COUNT(*) FROM users), 2) AS percentage
+      FROM
+         users
+      GROUP BY
+         source
+      ORDER BY
+         percentage DESC;
+   `;
+
+   return fetchALL(QUERY)
+}
 
 module.exports = {
    users,
    foundUser,
    allUser,
-   payedUsers
+   payedUsers,
+   statisticsSource
 }
