@@ -62,7 +62,7 @@ const statisticsSource = () => {
       SELECT
          source,
          ROUND((COUNT(*) * 100.0) / (SELECT COUNT(*) FROM users), 2) AS percentage,
-         const(*)
+         count(*)
       FROM
          users
       GROUP BY
