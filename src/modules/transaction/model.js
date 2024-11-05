@@ -125,13 +125,20 @@ const expiredDate = (user_id, expiredDate) => {
 const statisticsMonths = () => {
    const QUERY = `
       SELECT
-         TO_CHAR(DATE_TRUNC('month', create_at), 'Month') AS month_name,
-         DATE_TRUNC('month', create_at) AS month,  -- Truncated date for ordering
-         SUM(amount) AS total_amount
+         TO_CHAR(month::date, 'Month YYYY') AS month,
+         COALESCE(SUM(c.amount), 0) AS total_amount
       FROM
-         checks
+         GENERATE_SERIES(
+            DATE_TRUNC('year', CURRENT_DATE),
+            DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '11 months',
+            '1 month'
+         ) AS month
+      LEFT JOIN
+         checks c ON DATE_TRUNC('month', c.create_at) = month
+      WHERE
+         EXTRACT(YEAR FROM month) = EXTRACT(YEAR FROM CURRENT_DATE)
       GROUP BY
-         month_name, month
+         month
       ORDER BY
          month;
    `;
