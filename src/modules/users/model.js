@@ -104,7 +104,7 @@ const statisticsIncrease = () => {
             monthly_user_counts muc ON all_months.month = muc.month
       )
       SELECT
-         TO_CHAR(month, 'Month YYYY') AS month,
+         TO_CHAR(month, 'Month') AS month,
          user_count,
          CASE
             WHEN previous_count = 0 OR user_count = 0 THEN NULL
