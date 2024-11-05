@@ -76,9 +76,9 @@ module.exports = {
 
    USER_STATIS: async (req, res) => {
       try {
-         const allUser = await model.allUser()
-         const payedUsers = await model.payedUsers()
-         const count = await bot.getChatMembersCount(process.env.CHANNEL_ID);
+         const allUser = await model.allUser();
+         const payedUsers = await model.payedUsers();
+         const count = await bot.getChatMemberCount(process.env.CHANNEL_ID);
 
          return res.status(200).json({
             status: 200,
@@ -88,14 +88,14 @@ module.exports = {
                payed_user: payedUsers?.count,
                bot_members: count
             }
-         })
+         });
 
       } catch (error) {
          console.log(error);
          return res.status(500).json({
             status: 500,
-            message: "Interval Server Error"
-         })
+            message: "Internal Server Error"
+         });
       }
    }
 }
