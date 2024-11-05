@@ -41,6 +41,7 @@ router
    .get('/user/:chat_id', AUTH, users.GET_ID)
    .get('/users/statistics', AUTH, users.USER_STATIS)
    .get('/users/statistics/source', AUTH, users.STATISTICS_SOURCE)
+   .get('/users/statistics/increase', AUTH, users.STATISTICS_INCREASE)
 
    // TRANSACTION
    .get('/transactions/list', AUTH, transaction.GET)

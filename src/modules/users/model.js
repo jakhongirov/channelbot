@@ -72,11 +72,58 @@ const statisticsSource = () => {
 
    return fetchALL(QUERY)
 }
+const statisticsIncrease = () => {
+   const QUERY = `
+      WITH monthly_user_counts AS (
+         SELECT
+            DATE_TRUNC('month', create_at) AS month,
+            COUNT(chat_id) AS user_count
+         FROM
+            users
+         GROUP BY
+            DATE_TRUNC('month', create_at)
+      ),
+      all_months AS (
+         SELECT
+            DATE_TRUNC('month', generate_series) AS month
+         FROM
+            GENERATE_SERIES(
+                  DATE_TRUNC('year', CURRENT_DATE),
+                  DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '11 months',
+                  '1 month'
+            ) AS generate_series
+      ),
+      monthly_growth AS (
+         SELECT
+            all_months.month,
+            COALESCE(muc.user_count, 0) AS user_count,
+            LAG(COALESCE(muc.user_count, 0)) OVER (ORDER BY all_months.month) AS previous_count
+         FROM
+            all_months
+         LEFT JOIN
+            monthly_user_counts muc ON all_months.month = muc.month
+      )
+      SELECT
+         TO_CHAR(month, 'Month YYYY') AS month,
+         user_count,
+         CASE
+            WHEN previous_count = 0 OR user_count = 0 THEN NULL
+            ELSE ROUND(((user_count - previous_count) * 100.0 / previous_count), 2)
+         END AS percentage_increase
+      FROM
+         monthly_growth
+      ORDER BY
+         month;
+   `;
+
+   return fetchALL(QUERY)
+}
 
 module.exports = {
    users,
    foundUser,
    allUser,
    payedUsers,
-   statisticsSource
+   statisticsSource,
+   statisticsIncrease
 }

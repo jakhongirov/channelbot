@@ -116,5 +116,24 @@ module.exports = {
             message: "Internal Server Error"
          });
       }
+   },
+
+   STATISTICS_INCREASE: async (req, res) => {
+      try {
+         const statisticsIncrease = await model.statisticsIncrease()
+
+         return res.status(200).json({
+            status: 200,
+            message: "Success",
+            data: statisticsIncrease
+         });
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Internal Server Error"
+         });
+      }
    }
 }
