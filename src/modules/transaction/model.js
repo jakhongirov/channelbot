@@ -145,6 +145,52 @@ const statisticsMonths = () => {
 
    return fetchALL(QUERY)
 }
+const statisticsIncrease = () => {
+   const QUERY = `
+      WITH monthly_totals AS (
+         SELECT
+            DATE_TRUNC('month', create_at) AS month,
+            SUM(amount) AS total_amount
+         FROM
+            checks
+         GROUP BY
+            DATE_TRUNC('month', create_at)
+      ),
+      all_months AS (
+         SELECT
+            DATE_TRUNC('month', generate_series) AS month
+         FROM
+            GENERATE_SERIES(
+                  DATE_TRUNC('year', CURRENT_DATE),
+                  DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '11 months',
+                  '1 month'
+            ) AS generate_series
+      ),
+      monthly_growth AS (
+         SELECT
+            all_months.month,
+            COALESCE(mt.total_amount, 0) AS total_amount,
+            LAG(COALESCE(mt.total_amount, 0)) OVER (ORDER BY all_months.month) AS previous_total
+         FROM
+            all_months
+         LEFT JOIN
+            monthly_totals mt ON all_months.month = mt.month
+      )
+      SELECT
+         TO_CHAR(month, 'Month YYYY') AS month,
+         total_amount,
+         CASE
+            WHEN previous_total = 0 OR total_amount = 0 THEN NULL
+            ELSE ROUND(((total_amount - previous_total) * 100.0 / previous_total), 2)
+         END AS percentage_increase
+      FROM
+         monthly_growth
+      ORDER BY
+         DATE_TRUNC('month', month::date);
+   `;
+
+   return fetchALL(QUERY)
+}
 
 module.exports = {
    transaction,
@@ -155,5 +201,6 @@ module.exports = {
    foundUser,
    addTransaction,
    expiredDate,
-   statisticsMonths
+   statisticsMonths,
+   statisticsIncrease
 }

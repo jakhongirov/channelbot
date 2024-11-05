@@ -48,6 +48,7 @@ router
    .get('/transaction/:id', AUTH, transaction.GET_ID)
    .get('/transactions/user', AUTH, transaction.GET_USER_ID)
    .get('/transactions/statistics/month', AUTH, transaction.GET_STATIS_MONTHS)
+   .get('/transactions/statistics/increase', AUTH, transaction.GET_STATIS_INCREASE)
    .post('/transaction/add', AUTH, transaction.ADD_TRANSACTION)
 
    // CHANNEL ADMIN
