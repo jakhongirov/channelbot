@@ -122,6 +122,22 @@ const expiredDate = (user_id, expiredDate) => {
 
    return fetch(QUERY, user_id, expiredDate)
 }
+const statisticsMonths = () => {
+   const QUERY = `
+      SELECT
+         TO_CHAR(DATE_TRUNC('month', create_at), 'Month') AS month_name,
+         DATE_TRUNC('month', create_at) AS month,  -- Truncated date for ordering
+         SUM(amount) AS total_amount
+      FROM
+         checks
+      GROUP BY
+         month_name, month
+      ORDER BY
+         month;
+   `;
+
+   return fetchALL(QUERY)
+}
 
 module.exports = {
    transaction,
@@ -131,5 +147,6 @@ module.exports = {
    foundTransaction,
    foundUser,
    addTransaction,
-   expiredDate
+   expiredDate,
+   statisticsMonths
 }
