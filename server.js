@@ -78,7 +78,7 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
                [{
                   text: localText?.offerLink,
                   web_app: {
-                     url: `https://www.instagram.com/`
+                     url: `https://atmos.uz/documents/`
                   }
                }],
                [{
@@ -139,7 +139,7 @@ bot.on('chat_join_request', async (msg) => {
                [{
                   text: localText?.offerLink,
                   web_app: {
-                     url: `https://www.instagram.com/`
+                     url: `https://atmos.uz/documents/`
                   }
                }],
                [{
