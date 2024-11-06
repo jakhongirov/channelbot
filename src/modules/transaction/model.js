@@ -150,8 +150,7 @@ const statisticsIncrease = () => {
       WITH monthly_totals AS (
          SELECT
             DATE_TRUNC('month', create_at) AS month,
-            SUM(amount) AS total_amount,
-            count(user_id)
+            SUM(amount) AS total_amount
          FROM
             checks
          GROUP BY
@@ -180,6 +179,7 @@ const statisticsIncrease = () => {
       SELECT
          TO_CHAR(month, 'Month') AS month,
          total_amount,
+         count(user_id)
          CASE
             WHEN previous_total = 0 OR total_amount = 0 THEN NULL
             ELSE ROUND(((total_amount - previous_total) * 100.0 / previous_total), 2)
