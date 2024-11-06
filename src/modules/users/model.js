@@ -83,7 +83,7 @@ const statisticsSource = () => {
       ),
       total_users_per_month AS (
          SELECT
-            month,
+            am.month,
             COALESCE(mt.source, 'N/A') AS source,
             COALESCE(mt.source_count, 0) AS source_count
          FROM
@@ -99,7 +99,7 @@ const statisticsSource = () => {
       FROM
          total_users_per_month
       ORDER BY
-         DATE_TRUNC('month', month::date);
+         month;
    `;
 
    return fetchALL(QUERY)
