@@ -79,7 +79,7 @@ const statisticsSource = () => {
             DATE_TRUNC('month', create_at)
       )
       SELECT
-         TO_CHAR(mt.month, 'Month YYYY') AS month,
+         TO_CHAR(mt.month, 'Month') AS month,
          mt.source,
          mt.source_count AS count,
          ROUND((mt.source_count * 100.0) / COALESCE(tupm.total_count, 1), 2) AS percentage
@@ -88,7 +88,7 @@ const statisticsSource = () => {
       JOIN
          total_users_per_month tupm ON mt.month = tupm.month
       ORDER BY
-         DATE_TRUNC('month', mt.month),  -- Ensures months are sorted January to December;
+         DATE_TRUNC('month', mt.month);
    `;
 
    return fetchALL(QUERY)
