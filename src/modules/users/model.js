@@ -92,7 +92,7 @@ const statisticsSource = () => {
             monthly_totals mt ON am.month = mt.month
       )
       SELECT
-         TO_CHAR(month, 'Month YYYY') AS month,
+         TO_CHAR(month, 'Month') AS month,
          source,
          source_count AS count,
          ROUND((source_count * 100.0) / NULLIF(SUM(source_count) OVER (PARTITION BY month), 0), 2) AS percentage
