@@ -817,7 +817,7 @@ bot.on('message', async (msg) => {
                         resize_keyboard: true
                      }
                   }).then(async () => {
-                     await model.editStepSubcribe(chatId, "mainSrean", true)
+                     await model.editStepSubcribe(chatId, "mainSrean", false)
                   })
                }
             }

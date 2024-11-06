@@ -185,7 +185,7 @@ module.exports = {
                                           resize_keyboard: true
                                        }
                                     }).then(async () => {
-                                       await model.editStep(chat_id, "mainSrean", true)
+                                       await model.editStep(chat_id, "mainSrean", false)
                                     })
                                  }
 
