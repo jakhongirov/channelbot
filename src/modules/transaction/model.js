@@ -150,7 +150,8 @@ const statisticsIncrease = () => {
       WITH monthly_totals AS (
          SELECT
             DATE_TRUNC('month', create_at) AS month,
-            SUM(amount) AS total_amount
+            SUM(amount) AS total_amount,
+            COUNT(DISTINCT user_id) AS user_count  -- Count unique user IDs per month
          FROM
             checks
          GROUP BY
@@ -170,6 +171,7 @@ const statisticsIncrease = () => {
          SELECT
             all_months.month,
             COALESCE(mt.total_amount, 0) AS total_amount,
+            COALESCE(mt.user_count, 0) AS user_count,  -- Use COALESCE to set missing counts to 0
             LAG(COALESCE(mt.total_amount, 0)) OVER (ORDER BY all_months.month) AS previous_total
          FROM
             all_months
@@ -179,7 +181,7 @@ const statisticsIncrease = () => {
       SELECT
          TO_CHAR(month, 'Month') AS month,
          total_amount,
-         count(user_id)
+         user_count,  -- Display the count of unique users
          CASE
             WHEN previous_total = 0 OR total_amount = 0 THEN NULL
             ELSE ROUND(((total_amount - previous_total) * 100.0 / previous_total), 2)
@@ -187,7 +189,7 @@ const statisticsIncrease = () => {
       FROM
          monthly_growth
       ORDER BY
-         DATE_TRUNC('month', month::date);
+         month;
    `;
 
    return fetchALL(QUERY)
