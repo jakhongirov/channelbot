@@ -59,16 +59,36 @@ const payedUsers = () => {
 }
 const statisticsSource = () => {
    const QUERY = `
+      WITH monthly_totals AS (
+         SELECT
+            DATE_TRUNC('month', create_at) AS month,
+            source,
+            COUNT(*) AS source_count
+         FROM
+            users
+         GROUP BY
+            DATE_TRUNC('month', create_at), source
+      ),
+      total_users_per_month AS (
+         SELECT
+            DATE_TRUNC('month', create_at) AS month,
+            COUNT(*) AS total_count
+         FROM
+            users
+         GROUP BY
+            DATE_TRUNC('month', create_at)
+      )
       SELECT
-         source,
-         ROUND((COUNT(*) * 100.0) / (SELECT COUNT(*) FROM users), 2) AS percentage,
-         count(*)
+         TO_CHAR(mt.month, 'Month YYYY') AS month,
+         mt.source,
+         mt.source_count AS count,
+         ROUND((mt.source_count * 100.0) / COALESCE(tupm.total_count, 1), 2) AS percentage
       FROM
-         users
-      GROUP BY
-         source
+         monthly_totals mt
+      JOIN
+         total_users_per_month tupm ON mt.month = tupm.month
       ORDER BY
-         percentage DESC;
+         DATE_TRUNC('month', mt.month),  -- Ensures months are sorted January to December;
    `;
 
    return fetchALL(QUERY)
