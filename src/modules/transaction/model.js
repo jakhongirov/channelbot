@@ -150,7 +150,8 @@ const statisticsIncrease = () => {
       WITH monthly_totals AS (
          SELECT
             DATE_TRUNC('month', create_at) AS month,
-            SUM(amount) AS total_amount
+            SUM(amount) AS total_amount,
+            count(user_id)
          FROM
             checks
          GROUP BY
