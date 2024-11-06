@@ -114,7 +114,7 @@ const statisticsIncrease = () => {
       FROM
          monthly_growth
       ORDER BY
-         month;
+         DATE_TRUNC('month', month::date);;
    `;
 
    return fetchALL(QUERY)
