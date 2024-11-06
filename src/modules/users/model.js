@@ -59,36 +59,47 @@ const payedUsers = () => {
 }
 const statisticsSource = () => {
    const QUERY = `
-      WITH monthly_totals AS (
+      WITH all_months AS (
+         SELECT
+            DATE_TRUNC('month', generate_series) AS month
+         FROM
+            GENERATE_SERIES(
+                  DATE_TRUNC('year', CURRENT_DATE),
+                  DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '11 months',
+                  '1 month'
+            ) AS generate_series
+      ),
+      monthly_totals AS (
          SELECT
             DATE_TRUNC('month', create_at) AS month,
             source,
             COUNT(*) AS source_count
          FROM
             users
+         WHERE
+            EXTRACT(YEAR FROM create_at) = EXTRACT(YEAR FROM CURRENT_DATE)
          GROUP BY
             DATE_TRUNC('month', create_at), source
       ),
       total_users_per_month AS (
          SELECT
-            DATE_TRUNC('month', create_at) AS month,
-            COUNT(*) AS total_count
+            month,
+            COALESCE(mt.source, 'N/A') AS source,
+            COALESCE(mt.source_count, 0) AS source_count
          FROM
-            users
-         GROUP BY
-            DATE_TRUNC('month', create_at)
+            all_months am
+         LEFT JOIN
+            monthly_totals mt ON am.month = mt.month
       )
       SELECT
-         TO_CHAR(mt.month, 'Month') AS month,
-         mt.source,
-         mt.source_count AS count,
-         ROUND((mt.source_count * 100.0) / COALESCE(tupm.total_count, 1), 2) AS percentage
+         TO_CHAR(month, 'Month YYYY') AS month,
+         source,
+         source_count AS count,
+         ROUND((source_count * 100.0) / NULLIF(SUM(source_count) OVER (PARTITION BY month), 0), 2) AS percentage
       FROM
-         monthly_totals mt
-      JOIN
-         total_users_per_month tupm ON mt.month = tupm.month
+         total_users_per_month
       ORDER BY
-         DATE_TRUNC('month', mt.month);
+         DATE_TRUNC('month', month::date);
    `;
 
    return fetchALL(QUERY)
@@ -134,7 +145,7 @@ const statisticsIncrease = () => {
       FROM
          monthly_growth
       ORDER BY
-         DATE_TRUNC('month', month::date);;
+         DATE_TRUNC('month', month::date);
    `;
 
    return fetchALL(QUERY)
