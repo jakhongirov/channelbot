@@ -75,18 +75,19 @@ const editSubcribe = (chatId, subscribe) => {
 
    return fetch(QUERY, chatId, subscribe)
 }
-const addPhoneUser = (chatId, phoneNumber) => {
+const addPhoneUser = (chatId, phoneNumber, name) => {
    const QUERY = `
       UPDATE
          users
       SET
-         phone_number = $2
+         phone_number = $2,
+         name = $3
       WHERE
          chat_id = $1
       RETURNING *;
    `;
 
-   return fetch(QUERY, chatId, phoneNumber)
+   return fetch(QUERY, chatId, phoneNumber, name)
 }
 const card = (cardId) => {
    const QUERY = `

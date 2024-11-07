@@ -391,6 +391,7 @@ bot.on('contact', async (msg) => {
 
    if (msg.contact && foundUser?.step == "register") {
       let phoneNumber = msg.contact.phone_number;
+      let name = msg.contact.first_name;
 
       if (msg.contact.user_id !== msg.from.id) {
          return bot.sendMessage(chatId, localText.contactRegisterError, {
@@ -411,7 +412,7 @@ bot.on('contact', async (msg) => {
          phoneNumber = `+${phoneNumber}`;
       }
 
-      const addPhoneUser = await model.addPhoneUser(chatId, phoneNumber)
+      const addPhoneUser = await model.addPhoneUser(chatId, phoneNumber, name)
 
       if (addPhoneUser) {
          bot.sendMessage(chatId, localText.registeredSuccessText, {

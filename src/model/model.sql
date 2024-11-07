@@ -9,6 +9,7 @@ CREATE TABLE users (
    id bigserial,
    chat_id bigint PRIMARY KEY,
    phone_number text,
+   name text,
    step text DEFAULT 'start',
    subscribe boolean DEFAULT false,
    expired int DEFAULT 0,
@@ -61,5 +62,23 @@ CREATE TABLE channel_admin (
    id bigserial PRIMARY KEY,
    title text,
    username text,
+   create_at timestamptz DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE news (
+   id bigserial PRIMARY KEY,
+   data text,
+   image_url text,
+   image_name text,
+   user_count bigint,
+   source text,
+   subscribe text,
+   create_at timestamptz DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE trial (
+   id bigserial PRIMARY KEY,
+   source text,
+   day int,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
