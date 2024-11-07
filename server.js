@@ -52,6 +52,8 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
 
+   console.log(param)
+
    if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == null) {
       bot.sendMessage(chatId, localText.registeredSuccessText, {
          reply_markup: {
