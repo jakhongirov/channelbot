@@ -135,5 +135,31 @@ module.exports = {
             message: "Internal Server Error"
          });
       }
+   },
+
+   GET_SOURCE: async (req, res) => {
+      try {
+         const source = await model.source()
+
+         if (source?.length > 0) {
+            return res.status(200).json({
+               status: 200,
+               message: "Success",
+               data: source
+            });
+         } else {
+            return res.status(404).json({
+               status: 404,
+               message: "Not found"
+            });
+         }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Internal Server Error"
+         });
+      }
    }
 }

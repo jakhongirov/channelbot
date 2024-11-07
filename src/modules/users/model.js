@@ -150,6 +150,18 @@ const statisticsIncrease = () => {
 
    return fetchALL(QUERY)
 }
+const source = () => {
+   const QUERY = `
+      SELECT
+         source
+      FROM
+         users
+      GROUP BY
+         source;
+   `;
+
+   return fetchALL(QUERY)
+}
 
 module.exports = {
    users,
@@ -157,5 +169,6 @@ module.exports = {
    allUser,
    payedUsers,
    statisticsSource,
-   statisticsIncrease
+   statisticsIncrease,
+   source
 }

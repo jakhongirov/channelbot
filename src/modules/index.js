@@ -42,6 +42,7 @@ router
    .get('/users/statistics', AUTH, users.USER_STATIS)
    .get('/users/statistics/source', AUTH, users.STATISTICS_SOURCE)
    .get('/users/statistics/increase', AUTH, users.STATISTICS_INCREASE)
+   .get('/users/source/list', AUTH, users.GET_SOURCE)
 
    // TRANSACTION
    .get('/transactions/list', AUTH, transaction.GET)
