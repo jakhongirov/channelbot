@@ -189,7 +189,8 @@ const statisticsIncrease = () => {
       FROM
          monthly_growth
       ORDER BY
-         month;
+         EXTRACT(MONTH FROM month);
+
    `;
 
    return fetchALL(QUERY)
