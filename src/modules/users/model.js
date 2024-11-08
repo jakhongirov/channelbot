@@ -99,7 +99,7 @@ const statisticsSource = () => {
       FROM
          total_users_per_month
       ORDER BY
-         month;
+         DATE_TRUNC('month', month::date);
    `;
 
    return fetchALL(QUERY)
