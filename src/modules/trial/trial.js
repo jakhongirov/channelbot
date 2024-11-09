@@ -57,7 +57,7 @@ module.exports = {
       }
    },
 
-   EDIT_TRAIL: async (req, res) => {
+   EDIT_TRIAL: async (req, res) => {
       try {
          const {
             id,
@@ -88,7 +88,7 @@ module.exports = {
       }
    },
 
-   DELETE_TRAIL: async (req, res) => {
+   DELETE_TRIAL: async (req, res) => {
       try {
          const {
             id

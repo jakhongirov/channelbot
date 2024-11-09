@@ -65,9 +65,9 @@ router
    .post('/news/single/user', AUTH, FileUpload.single('photo'), news.SINGLE_USER)
 
    // TRIAL
-   .get('/trail/list', AUTH, trail.GET)
-   .post('/trail/add', AUTH, trail.ADD_TRIAL)
-   .put('/trail/edit', AUTH, trail.EDIT_TRAIL)
-   .delete('/trail/dleete', AUTH, trail.DELETE_TRAIL)
+   .get('/trial/list', AUTH, trail.GET)
+   .post('/trial/add', AUTH, trail.ADD_TRIAL)
+   .put('/trial/edit', AUTH, trail.EDIT_TRIAL)
+   .delete('/trial/delete', AUTH, trail.DELETE_TRIL)
 
 module.exports = router
