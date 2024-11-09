@@ -3,13 +3,13 @@ const model = require('./model')
 module.exports = {
    GET: async (req, res) => {
       try {
-         const trail = await model.trail()
+         const trial = await model.trial()
 
-         if (trail?.length > 0) {
+         if (trial?.length > 0) {
             return res.status(200).json({
                status: 200,
                message: "Success",
-               data: trail
+               data: trial
             })
          } else {
             return res.status(404).json({

@@ -3,7 +3,7 @@ const {
    fetchALL
 } = require('../../lib/postgres')
 
-const trail = () => {
+const trial = () => {
    const QUERY = `
       SELECT
          *
@@ -56,7 +56,7 @@ const deleteTrial = (id) => {
 }
 
 module.exports = {
-   trail,
+   trial,
    addTrial,
    editTrial,
    deleteTrial

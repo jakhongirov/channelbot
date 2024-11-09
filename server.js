@@ -46,6 +46,23 @@ function formatBalanceWithSpaces(balance) {
    }).format(balance / 100).replace(/,/g, ' ');
 }
 
+function addDayToCurrentDate(expire_day) {
+   const date = new Date();
+
+   // Add days
+   date.setDate(date.getDate() + Number(expire_day));
+
+   // Apply Uzbekistan timezone offset (UTC+5)
+   const uzbekistanOffset = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+   const uzbekistanTime = new Date(date.getTime() + uzbekistanOffset);
+
+   const year = uzbekistanTime.getUTCFullYear();
+   const month = String(uzbekistanTime.getUTCMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+   const day = String(uzbekistanTime.getUTCDate()).padStart(2, '0');
+
+   return `${year}-${month}-${day}`;
+}
+
 bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const chatId = msg.chat.id;
    const param = match[1]?.trim();
