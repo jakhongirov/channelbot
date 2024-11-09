@@ -68,6 +68,6 @@ router
    .get('/trial/list', AUTH, trail.GET)
    .post('/trial/add', AUTH, trail.ADD_TRIAL)
    .put('/trial/edit', AUTH, trail.EDIT_TRIAL)
-   .delete('/trial/delete', AUTH, trail.DELETE_TRIL)
+   .delete('/trial/delete', AUTH, trail.DELETE_TRIAL)
 
 module.exports = router
