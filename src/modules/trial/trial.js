@@ -65,7 +65,7 @@ module.exports = {
             day
          } = req.body
 
-         const editTrail = await model.editTrail(id, source, day)
+         const editTrail = await model.editTrial(id, source, day)
 
          if (editTrail) {
             return res.status(200).json({
@@ -94,7 +94,7 @@ module.exports = {
             id
          } = req.body
 
-         const deleteTrail = await model.deleteTrail(id)
+         const deleteTrail = await model.deleteTrial(id)
 
          if (deleteTrail) {
             return res.status(200).json({

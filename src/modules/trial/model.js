@@ -18,7 +18,7 @@ const trail = () => {
 const addTrial = (source, day) => {
    const QUERY = `
       INSERT INTO
-         trail (
+         trial (
             source,
             day
          ) VALUES (
@@ -29,10 +29,10 @@ const addTrial = (source, day) => {
 
    return fetch(QUERY, source, day)
 }
-const editTrail = (id, source, day) => {
+const editTrial = (id, source, day) => {
    const QUERY = `
       UPDATE
-         trail
+         trial
       SET
          source = $2,
          day = $3
@@ -43,10 +43,10 @@ const editTrail = (id, source, day) => {
 
    return fetch(QUERY, id, source, day)
 }
-const deleteTrail = (id) => {
+const deleteTrial = (id) => {
    const QUERY = `
       DELETE FROM
-         trail
+         trial
       WHERE
          id = $1
       RETURNING *;
@@ -58,6 +58,6 @@ const deleteTrail = (id) => {
 module.exports = {
    trail,
    addTrial,
-   editTrail,
-   deleteTrail
+   editTrial,
+   deleteTrial
 }
