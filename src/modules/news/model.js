@@ -1,26 +1,121 @@
 const {
-   fetchALL
+   fetchALL,
+   fetch
 } = require('../../lib/postgres')
 
-const users = (user_subcribe) => {
+const news = (page, limit) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         news
+      ORDER BY
+         id DESC
+      LIMIT ${limit}
+      OFFSET ${Number((page - 1) * limit)}
+   `;
+
+   return fetchALL(QUERY)
+}
+const users = (user_subcribe, source) => {
    const QUERY = `
       SELECT
          *
       FROM
          users
       ${
-         user_subcribe == 'all' ? '' : (
+         user_subcribe != 'all' && source != 'all' ? (
+            `
+               WHERE
+                  subscribe = ${user_subcribe}
+                  AND source = ${source}
+            `
+         ) : user_subcribe != 'all' && source == 'all' ? (
             `
                WHERE
                   subscribe = ${user_subcribe}
             `
-         ) 
+         ): user_subcribe == 'all' && source != 'all' ? (
+            `
+               WHERE
+                  source = ${source}
+            `
+         ) : ''
       };
    `;
 
    return fetchALL(QUERY)
 }
+const addNewAllUser = (
+   text,
+   fileUrl,
+   fileName,
+   source,
+   user_subcribe,
+   user_count,
+) => {
+   const QUERY = `
+      INSERT INTO
+         news (
+            data,
+            image_url,
+            user_count,
+            source,
+            subscribe,
+            user_id
+         ) VALUES (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5,
+            $6
+         ) RETURNING *;
+   `;
+
+   return fetch(
+      QUERY,
+      text,
+      fileUrl,
+      fileName,
+      source,
+      user_subcribe,
+      user_count
+   )
+}
+const addNewUser = (
+   text,
+   fileUrl,
+   fileName,
+   chat_id
+) => {
+   const QUERY = `
+      INSERT INTO
+         news (
+            data,
+            image_url,
+            image_name,
+            user_id
+         ) VALUES (
+            $1, 
+            $2, 
+            $3, 
+            $4 
+         ) RETURNING *;
+   `;
+
+   return fetch(
+      QUERY,
+      text,
+      fileUrl,
+      fileName,
+      chat_id
+   )
+}
 
 module.exports = {
-   users
+   news,
+   users,
+   addNewAllUser,
+   addNewUser
 }

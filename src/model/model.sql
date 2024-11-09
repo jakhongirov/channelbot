@@ -70,9 +70,10 @@ CREATE TABLE news (
    data text,
    image_url text,
    image_name text,
-   user_count bigint,
+   user_count bigint DEFAULT 1, 
    source text,
    subscribe text,
+   user_id bigint,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 

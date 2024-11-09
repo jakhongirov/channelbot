@@ -15,6 +15,7 @@ const users = require('./users/users')
 const transaction = require('./transaction/transaction')
 const channelAdmin = require('./channelAdmin/channelAdmin')
 const news = require('./news/news')
+const trail = require('./trial/trial')
 
 router
 
@@ -59,7 +60,14 @@ router
    .put('/channel-admin/edit', AUTH, channelAdmin.EDIT_ADMIN)
 
    // NEWS
+   .get('/news/list', AUTH, news.GET)
    .post('/news/all/users', AUTH, FileUpload.single('photo'), news.ALL_USERS)
    .post('/news/single/user', AUTH, FileUpload.single('photo'), news.SINGLE_USER)
+
+   // TRIAL
+   .get('/trail/list', AUTH, trail.GET)
+   .post('/trail/add', AUTH, trail.ADD_TRIAL)
+   .put('/trail/edit', AUTH, trail.EDIT_TRAIL)
+   .delete('/trail/dleete', AUTH, trail.DELETE_TRAIL)
 
 module.exports = router
