@@ -62,7 +62,7 @@ module.exports = {
          let user_count = 0
          const fileName = uploadPhoto ? uploadPhoto?.filename : null;
          const fileUrl = uploadPhoto ? `${process.env.BACKEND_URL}/${uploadPhoto?.filename}` : null
-         const mimeType = req.file.mimetype;
+         const mimeType = uploadPhoto ? req?.file?.mimetype : null;
 
          if (uploadPhoto) {
             if (mimeType.startsWith('image/')) {
