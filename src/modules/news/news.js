@@ -53,47 +53,64 @@ module.exports = {
             user_subcribe,
             text,
             source
-         } = req.body
-         const users = await model.users(user_subcribe, source)
+         } = req.body;
+
+         // Fetch users
+         const users = await model.users(user_subcribe, source);
+
+         // Format the text by removing certain HTML tags
          const formattedText = text
             .replace(/<p>/g, '')
             .replace(/<\/p>/g, '\n')
             .replace(/<br\s*\/?>/g, '\n');
-         let user_count = 0
-         const fileName = uploadPhoto ? uploadPhoto?.filename : null;
-         const fileUrl = uploadPhoto ? `${process.env.BACKEND_URL}/${uploadPhoto?.filename}` : null
-         const mimeType = uploadPhoto ? req?.file?.mimetype : null;
+
+         let user_count = 0;
+         const fileName = uploadPhoto ? uploadPhoto.filename : null;
+         const fileUrl = uploadPhoto ? `${process.env.BACKEND_URL}/${uploadPhoto.filename}` : null;
+         const mimeType = uploadPhoto ? req.file.mimetype : null;
 
          if (uploadPhoto) {
             if (mimeType.startsWith('image/')) {
                const imagePath = path.resolve(__dirname, '..', '..', '..', 'public', 'images', fileName);
                for (const user of users) {
-                  bot.sendPhoto(user?.chat_id, fs.readFileSync(imagePath), {
-                     parse_mode: "HTML",
-                     caption: formattedText
-                  }).then(async () => {
-                     user_count += 1
-                  })
+                  try {
+                     await bot.sendPhoto(user.chat_id, fs.readFileSync(imagePath), {
+                        parse_mode: "HTML",
+                        caption: formattedText
+                     });
+                     user_count += 1;
+                  } catch (error) {
+                     console.log(`Failed to send photo to user ${user.chat_id}:`, error);
+                  }
                }
             } else if (mimeType.startsWith('video/')) {
                const videoPath = path.resolve(__dirname, '..', '..', '..', 'public', 'images', fileName);
                for (const user of users) {
-                  bot.sendVideo(user?.chat_id, fs.readFileSync(videoPath), {
-                     parse_mode: "HTML",
-                     caption: formattedText
-                  }).then(async () => {
-                     user_count += 1
-                  })
+                  try {
+                     await bot.sendVideo(user.chat_id, fs.readFileSync(videoPath), {
+                        parse_mode: "HTML",
+                        caption: formattedText
+                     });
+                     user_count += 1;
+                  } catch (error) {
+                     console.log(`Failed to send video to user ${user.chat_id}:`, error);
+                  }
                }
             }
          } else {
-            for (const user of users) { // Remove <p> tags
-               bot.sendMessage(user?.chat_id, formattedText, {
-                  parse_mode: "HTML"
-               }).then(() => user_count += 1);
+            for (const user of users) {
+               try {
+                  await bot.sendMessage(user.chat_id, formattedText, {
+                     parse_mode: "HTML"
+                  });
+                  user_count += 1;
+               } catch (error) {
+                  console.log(`Failed to send message to user ${user.chat_id}:`, error);
+               }
             }
          }
 
+         // Save the broadcast data to the database
          const addNewAllUser = await model.addNewAllUser(
             text,
             fileUrl,
@@ -101,26 +118,26 @@ module.exports = {
             source,
             user_subcribe,
             user_count,
-         )
+         );
 
          if (addNewAllUser) {
             return res.status(200).json({
                status: 200,
                message: "Success"
-            })
+            });
          } else {
             return res.status(400).json({
                status: 400,
                message: "Bad request"
-            })
+            });
          }
 
       } catch (error) {
          console.log(error);
          return res.status(500).json({
             status: 500,
-            message: "Interval Server Error"
-         })
+            message: "Internal Server Error"
+         });
       }
    },
 
