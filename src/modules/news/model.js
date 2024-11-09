@@ -28,7 +28,7 @@ const users = (user_subcribe, source) => {
             `
                WHERE
                   subscribe = ${user_subcribe}
-                  AND source = ${source}
+                  AND source = '${source}'
             `
          ) : user_subcribe != 'all' && source == 'all' ? (
             `
@@ -38,7 +38,7 @@ const users = (user_subcribe, source) => {
          ): user_subcribe == 'all' && source != 'all' ? (
             `
                WHERE
-                  source = ${source}
+                  source = '${source}'
             `
          ) : ''
       };
