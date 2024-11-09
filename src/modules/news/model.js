@@ -59,10 +59,10 @@ const addNewAllUser = (
          news (
             data,
             image_url,
-            user_count,
+            image_name,
             source,
             subscribe,
-            user_id
+            user_count
          ) VALUES (
             $1,
             $2,
