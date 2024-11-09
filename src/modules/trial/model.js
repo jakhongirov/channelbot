@@ -9,8 +9,8 @@ const trail = () => {
          *
       FROM
          trial
-      WHERE
-         id DESC
+      ORDER BY
+         id DESC;
    `;
 
    return fetchALL(QUERY)
