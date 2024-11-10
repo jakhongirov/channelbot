@@ -17,6 +17,16 @@ const transaction = (limit, page) => {
 
    return fetchALL(QUERY)
 }
+const totalAmount = () => {
+   const QUERY = `
+      SELECT
+         sum(amount)
+      FROM
+         checks;
+   `;
+
+   return fetch(QUERY)
+}
 const transactionsFilter = (limit, page, month, year) => {
    const QUERY = `
       SELECT
@@ -198,6 +208,7 @@ const statisticsIncrease = () => {
 
 module.exports = {
    transaction,
+   totalAmount,
    transactionsFilter,
    transactionsAmount,
    transactionsUserId,

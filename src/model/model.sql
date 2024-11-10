@@ -45,7 +45,7 @@ CREATE TABLE checks (
    user_id bigint REFERENCES users(chat_id) ON DELETE CASCADE,
    success_trans_id text,
    method text,
-   amount int,
+   amount bigint,
    transaction_id int,
    ofd_url text,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP

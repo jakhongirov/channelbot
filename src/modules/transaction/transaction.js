@@ -51,6 +51,25 @@ module.exports = {
       }
    },
 
+   TOTAL_AMOUNT: async (req, res) => {
+      try {
+         const totalAmount = await model.totalAmount()
+
+         return res.status(200).json({
+            status: 200,
+            message: "Success",
+            data: totalAmount
+         })
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
    GET_FILTER: async (req, res) => {
       try {
          const {

@@ -47,6 +47,7 @@ router
 
    // TRANSACTION
    .get('/transactions/list', AUTH, transaction.GET)
+   .get('/transactions/total/amout', AUTH, transaction.TOTAL_AMOUNT)
    .get('/transactions/filter', AUTH, transaction.GET_FILTER)
    .get('/transaction/:id', AUTH, transaction.GET_ID)
    .get('/transactions/user', AUTH, transaction.GET_USER_ID)
