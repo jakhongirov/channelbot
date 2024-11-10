@@ -15,6 +15,32 @@ const foundUser = (chatId) => {
 
    return fetch(QUERY, chatId)
 }
+const foundTrial = (param) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         trial
+      WHERE
+         source = $1;
+   `;
+
+   return fetch(QUERY, param)
+}
+const addTrial = (param) => {
+   const QUERY = `
+      INSERT INTO
+         trial (
+            source,
+            day
+         ) VALUES (
+            $1,
+            0
+         ) RETURNING *;
+   `;
+
+   return fetch(QUERY, param)
+}
 const createUser = (
    chatId,
    step,
@@ -34,6 +60,29 @@ const createUser = (
    `;
 
    return fetch(QUERY, chatId, step, source)
+}
+const createUserWithExpired = (
+   chatId,
+   step,
+   source,
+   expired
+) => {
+   const QUERY = `
+      INSERT INTO
+         users (
+            chat_id,
+            step,
+            source,
+            expired
+         ) VALUES (
+            $1, 
+            $2,
+            $3,
+            $4
+         ) RETURNING *;
+   `;
+
+   return fetch(QUERY, chatId, step, source, expired)
 }
 const editStep = (chatId, step) => {
    const QUERY = `
@@ -203,7 +252,10 @@ const adminUsername = () => {
 
 module.exports = {
    foundUser,
+   foundTrial,
+   addTrial,
    createUser,
+   createUserWithExpired,
    editStep,
    addPhoneUser,
    editStepSubcribe,

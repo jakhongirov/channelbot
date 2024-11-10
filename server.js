@@ -68,7 +68,6 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const param = match[1]?.trim();
    const foundUser = await model.foundUser(chatId)
    const usersCard = await model.userCard(chatId)
-   const foundTrail = await model.foundTrail(param)
 
    if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == null) {
       bot.sendMessage(chatId, localText.registeredSuccessText, {
@@ -90,33 +89,96 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          await model.editStep(chatId, 'webpage');
       }).catch(e => console.log(e));
    } else if (!foundUser || foundUser?.expired == null) {
-      bot.sendMessage(chatId, localText?.startTextFromBot, {
-         reply_markup: {
-            keyboard: [
-               [{
-                  text: localText?.ofertaLink,
-                  web_app: {
-                     url: `https://atmos.uz/documents/`
-                  }
-               }],
-               [{
-                  text: localText.agree,
-                  // url: 'https://t.me/botbotobtobt_bot?start=join_group'
-               }],
-            ],
-            resize_keyboard: true
-         }
-      }).then(async () => {
-         if (!foundUser) {
-            await model.createUser(
-               chatId,
-               "start",
-               param ? param : "organic"
-            )
+      if (param) {
+         const foundTrial = await model.foundTrial(param)
+
+         if (foundTrial) {
+
+            bot.sendMessage(chatId, localText?.startTextFromTril, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText?.ofertaLink,
+                        web_app: {
+                           url: `https://atmos.uz/documents/`
+                        }
+                     }],
+                     [{
+                        text: localText.agree
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               if (!foundUser) {
+                  await model.createUserWithExpired(
+                     chatId,
+                     "start",
+                     param ? param : "organic",
+                     addDayToCurrentDate(foundTrial?.day)
+                  )
+               } else {
+                  await model.editStep(chatId, 'start');
+               }
+            }).catch(e => console.log(e))
          } else {
-            await model.editStep(chatId, 'start');
+            await model.addTrial(param)
+
+            bot.sendMessage(chatId, localText?.startTextFromBot, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText?.ofertaLink,
+                        web_app: {
+                           url: `https://atmos.uz/documents/`
+                        }
+                     }],
+                     [{
+                        text: localText.agree
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               if (!foundUser) {
+                  await model.createUser(
+                     chatId,
+                     "start",
+                     param ? param : "organic"
+                  )
+               } else {
+                  await model.editStep(chatId, 'start');
+               }
+            }).catch(e => console.log(e))
          }
-      }).catch(e => console.log(e))
+      } else {
+         bot.sendMessage(chatId, localText?.startTextFromBot, {
+            reply_markup: {
+               keyboard: [
+                  [{
+                     text: localText?.ofertaLink,
+                     web_app: {
+                        url: `https://atmos.uz/documents/`
+                     }
+                  }],
+                  [{
+                     text: localText.agree
+                  }],
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            if (!foundUser) {
+               await model.createUser(
+                  chatId,
+                  "start",
+                  param ? param : "organic"
+               )
+            } else {
+               await model.editStep(chatId, 'start');
+            }
+         }).catch(e => console.log(e))
+      }
    } else {
       bot.sendMessage(chatId, localText.mainScreen, {
          reply_markup: {
@@ -161,8 +223,7 @@ bot.on('chat_join_request', async (msg) => {
                   }
                }],
                [{
-                  text: localText.agree,
-                  // url: 'https://t.me/botbotobtobt_bot?start=join_group'
+                  text: localText.agree
                }],
             ],
             resize_keyboard: true
@@ -433,24 +494,53 @@ bot.on('contact', async (msg) => {
       const addPhoneUser = await model.addPhoneUser(chatId, phoneNumber, name)
 
       if (addPhoneUser) {
-         bot.sendMessage(chatId, localText.registeredSuccessText, {
-            reply_markup: {
-               keyboard: [
-                  [{
-                     text: localText.activationBtn,
-                     web_app: {
-                        url: `https://web-page-one-theta.vercel.app/${chatId}`
-                     }
-                  }],
-                  [{
-                     text: localText.contactAdmin,
-                  }],
-               ],
-               resize_keyboard: true
-            }
-         }).then(async () => {
-            await model.editStep(chatId, 'webpage');
-         }).catch(e => console.log(e));
+         const current = new Date().toISOString().split('T')[0];
+
+         if (addPhoneUser?.expired > current) {
+            const invateLink = await createOneTimeLink()
+            bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+               reply_markup: {
+                  keyboard: [
+                     ...(addPhoneUser?.duration === false ? [
+                        [{
+                           text: localText.activatingSubscriptionBtn
+                        }]
+                     ] : []),
+                     [{
+                        text: localText.myCardsBtn
+                     }],
+                     [{
+                        text: localText.historyPayBtn
+                     }],
+                     [{
+                        text: localText.contactAdmin
+                     }]
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, "getLink")
+            })
+         } else {
+            bot.sendMessage(chatId, localText.registeredSuccessText, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'webpage');
+            }).catch(e => console.log(e));
+         }
       }
    }
 })

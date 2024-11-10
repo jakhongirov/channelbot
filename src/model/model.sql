@@ -12,7 +12,7 @@ CREATE TABLE users (
    name text,
    step text DEFAULT 'start',
    subscribe boolean DEFAULT false,
-   expired int DEFAULT 0,
+   expired text,
    source text,
    duration boolean DEFAULT false,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
@@ -70,7 +70,7 @@ CREATE TABLE news (
    data text,
    image_url text,
    image_name text,
-   user_count bigint DEFAULT 1, 
+   user_count bigint DEFAULT 1,
    source text,
    subscribe text,
    user_id bigint,
