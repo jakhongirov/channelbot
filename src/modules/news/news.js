@@ -62,7 +62,8 @@ module.exports = {
          const formattedText = text
             .replace(/<p>/g, '')
             .replace(/<\/p>/g, '\n')
-            .replace(/<br\s*\/?>/g, '\n');
+            .replace(/<br\s*\/?>/g, '\n')
+            .replace(/&nbsp;/g, ' '); // Replaces non-breaking spaces with regular spaces
 
          let user_count = 0;
          const fileName = uploadPhoto ? uploadPhoto.filename : null;
