@@ -70,26 +70,103 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const usersCard = await model.userCard(chatId)
 
    if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == null) {
-      const price = await model.price()
-      const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
-      bot.sendMessage(chatId, format, {
-         reply_markup: {
-            keyboard: [
-               [{
-                  text: localText.activationBtn,
-                  web_app: {
-                     url: `https://web-page-one-theta.vercel.app/${chatId}`
+      if (param) {
+         const foundTrial = await model.foundTrial(param)
+
+         if (foundTrial) {
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText?.ofertaLink,
+                        web_app: {
+                           url: `https://atmos.uz/documents/`
+                        }
+                     }],
+                     [{
+                        text: localText.agree
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStepTrial(
+                  chatId,
+                  'start',
+                  param ? param : "organic",
+                  addDayToCurrentDate(foundTrial?.day)
+               );
+               const invateLink = await createOneTimeLink()
+               bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+                  reply_markup: {
+                     keyboard: [
+                        ...(foundUser?.duration === false ? [
+                           [{
+                              text: localText.activatingSubscriptionBtn
+                           }]
+                        ] : []),
+                        [{
+                           text: localText.myCardsBtn
+                        }],
+                        [{
+                           text: localText.historyPayBtn
+                        }],
+                        [{
+                           text: localText.contactAdmin
+                        }]
+                     ],
+                     resize_keyboard: true
                   }
-               }],
-               [{
-                  text: localText.contactAdmin,
-               }],
-            ],
-            resize_keyboard: true
+               }).then(async () => {
+                  await model.editStep(chatId, "getLink")
+               })
+            }).catch(e => console.log(e))
+         } else {
+            const price = await model.price()
+            const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'webpage');
+            }).catch(e => console.log(e));
          }
-      }).then(async () => {
-         await model.editStep(chatId, 'webpage');
-      }).catch(e => console.log(e));
+
+      } else {
+         await model.addTrial(param)
+         const price = await model.price()
+         const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+         bot.sendMessage(chatId, format, {
+            reply_markup: {
+               keyboard: [
+                  [{
+                     text: localText.activationBtn,
+                     web_app: {
+                        url: `https://web-page-one-theta.vercel.app/${chatId}`
+                     }
+                  }],
+                  [{
+                     text: localText.contactAdmin,
+                  }],
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            await model.editStep(chatId, 'webpage');
+         }).catch(e => console.log(e));
+      }
    } else if (!foundUser || foundUser?.expired == null) {
       if (param) {
          const foundTrial = await model.foundTrial(param)

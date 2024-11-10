@@ -107,6 +107,21 @@ const editStep = (chatId, step) => {
 
    return fetch(QUERY, chatId, step)
 }
+const editStepTrial = (chatId, step, source, expired) => {
+   const QUERY = `
+      UPDATE
+         users
+      SET
+         step = $2,
+         source = $3,
+         expired = $4
+      WHERE
+         chat_id = $1
+      RETURNING *;
+   `;
+
+   return fetch(QUERY, chatId, step, source, expired)
+}
 const editStepSubcribe = (chatId, step, subscribe) => {
    const QUERY = `
       UPDATE
@@ -268,6 +283,7 @@ module.exports = {
    createUser,
    createUserWithExpired,
    editStep,
+   editStepTrial,
    addPhoneUser,
    editStepSubcribe,
    editSubcribe,
