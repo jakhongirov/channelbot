@@ -19,10 +19,15 @@ module.exports = {
             const news = await model.news(page, limit)
 
             if (news?.length > 0) {
+               const userList = await model.userList(news?.user_id)
+
                return res.status(200).json({
                   status: 200,
                   message: "Success",
-                  data: news
+                  data: {
+                     news: news,
+                     users: userList
+                  }
                })
             } else {
                return res.status(404).json({

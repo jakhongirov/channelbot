@@ -17,6 +17,19 @@ const news = (page, limit) => {
 
    return fetchALL(QUERY)
 }
+const userList = (user_id) => {
+   const id = user_id?.length > 0 ? user_id?.join(', ') : user_id
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         users
+      WHERE
+         chat_id IN ($1);
+   `;
+
+   return fetch(QUERY, id)
+}
 const users = (user_subcribe, source) => {
    const QUERY = `
       SELECT
@@ -119,6 +132,7 @@ const addNewUser = (
 
 module.exports = {
    news,
+   userList,
    users,
    addNewAllUser,
    addNewUser
