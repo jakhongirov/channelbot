@@ -93,8 +93,9 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          const foundTrial = await model.foundTrial(param)
 
          if (foundTrial) {
+            const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
 
-            bot.sendMessage(chatId, localText?.startTextFromTril, {
+            bot.sendMessage(chatId, format, {
                reply_markup: {
                   keyboard: [
                      [{
