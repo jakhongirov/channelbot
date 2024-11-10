@@ -23,7 +23,7 @@ const foundNews = (id) => {
          *
       FROM
          news
-      WHERE_
+      WHERE
          id = $1;
    `;
 
