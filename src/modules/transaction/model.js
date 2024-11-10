@@ -13,7 +13,7 @@ const transaction = (limit, page, method) => {
          method ? (
             `
                WHERE
-                  method = '${method}'
+                  method = '${method.toUpperCase()}'
             `
          ) : ""
       }
