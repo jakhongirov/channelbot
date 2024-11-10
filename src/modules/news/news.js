@@ -66,6 +66,7 @@ module.exports = {
             .replace(/&nbsp;/g, ' '); // Replaces non-breaking spaces with regular spaces
 
          let user_count = 0;
+         let user_id = [];
          const fileName = uploadPhoto ? uploadPhoto.filename : null;
          const fileUrl = uploadPhoto ? `${process.env.BACKEND_URL}/${uploadPhoto.filename}` : null;
          const mimeType = uploadPhoto ? req.file.mimetype : null;
@@ -80,6 +81,7 @@ module.exports = {
                         caption: formattedText
                      });
                      user_count += 1;
+                     user_id.push(user?.chat_id);
                   } catch (error) {
                      console.log(`Failed to send photo to user ${user.chat_id}:`, error);
                   }
@@ -93,6 +95,7 @@ module.exports = {
                         caption: formattedText
                      });
                      user_count += 1;
+                     user_id.push(user?.chat_id);
                   } catch (error) {
                      console.log(`Failed to send video to user ${user.chat_id}:`, error);
                   }
@@ -105,6 +108,7 @@ module.exports = {
                      parse_mode: "HTML"
                   });
                   user_count += 1;
+                  user_id.push(user?.chat_id);
                } catch (error) {
                   console.log(`Failed to send message to user ${user.chat_id}:`, error);
                }
@@ -119,6 +123,7 @@ module.exports = {
             source,
             user_subcribe,
             user_count,
+            user_id
          );
 
          if (addNewAllUser) {

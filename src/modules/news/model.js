@@ -53,6 +53,7 @@ const addNewAllUser = (
    source,
    user_subcribe,
    user_count,
+   user_id
 ) => {
    const QUERY = `
       INSERT INTO
@@ -62,14 +63,16 @@ const addNewAllUser = (
             image_name,
             source,
             subscribe,
-            user_count
+            user_count,
+            user_id
          ) VALUES (
             $1,
             $2,
             $3,
             $4,
             $5,
-            $6
+            $6,
+            $7
          ) RETURNING *;
    `;
 
@@ -80,7 +83,8 @@ const addNewAllUser = (
       fileName,
       source,
       user_subcribe,
-      user_count
+      user_count,
+      user_id
    )
 }
 const addNewUser = (
@@ -100,7 +104,7 @@ const addNewUser = (
             $1, 
             $2, 
             $3, 
-            $4 
+            ARRAY[ $4 ] 
          ) RETURNING *;
    `;
 
