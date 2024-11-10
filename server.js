@@ -572,7 +572,12 @@ bot.on('message', async (msg) => {
       }).catch(e => console.log(e))
    } else if (text == localText.contactAdmin) {
       const adminUsername = await model.adminUsername()
-      bot.sendMessage(chatId, adminUsername?.username, {
+      const formattedText = adminUsername?.username
+         .replace(/<p>/g, '')
+         .replace(/<\/p>/g, '\n')
+         .replace(/<br\s*\/?>/g, '\n')
+         .replace(/&nbsp;/g, ' ');
+      bot.sendMessage(chatId, formattedText, {
          reply_markup: {
             keyboard: [
                [{
@@ -580,7 +585,8 @@ bot.on('message', async (msg) => {
                }]
             ],
             resize_keyboard: true
-         }
+         },
+         parse_mode: "HTML"
       }).then(async () => {
          await model.editStep(chatId, 'contactAdmin');
       }).catch(e => console.log(e));
