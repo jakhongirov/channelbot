@@ -76,45 +76,37 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          if (foundTrial) {
             const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
 
-            bot.sendMessage(chatId, format, {
-               reply_markup: {
-                  keyboard: [
-                     [{
-                        text: localText.getLinkBtn
-                     }]
-                  ]
-               }
-            }).then(async () => {
+            bot.sendMessage(chatId, format).then(async () => {
                await model.editStepTrial(
                   chatId,
                   'start',
                   param ? param : "organic",
                   addDayToCurrentDate(foundTrial?.day)
-               );
-               // const invateLink = await createOneTimeLink()
-               // bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
-               //    reply_markup: {
-               //       keyboard: [
-               //          ...(foundUser?.duration === false ? [
-               //             [{
-               //                text: localText.activatingSubscriptionBtn
-               //             }]
-               //          ] : []),
-               //          [{
-               //             text: localText.myCardsBtn
-               //          }],
-               //          [{
-               //             text: localText.historyPayBtn
-               //          }],
-               //          [{
-               //             text: localText.contactAdmin
-               //          }]
-               //       ],
-               //       resize_keyboard: true
-               //    }
-               // }).then(async () => {
-               //    await model.editStep(chatId, "getLink")
-               // })
+               )
+               const invateLink = await createOneTimeLink()
+               bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+                  reply_markup: {
+                     keyboard: [
+                        ...(foundUser?.duration === false ? [
+                           [{
+                              text: localText.activatingSubscriptionBtn
+                           }]
+                        ] : []),
+                        [{
+                           text: localText.myCardsBtn
+                        }],
+                        [{
+                           text: localText.historyPayBtn
+                        }],
+                        [{
+                           text: localText.contactAdmin
+                        }]
+                     ],
+                     resize_keyboard: true
+                  }
+               }).then(async () => {
+                  await model.editStep(chatId, "getLink")
+               })
             }).catch(e => console.log(e))
          } else {
             const price = await model.price()
