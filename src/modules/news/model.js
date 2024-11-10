@@ -17,6 +17,18 @@ const news = (page, limit) => {
 
    return fetchALL(QUERY)
 }
+const foundNews = (id) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         news
+      WHERE_
+         id = $1;
+   `;
+
+   return fetch(QUERY, id)
+}
 const userList = (user_id) => {
    const id = user_id?.length > 0 ? user_id?.join(', ') : user_id
    const QUERY = `
@@ -132,6 +144,7 @@ const addNewUser = (
 
 module.exports = {
    news,
+   foundNews,
    userList,
    users,
    addNewAllUser,

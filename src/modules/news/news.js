@@ -19,15 +19,10 @@ module.exports = {
             const news = await model.news(page, limit)
 
             if (news?.length > 0) {
-               const userList = await model.userList(news?.user_id)
-
                return res.status(200).json({
                   status: 200,
                   message: "Success",
-                  data: {
-                     news: news,
-                     users: userList
-                  }
+                  data: news
                })
             } else {
                return res.status(404).json({
@@ -39,6 +34,34 @@ module.exports = {
             return res.status(400).json({
                status: 400,
                message: "Bad request"
+            })
+         }
+
+      } catch (error) {
+         console.log(error);
+         return res.status(500).json({
+            status: 500,
+            message: "Interval Server Error"
+         })
+      }
+   },
+
+   GET_ID: async (req, res) => {
+      try {
+         const {
+            id
+         } = req.params
+         const foundNews = await model.foundNews(id)
+         const usersList = await model.userList(foundNews?.user_id)
+
+         if (foundNews && usersList?.length > 0) {
+            return res.status(200).json({
+               status: 200,
+               message: "Succes",
+               data: {
+                  news: foundNews,
+                  users: usersList
+               }
             })
          }
 

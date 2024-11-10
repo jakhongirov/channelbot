@@ -62,6 +62,7 @@ router
 
    // NEWS
    .get('/news/list', AUTH, news.GET)
+   .get('/news/:id', AUTH, news.GET_ID)
    .post('/news/all/users', AUTH, FileUpload.single('photo'), news.ALL_USERS)
    .post('/news/single/user', AUTH, FileUpload.single('photo'), news.SINGLE_USER)
 
