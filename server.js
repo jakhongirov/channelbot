@@ -1077,7 +1077,7 @@ app.use('/public', express.static(path.resolve(__dirname, 'public')))
 app.use("/api/v1", router);
 
 // Job that runs every 2 minutes
-const job = new CronJob('0 * * * *', async () => {
+const job = new CronJob('0 1 * * *', async () => {
    await sendMessageBefore();
    await paySubcribe();
    console.log('aa');
