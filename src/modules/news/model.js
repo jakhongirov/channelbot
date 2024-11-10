@@ -30,18 +30,22 @@ const foundNews = (id) => {
    return fetch(QUERY, id)
 }
 const userList = (user_id) => {
-   const id = user_id?.length > 0 ? user_id?.join(', ') : user_id
+   if (!user_id || user_id.length === 0) return [];
+
+   // Generate placeholders like $1, $2, etc., for each ID in the array
+   const placeholders = user_id.map((_, index) => `$${index + 1}`).join(', ');
    const QUERY = `
       SELECT
          *
       FROM
          users
       WHERE
-         chat_id IN ($1);
+         chat_id IN (${placeholders});
    `;
 
-   return fetch(QUERY, id)
-}
+   // Execute the query with user_id array spread as parameters
+   return fetch(QUERY, );
+};
 const users = (user_subcribe, source) => {
    const QUERY = `
       SELECT
