@@ -33,6 +33,7 @@ const userList = (user_id) => {
    if (!user_id || user_id.length === 0) return [];
 
    const placeholders = user_id.map((_, index) => `$${index + 1}`).join(', ');
+   console.log(placeholders)
    const QUERY = `
       SELECT
          *
