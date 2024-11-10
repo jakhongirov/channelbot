@@ -70,7 +70,9 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const usersCard = await model.userCard(chatId)
 
    if (foundUser?.step == 'webpage' && foundUser?.phone_number && foundUser?.expired == null) {
-      bot.sendMessage(chatId, localText.registeredSuccessText, {
+      const price = await model.price()
+      const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+      bot.sendMessage(chatId, format, {
          reply_markup: {
             keyboard: [
                [{
