@@ -3,12 +3,20 @@ const {
    fetch
 } = require('../../lib/postgres')
 
-const transaction = (limit, page) => {
+const transaction = (limit, page, method) => {
    const QUERY = `
       SELECT
          *
       FROM
          checks
+      ${
+         method ? (
+            `
+               WHERE
+                  method = '${method}'
+            `
+         ) : ""
+      }
       ORDER BY
          id DESC
       LIMIT ${limit}

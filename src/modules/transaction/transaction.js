@@ -16,11 +16,12 @@ module.exports = {
       try {
          const {
             limit,
-            page
+            page,
+            method
          } = req.query
 
          if (limit && page) {
-            const transactions = await model.transaction(limit, page)
+            const transactions = await model.transaction(limit, page, method)
 
             if (transactions?.length > 0) {
                return res.status(200).json({
