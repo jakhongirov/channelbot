@@ -44,7 +44,7 @@ const userList = (user_id) => {
    `;
 
    // Execute the query with user_id array spread as parameters
-   return fetch(QUERY, );
+   return fetch(QUERY, user_id);
 };
 const users = (user_subcribe, source) => {
    const QUERY = `
