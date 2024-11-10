@@ -32,7 +32,6 @@ const foundNews = (id) => {
 const userList = (user_id) => {
    if (!user_id || user_id.length === 0) return [];
 
-   // Generate placeholders like $1, $2, etc., for each ID in the array
    const placeholders = user_id.map((_, index) => `$${index + 1}`).join(', ');
    const QUERY = `
       SELECT
@@ -43,7 +42,6 @@ const userList = (user_id) => {
          chat_id IN (${placeholders});
    `;
 
-   // Execute the query with user_id array spread as parameters
    return fetch(QUERY, user_id);
 };
 const users = (user_subcribe, source) => {
