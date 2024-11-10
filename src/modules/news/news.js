@@ -54,7 +54,7 @@ module.exports = {
          const foundNews = await model.foundNews(id)
          const usersList = await model.userList(foundNews?.user_id)
 
-         if (foundNews && usersList?.length > 0) {
+         if (foundNews) {
             return res.status(200).json({
                status: 200,
                message: "Succes",
