@@ -523,7 +523,9 @@ bot.on('contact', async (msg) => {
                await model.editStep(chatId, "getLink")
             })
          } else {
-            bot.sendMessage(chatId, localText.registeredSuccessText, {
+            const price = await model.price()
+            const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+            bot.sendMessage(chatId, format, {
                reply_markup: {
                   keyboard: [
                      [{

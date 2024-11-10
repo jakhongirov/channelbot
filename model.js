@@ -27,6 +27,16 @@ const foundTrial = (param) => {
 
    return fetch(QUERY, param)
 }
+const price = () => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         prices;
+   `;
+
+   return fetch(QUERY)
+}
 const addTrial = (param) => {
    const QUERY = `
       INSERT INTO
@@ -253,6 +263,7 @@ const adminUsername = () => {
 module.exports = {
    foundUser,
    foundTrial,
+   price,
    addTrial,
    createUser,
    createUserWithExpired,

@@ -23,7 +23,7 @@
 	"deletedCardText": "Karta muaffaqiyatli o'chirildi. Agar boshqa karta qo'shmasangiz, obuna muddati tugashida kanaldan chiqarib yuborilasiz..",
 	"deletedCardError": "Xatolik yuz berdi",
 	"contactRegisterError": "Ko'rinishidan bu sizning kontaktingiz emas, iltimos, pastdagi tugma orqali kontaktingizni yuboring.",
-	"registeredSuccessText": "Hush kelibsiz! Ushbu yoqib klubda siz ko'plab manfaatlar olishingizga ishonamiz! Obuna narxi oyiga 999,000 so'mni tashkil qiladi va har oy avtomatik xisoblanadi.\n\nPastdagi tugma orqali obunani faollashtirishingiz mumkin:",
+	"registeredSuccessText": "Hush kelibsiz! Ushbu yoqib klubda siz ko'plab manfaatlar olishingizga ishonamiz! Obuna narxi oyiga %price% so'mni tashkil qiladi va har oy avtomatik xisoblanadi.\n\nPastdagi tugma orqali obunani faollashtirishingiz mumkin:",
 	"activationBtn": "💳 Obunani faolashtirish",
 	"contactAdminText": "Admin bilan bog'lanish uchun @admin ga murojaat qiling..",
 	"getLinkBtn": "🔗 Kanal havolasini olish",
