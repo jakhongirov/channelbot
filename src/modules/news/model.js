@@ -42,7 +42,7 @@ const userList = (user_id) => {
          chat_id IN (${id});
    `;
 
-   return fetch(QUERY);
+   return fetchALL(QUERY);
 };
 const users = (user_subcribe, source) => {
    const QUERY = `
