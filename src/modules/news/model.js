@@ -32,18 +32,17 @@ const foundNews = (id) => {
 const userList = (user_id) => {
    if (!user_id || user_id.length === 0) return [];
 
-   const placeholders = user_id.map((_, index) => `$${index + 1}`).join(', ');
-   console.log(placeholders)
+   const id = user_id.map((e) => `${e}`).join(', ');
    const QUERY = `
       SELECT
          *
       FROM
          users
       WHERE
-         chat_id IN (${placeholders});
+         chat_id IN (${id});
    `;
 
-   return fetch(QUERY, user_id);
+   return fetch(QUERY);
 };
 const users = (user_subcribe, source) => {
    const QUERY = `
