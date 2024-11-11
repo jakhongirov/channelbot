@@ -39,7 +39,7 @@
 	"askFullContact": "Full Contact haqida bilasizmi? bilmasez bilvolin!!!",
 	"askFullContactYesBtn": "Ha, bilaman",
 	"askFullContactNoBtn": "Bilishni hohliman",
-	"localText.aboutFullContact": "nimadr nimadir nimadrdeeee qanaqadir uzuuuuuuun text",
+	"aboutFullContact": "nimadr nimadir nimadrdeeee qanaqadir uzuuuuuuun text",
 
 	"cronTextBefore2day": "Sizning obunangiz yangilanishiga 2 kun qoldi. Kartangizda mablag' yetarli bo'lsa, avtomatik yangilanadi..",
 	"cronTextBefore1day": "Sizning obunangiz tugashiga 1 kun qoldi.  Kartangizda mablag' yetarli bo'lsa, avtomatik yangilanadi..",
