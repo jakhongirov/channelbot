@@ -71,11 +71,11 @@ const createUser = (
 
    return fetch(QUERY, chatId, step, source)
 }
-const createUserWithExpired = (
+const createUserWithTrial = (
    chatId,
    step,
    source,
-   expired
+   trial
 ) => {
    const QUERY = `
       INSERT INTO
@@ -83,7 +83,7 @@ const createUserWithExpired = (
             chat_id,
             step,
             source,
-            expired
+            trial
          ) VALUES (
             $1, 
             $2,
@@ -92,7 +92,7 @@ const createUserWithExpired = (
          ) RETURNING *;
    `;
 
-   return fetch(QUERY, chatId, step, source, expired)
+   return fetch(QUERY, chatId, step, source, trial)
 }
 const editStep = (chatId, step) => {
    const QUERY = `
@@ -107,20 +107,20 @@ const editStep = (chatId, step) => {
 
    return fetch(QUERY, chatId, step)
 }
-const editStepTrial = (chatId, step, source, expired) => {
+const editStepTrial = (chatId, step, source, trial) => {
    const QUERY = `
       UPDATE
          users
       SET
          step = $2,
          source = $3,
-         expired = $4
+         trial = $4
       WHERE
          chat_id = $1
       RETURNING *;
    `;
 
-   return fetch(QUERY, chatId, step, source, expired)
+   return fetch(QUERY, chatId, step, source, trial)
 }
 const editStepSubcribe = (chatId, step, subscribe) => {
    const QUERY = `
@@ -281,7 +281,7 @@ module.exports = {
    price,
    addTrial,
    createUser,
-   createUserWithExpired,
+   createUserWithTrial,
    editStep,
    editStepTrial,
    addPhoneUser,

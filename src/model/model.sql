@@ -14,6 +14,7 @@ CREATE TABLE users (
    subscribe boolean DEFAULT false,
    expired text,
    source text,
+   trial int DEFAULT 1,
    duration boolean DEFAULT false,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
@@ -79,7 +80,7 @@ CREATE TABLE news (
 
 CREATE TABLE trial (
    id bigserial PRIMARY KEY,
-   source text,
+   source text UNIQUE,
    day int,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );

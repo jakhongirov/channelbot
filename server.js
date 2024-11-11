@@ -46,23 +46,6 @@ function formatBalanceWithSpaces(balance) {
    }).format(balance / 100).replace(/,/g, ' ');
 }
 
-function addDayToCurrentDate(expire_day) {
-   const date = new Date();
-
-   // Add days
-   date.setDate(date.getDate() + Number(expire_day));
-
-   // Apply Uzbekistan timezone offset (UTC+5)
-   const uzbekistanOffset = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
-   const uzbekistanTime = new Date(date.getTime() + uzbekistanOffset);
-
-   const year = uzbekistanTime.getUTCFullYear();
-   const month = String(uzbekistanTime.getUTCMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-   const day = String(uzbekistanTime.getUTCDate()).padStart(2, '0');
-
-   return `${year}-${month}-${day}`;
-}
-
 bot.onText(/\/start ?(.*)?/, async (msg, match) => {
    const chatId = msg.chat.id;
    const param = match[1]?.trim();
@@ -76,39 +59,31 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          if (foundTrial) {
             const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
 
-            bot.sendMessage(chatId, format).then(async () => {
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
                await model.editStepTrial(
                   chatId,
                   'start',
                   param ? param : "organic",
-                  addDayToCurrentDate(foundTrial?.day)
+                  2
                )
-               const invateLink = await createOneTimeLink()
-               bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
-                  reply_markup: {
-                     keyboard: [
-                        ...(foundUser?.duration === false ? [
-                           [{
-                              text: localText.activatingSubscriptionBtn
-                           }]
-                        ] : []),
-                        [{
-                           text: localText.myCardsBtn
-                        }],
-                        [{
-                           text: localText.historyPayBtn
-                        }],
-                        [{
-                           text: localText.contactAdmin
-                        }]
-                     ],
-                     resize_keyboard: true
-                  }
-               }).then(async () => {
-                  await model.editStep(chatId, "getLink")
-               })
             }).catch(e => console.log(e))
          } else {
+            await model.addTrial(param)
             const price = await model.price()
             const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
             bot.sendMessage(chatId, format, {
@@ -132,7 +107,6 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          }
 
       } else {
-         await model.addTrial(param)
          const price = await model.price()
          const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
          bot.sendMessage(chatId, format, {
@@ -178,11 +152,11 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
                }
             }).then(async () => {
                if (!foundUser) {
-                  await model.createUserWithExpired(
+                  await model.createUserWithTrial(
                      chatId,
                      "start",
                      param ? param : "organic",
-                     addDayToCurrentDate(foundTrial?.day)
+                     2
                   )
                } else {
                   await model.editStep(chatId, 'start');
@@ -319,50 +293,58 @@ bot.on('chat_join_request', async (msg) => {
    }
 });
 
-bot.on('chat_member', (msg) => {
-   const chatId = msg.chat.id;
-   const userId = msg.from.id;
-   const newStatus = msg.new_chat_member.status;
-
-   console.log(msg)
-
-   if (newStatus === 'left' || newStatus === 'kicked') {
-      console.log(`User ${userId} has left the channel ${chatId}`);
-   }
-});
-
 bot.on("callback_query", async (msg) => {
    const chatId = msg.message.chat.id;
    const data = msg.data;
    const foundUser = await model.foundUser(chatId)
 
    if (data == 'know') {
-      const current = new Date().toISOString().split('T')[0];
-      if (foundUser?.expired > current) {
-         const invateLink = await createOneTimeLink()
-         bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
-            reply_markup: {
-               keyboard: [
-                  ...(foundUser?.duration === false ? [
+      if (foundUser?.trial == 2) {
+         const foundTrial = await model.foundTrial(foundUser?.source)
+
+         if (foundTrial?.day > 0) {
+            const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
+
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
                      [{
-                        text: localText.activatingSubscriptionBtn
-                     }]
-                  ] : []),
-                  [{
-                     text: localText.myCardsBtn
-                  }],
-                  [{
-                     text: localText.historyPayBtn
-                  }],
-                  [{
-                     text: localText.contactAdmin
-                  }]
-               ],
-               resize_keyboard: true
-            }
-         }).then(async () => {
-            await model.editStep(chatId, "getLink")
-         })
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'trial');
+            }).catch(e => console.log(e))
+         } else {
+            const price = await model.price()
+            const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'webpage');
+            }).catch(e => console.log(e));
+         }
       } else {
          const price = await model.price()
          const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
@@ -389,32 +371,52 @@ bot.on("callback_query", async (msg) => {
    } else if (data == "no_know") {
       bot.sendMessage(chatId, localText.aboutFullContact)
 
-      const current = new Date().toISOString().split('T')[0];
-      if (foundUser?.expired > current) {
-         const invateLink = await createOneTimeLink()
-         bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
-            reply_markup: {
-               keyboard: [
-                  ...(foundUser?.duration === false ? [
+      if (foundUser?.trial == 2) {
+         const foundTrial = await model.foundTrial(foundUser?.source)
+
+         if (foundTrial?.day > 0) {
+            const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
+
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
                      [{
-                        text: localText.activatingSubscriptionBtn
-                     }]
-                  ] : []),
-                  [{
-                     text: localText.myCardsBtn
-                  }],
-                  [{
-                     text: localText.historyPayBtn
-                  }],
-                  [{
-                     text: localText.contactAdmin
-                  }]
-               ],
-               resize_keyboard: true
-            }
-         }).then(async () => {
-            await model.editStep(chatId, "getLink")
-         })
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'trial');
+            }).catch(e => console.log(e))
+         } else {
+            const price = await model.price()
+            const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+            bot.sendMessage(chatId, format, {
+               reply_markup: {
+                  keyboard: [
+                     [{
+                        text: localText.activationBtn,
+                        web_app: {
+                           url: `https://web-page-one-theta.vercel.app/${chatId}`
+                        }
+                     }],
+                     [{
+                        text: localText.contactAdmin,
+                     }],
+                  ],
+                  resize_keyboard: true
+               }
+            }).then(async () => {
+               await model.editStep(chatId, 'webpage');
+            }).catch(e => console.log(e));
+         }
       } else {
          const price = await model.price()
          const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
@@ -437,6 +439,7 @@ bot.on("callback_query", async (msg) => {
             await model.editStep(chatId, 'webpage');
          }).catch(e => console.log(e));
       }
+
    } else if (data.startsWith('card_')) {
       const cardId = data?.split('card_')[1]
       const card = await model.card(cardId)
