@@ -219,7 +219,8 @@ const editStepTrial = (chat_id, step, subscribe, expired) => {
       SET
          step = $2,
          subscribe = $3,
-         expired = $4
+         expired = $4,
+         trial = 3
       WHERE
          chat_id = $1
       RETURNING *;
