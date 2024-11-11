@@ -336,11 +336,108 @@ bot.on("callback_query", async (msg) => {
    const data = msg.data;
    const foundUser = await model.foundUser(chatId)
 
-   // if (data === 'agreement') {
+   if (data == 'know') {
+      const current = new Date().toISOString().split('T')[0];
+      if (foundUser?.expired > current) {
+         const invateLink = await createOneTimeLink()
+         bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+            reply_markup: {
+               keyboard: [
+                  ...(foundUser?.duration === false ? [
+                     [{
+                        text: localText.activatingSubscriptionBtn
+                     }]
+                  ] : []),
+                  [{
+                     text: localText.myCardsBtn
+                  }],
+                  [{
+                     text: localText.historyPayBtn
+                  }],
+                  [{
+                     text: localText.contactAdmin
+                  }]
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            await model.editStep(chatId, "getLink")
+         })
+      } else {
+         const price = await model.price()
+         const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+         bot.sendMessage(chatId, format, {
+            reply_markup: {
+               keyboard: [
+                  [{
+                     text: localText.activationBtn,
+                     web_app: {
+                        url: `https://web-page-one-theta.vercel.app/${chatId}`
+                     }
+                  }],
+                  [{
+                     text: localText.contactAdmin,
+                  }],
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            await model.editStep(chatId, 'webpage');
+         }).catch(e => console.log(e));
+      }
 
-   // } else 
+   } else if (data == "no_know") {
+      bot.sendMessage(chatId, localText.aboutFullContact)
 
-   if (data.startsWith('card_')) {
+      const current = new Date().toISOString().split('T')[0];
+      if (foundUser?.expired > current) {
+         const invateLink = await createOneTimeLink()
+         bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+            reply_markup: {
+               keyboard: [
+                  ...(foundUser?.duration === false ? [
+                     [{
+                        text: localText.activatingSubscriptionBtn
+                     }]
+                  ] : []),
+                  [{
+                     text: localText.myCardsBtn
+                  }],
+                  [{
+                     text: localText.historyPayBtn
+                  }],
+                  [{
+                     text: localText.contactAdmin
+                  }]
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            await model.editStep(chatId, "getLink")
+         })
+      } else {
+         const price = await model.price()
+         const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+         bot.sendMessage(chatId, format, {
+            reply_markup: {
+               keyboard: [
+                  [{
+                     text: localText.activationBtn,
+                     web_app: {
+                        url: `https://web-page-one-theta.vercel.app/${chatId}`
+                     }
+                  }],
+                  [{
+                     text: localText.contactAdmin,
+                  }],
+               ],
+               resize_keyboard: true
+            }
+         }).then(async () => {
+            await model.editStep(chatId, 'webpage');
+         }).catch(e => console.log(e));
+      }
+   } else if (data.startsWith('card_')) {
       const cardId = data?.split('card_')[1]
       const card = await model.card(cardId)
 
@@ -561,55 +658,69 @@ bot.on('contact', async (msg) => {
       const addPhoneUser = await model.addPhoneUser(chatId, phoneNumber, name)
 
       if (addPhoneUser) {
-         const current = new Date().toISOString().split('T')[0];
 
-         if (addPhoneUser?.expired > current) {
-            const invateLink = await createOneTimeLink()
-            bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
-               reply_markup: {
-                  keyboard: [
-                     ...(addPhoneUser?.duration === false ? [
-                        [{
-                           text: localText.activatingSubscriptionBtn
-                        }]
-                     ] : []),
-                     [{
-                        text: localText.myCardsBtn
-                     }],
-                     [{
-                        text: localText.historyPayBtn
-                     }],
-                     [{
-                        text: localText.contactAdmin
-                     }]
-                  ],
-                  resize_keyboard: true
-               }
-            }).then(async () => {
-               await model.editStep(chatId, "getLink")
-            })
-         } else {
-            const price = await model.price()
-            const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
-            bot.sendMessage(chatId, format, {
-               reply_markup: {
-                  keyboard: [
-                     [{
-                        text: localText.activationBtn,
-                        web_app: {
-                           url: `https://web-page-one-theta.vercel.app/${chatId}`
-                        }
-                     }],
-                     [{
-                        text: localText.contactAdmin,
-                     }],
-                  ],
-                  resize_keyboard: true
-               }
-            }).then(async () => {
-               await model.editStep(chatId, 'webpage');
-            }).catch(e => console.log(e));
-         }
+         bot.sendMessage(chatId, `${localText.askFullContact}`, {
+            reply_markup: {
+               inline_keyboard: [
+                  [{
+                     text: localText.askFullContactYesBtn,
+                     callback_data: 'know'
+                  }],
+                  [{
+                     text: localText.askFullContactNoBtn,
+                     callback_data: 'no_know'
+                  }],
+               ]
+            }
+         })
+
+         // if (addPhoneUser?.expired > current) {
+         //    const invateLink = await createOneTimeLink()
+         //    bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
+         //       reply_markup: {
+         //          keyboard: [
+         //             ...(addPhoneUser?.duration === false ? [
+         //                [{
+         //                   text: localText.activatingSubscriptionBtn
+         //                }]
+         //             ] : []),
+         //             [{
+         //                text: localText.myCardsBtn
+         //             }],
+         //             [{
+         //                text: localText.historyPayBtn
+         //             }],
+         //             [{
+         //                text: localText.contactAdmin
+         //             }]
+         //          ],
+         //          resize_keyboard: true
+         //       }
+         //    }).then(async () => {
+         //       await model.editStep(chatId, "getLink")
+         //    })
+         // } else {
+         //    const price = await model.price()
+         //    const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+         //    bot.sendMessage(chatId, format, {
+         //       reply_markup: {
+         //          keyboard: [
+         //             [{
+         //                text: localText.activationBtn,
+         //                web_app: {
+         //                   url: `https://web-page-one-theta.vercel.app/${chatId}`
+         //                }
+         //             }],
+         //             [{
+         //                text: localText.contactAdmin,
+         //             }],
+         //          ],
+         //          resize_keyboard: true
+         //       }
+         //    }).then(async () => {
+         //       await model.editStep(chatId, 'webpage');
+         //    }).catch(e => console.log(e));
+         // }
       }
    }
 })
