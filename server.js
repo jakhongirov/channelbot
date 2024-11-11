@@ -57,31 +57,54 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
          const foundTrial = await model.foundTrial(param)
 
          if (foundTrial) {
-            const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
+            if (foundTrial?.day > 0) {
+               const format = localText?.startTextFromTrial.replace(/%day%/g, foundTrial?.day)
 
-            bot.sendMessage(chatId, format, {
-               reply_markup: {
-                  keyboard: [
-                     [{
-                        text: localText.activationBtn,
-                        web_app: {
-                           url: `https://web-page-one-theta.vercel.app/${chatId}`
-                        }
-                     }],
-                     [{
-                        text: localText.contactAdmin,
-                     }],
-                  ],
-                  resize_keyboard: true
-               }
-            }).then(async () => {
-               await model.editStepTrial(
-                  chatId,
-                  'start',
-                  param ? param : "organic",
-                  2
-               )
-            }).catch(e => console.log(e))
+               bot.sendMessage(chatId, format, {
+                  reply_markup: {
+                     keyboard: [
+                        [{
+                           text: localText.activationBtn,
+                           web_app: {
+                              url: `https://web-page-one-theta.vercel.app/${chatId}`
+                           }
+                        }],
+                        [{
+                           text: localText.contactAdmin,
+                        }],
+                     ],
+                     resize_keyboard: true
+                  }
+               }).then(async () => {
+                  await model.editStepTrial(
+                     chatId,
+                     'start',
+                     param ? param : "organic",
+                     2
+                  )
+               }).catch(e => console.log(e))
+            } else {
+               const price = await model.price()
+               const format = localText.registeredSuccessText.replace(/%price%/g, formatBalanceWithSpaces(price?.price))
+               bot.sendMessage(chatId, format, {
+                  reply_markup: {
+                     keyboard: [
+                        [{
+                           text: localText.activationBtn,
+                           web_app: {
+                              url: `https://web-page-one-theta.vercel.app/${chatId}`
+                           }
+                        }],
+                        [{
+                           text: localText.contactAdmin,
+                        }],
+                     ],
+                     resize_keyboard: true
+                  }
+               }).then(async () => {
+                  await model.editStep(chatId, 'webpage');
+               }).catch(e => console.log(e));
+            }
          } else {
             await model.addTrial(param)
             const price = await model.price()

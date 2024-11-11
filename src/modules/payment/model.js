@@ -1,4 +1,7 @@
-const { fetch, fetchALL } = require('../../lib/postgres')
+const {
+   fetch,
+   fetchALL
+} = require('../../lib/postgres')
 
 const checkUser = (chat_id) => {
    const QUERY = `
@@ -197,7 +200,33 @@ const deleteCard = (card_id) => {
 
    return fetch(QUERY, card_id)
 }
+const foundTrial = (param) => {
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         trial
+      WHERE
+         source = $1;
+   `;
 
+   return fetch(QUERY, param)
+}
+const editStepTrial = (chat_id, step, subscribe, expired) => {
+   const QUERY = `
+      UPDATE
+         users
+      SET
+         step = $2,
+         subscribe = $3,
+         expired = $4
+      WHERE
+         chat_id = $1
+      RETURNING *;
+   `;
+
+   return fetch(QUERY, chat_id, step, subscribe, expired)
+}
 
 module.exports = {
    checkUser,
@@ -210,5 +239,7 @@ module.exports = {
    addCheck,
    editStep,
    foundCardByCard_id,
-   deleteCard
+   deleteCard,
+   foundTrial,
+   editStepTrial
 }

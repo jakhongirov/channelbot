@@ -138,6 +138,38 @@ module.exports = {
                         status: 200,
                         message: "Add card"
                      })
+                  } else if (checkUser?.trial == 2) {
+                     const foundTrial = await model.foundTrial(checkUser?.source)
+
+                     if (foundTrial?.day > 0) {
+                        const invateLink = await createOneTimeLink()
+
+                        if (invateLink) {
+                           bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
+                              reply_markup: {
+                                 keyboard: [
+                                    [{
+                                       text: localText.myCardsBtn,
+                                       // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                    }],
+                                    [{
+                                       text: localText.historyPayBtn,
+                                    }],
+                                    [{
+                                       text: localText.contactAdmin,
+                                    }],
+                                 ],
+                                 resize_keyboard: true
+                              }
+                           }).then(async () => {
+                              await model.editStepTrial(chat_id, "mainSrean", false, addDayToCurrentDate(foundTrial?.day))
+                           })
+                        }
+                     }
+                     return res.status(200).json({
+                        status: 200,
+                        message: "Add card"
+                     })
                   } else {
                      const price = await model.price()
                      const atmosCreatePay = await atmos.createPay(
