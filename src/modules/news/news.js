@@ -188,7 +188,7 @@ module.exports = {
             .replace(/<br\s*\/?>/g, '\n');
          const fileName = uploadPhoto?.filename;
          const fileUrl = `${process.env.BACKEND_URL}/${uploadPhoto?.filename}`
-         const mimeType = req.file.mimetype;
+         const mimeType = req?.file?.mimetype;
 
          if (uploadPhoto) {
 
