@@ -120,18 +120,18 @@ const addNewUser = (
    chat_id
 ) => {
    const QUERY = `
-   INSERT INTO
-      news (
-         data,
-         image_url,
-         image_name,
-         user_id
-      ) VALUES (
-         $1, 
-         $2, 
-         $3, 
-         ARRAY[ $4 ]::bigint[] 
-      ) RETURNING *;
+      INSERT INTO
+         news (
+            data,
+            image_url,
+            image_name,
+            user_id
+         ) VALUES (
+            $1, 
+            $2, 
+            $3, 
+            ARRAY[ $4 ]::bigint[] 
+         ) RETURNING *;
 `;
 
    return fetch(
