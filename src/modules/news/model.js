@@ -50,24 +50,23 @@ const users = (user_subcribe, source) => {
          *
       FROM
          users
-      ${
-         user_subcribe != 'all' && source != 'all' ? (
-            `
+      ${user_subcribe != 'all' && source != 'all' ? (
+         `
                WHERE
                   subscribe = ${user_subcribe}
                   AND source = '${source}'
             `
-         ) : user_subcribe != 'all' && source == 'all' ? (
-            `
+      ) : user_subcribe != 'all' && source == 'all' ? (
+         `
                WHERE
                   subscribe = ${user_subcribe}
             `
-         ): user_subcribe == 'all' && source != 'all' ? (
-            `
+      ) : user_subcribe == 'all' && source != 'all' ? (
+         `
                WHERE
                   source = '${source}'
             `
-         ) : ''
+      ) : ''
       };
    `;
 
@@ -121,19 +120,19 @@ const addNewUser = (
    chat_id
 ) => {
    const QUERY = `
-      INSERT INTO
-         news (
-            data,
-            image_url,
-            image_name,
-            user_id
-         ) VALUES (
-            $1, 
-            $2, 
-            $3, 
-            ARRAY[ $4 ] 
-         ) RETURNING *;
-   `;
+   INSERT INTO
+      news (
+         data,
+         image_url,
+         image_name,
+         user_id
+      ) VALUES (
+         $1, 
+         $2, 
+         $3, 
+         ARRAY[ $4 ]::bigint[] 
+      ) RETURNING *;
+`;
 
    return fetch(
       QUERY,
