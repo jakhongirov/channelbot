@@ -21,6 +21,8 @@ const atmosToken = () => {
          *
       FROM
          atmos_token
+      ORDER BY
+         id DESC;
    `;
 
    return fetch(QUERY)

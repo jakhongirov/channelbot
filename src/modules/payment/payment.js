@@ -90,28 +90,28 @@ module.exports = {
 
          if (checkUser) {
             const atmosToken = await model.atmosToken()
-            const atmosOpt = await atmos.bindConfirm(
+            const atmosOtp = await atmos.bindConfirm(
                code,
                transaction_id,
                atmosToken?.token,
                atmosToken?.expires
             )
 
-            console.log(atmosOpt)
+            console.log(atmosOtp)
 
-            if (atmosOpt?.result?.code == "OK") {
+            if (atmosOtp?.result?.code == "OK") {
                const checkUserCards = await model.checkUserCards(chat_id)
                const addCard = await model.addCard(
-                  atmosOpt?.data.pan,
-                  atmosOpt?.data.expiry,
-                  atmosOpt?.data.card_holder,
-                  atmosOpt?.data.phone,
-                  atmosOpt?.data.card_token,
+                  atmosOtp?.data.pan,
+                  atmosOtp?.data.expiry,
+                  atmosOtp?.data.card_holder,
+                  atmosOtp?.data.phone,
+                  atmosOtp?.data.card_token,
                   code,
                   transaction_id,
                   chat_id,
                   checkUserCards?.length > 0 ? false : true,
-                  atmosOpt?.data.card_id
+                  atmosOtp?.data.card_id
                )
 
                const current = new Date().toISOString().split('T')[0];
@@ -249,24 +249,24 @@ module.exports = {
                   })
                }
 
-            } else if (atmosOpt?.result?.code == "STPIMS-ERR-133") {
+            } else if (atmosOtp?.result?.code == "STPIMS-ERR-133") {
                let card = {}
-               const foundCard = await model.foundCard(atmosOpt.data.card_id, chat_id)
+               const foundCard = await model.foundCard(atmosOtp.data.card_id, chat_id)
 
                if (foundCard) {
                   card = foundCard
                } else {
                   const addCard = await model.addCard(
-                     atmosOpt?.data.pan,
-                     atmosOpt?.data.expiry,
-                     atmosOpt?.data.card_holder,
-                     atmosOpt?.data.phone,
-                     atmosOpt?.data.card_token,
+                     atmosOtp?.data.pan,
+                     atmosOtp?.data.expiry,
+                     atmosOtp?.data.card_holder,
+                     atmosOtp?.data.phone,
+                     atmosOtp?.data.card_token,
                      code,
                      transaction_id,
                      chat_id,
                      checkUserCards?.length > 0 ? false : true,
-                     atmosOpt?.data.card_id
+                     atmosOtp?.data.card_id
                   )
 
                   card = addCard
@@ -380,7 +380,7 @@ module.exports = {
                }
 
             } else {
-               return res.status(400).json(atmosOpt.result)
+               return res.status(400).json(atmosOtp.result)
             }
          } else {
             return res.status(404).json({
