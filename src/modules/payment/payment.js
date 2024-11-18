@@ -126,7 +126,7 @@ module.exports = {
                      const foundTrial = await model.foundTrial(checkUser?.source)
 
                      if (foundTrial?.day > 0) {
-                        const invateLink = await createOneTimeLink()
+                        const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                         if (invateLink) {
                            bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
@@ -198,7 +198,7 @@ module.exports = {
                               const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
 
                               if (addCheck && editUserExpired) {
-                                 const invateLink = await createOneTimeLink()
+                                 const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                                  if (invateLink) {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
@@ -285,7 +285,7 @@ module.exports = {
                      const foundTrial = await model.foundTrial(checkUser?.source)
 
                      if (foundTrial?.day > 0) {
-                        const invateLink = await createOneTimeLink()
+                        const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                         if (invateLink) {
                            bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
@@ -360,7 +360,7 @@ module.exports = {
                               const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
 
                               if (addCheck && editUserExpired) {
-                                 const invateLink = await createOneTimeLink()
+                                 const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                                  if (invateLink) {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {

@@ -897,7 +897,7 @@ bot.on('message', async (msg) => {
          if (checksUser?.length > 0) {
             const checks = checksUser.map(
                (check, index) =>
-               `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+                  `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
             ).join("\n\n");
 
             bot.sendMessage(chatId, checks, {
@@ -972,7 +972,7 @@ bot.on('message', async (msg) => {
       if (checksUser?.length > 0) {
          const checks = checksUser.map(
             (check, index) =>
-            `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+               `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
          ).join("\n\n");
 
          bot.sendMessage(chatId, checks, {
@@ -1017,7 +1017,7 @@ bot.on('message', async (msg) => {
       const current = new Date().toISOString().split('T')[0];
 
       if (foundUser?.expired > current) {
-         const invateLink = await createOneTimeLink()
+         const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
          bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`).then(async () => {
             await model.editStep(chatId, "getLink")
          })
@@ -1119,7 +1119,7 @@ bot.on('message', async (msg) => {
                   await model.editDuration(chatId, true)
                })
             } else {
-               const invateLink = await createOneTimeLink()
+               const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                if (invateLink) {
                   bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`, {
