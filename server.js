@@ -305,7 +305,7 @@ bot.on('chat_join_request', async (msg) => {
             await model.editStep(userId, 'start')
          }
       }).catch(e => console.log(e))
-   } else if (foundUser?.expired > current) {
+   } else if (foundUser?.expired >= current) {
       try {
          await await bot.approveChatJoinRequest(chatId, userId).then(async () => {
             await model.editSubcribe(userId, true)
