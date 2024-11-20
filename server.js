@@ -1147,7 +1147,7 @@ bot.on('message', async (msg) => {
                await model.editStep(chatId, "historyPayment")
             })
          }
-      } else if (current < foundUser?.expired) {
+      } else if (current <= foundUser?.expired) {
          bot.sendMessage(chatId, localText.activatingSubscriptionText2, {
             reply_markup: {
                keyboard: [
@@ -1200,7 +1200,7 @@ app.use(express.urlencoded({
 app.use('/public', express.static(path.resolve(__dirname, 'public')))
 app.use("/api/v1", router);
 
-const job = new CronJob('0 1 * * *', async () => {
+const job = new CronJob('0 15 * * *', async () => {
    await sendMessageBefore();
    await paySubcribe();
    console.log('aa');
