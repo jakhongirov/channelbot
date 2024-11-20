@@ -1016,7 +1016,7 @@ bot.on('message', async (msg) => {
    } else if (text == localText.getLinkBtn) {
       const current = new Date().toISOString().split('T')[0];
 
-      if (foundUser?.expired > current) {
+      if (foundUser?.expired >= current) {
          const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
          bot.sendMessage(chatId, `${localText.getLinkText} ${invateLink}`).then(async () => {
             await model.editStep(chatId, "getLink")
