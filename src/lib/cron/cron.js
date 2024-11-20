@@ -197,7 +197,7 @@ const paySubcribe = async () => {
                      }
 
                      if (!success) {
-                        bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+                        bot.kickChatMember(process.env.CHANNEL_ID, user?.chat_id)
                            .then(async () => {
                               console.log(`User with ID ${user?.chat_id} has been removed `);
                               await model.editUserSubcribe(user?.chat_id, false)
@@ -221,7 +221,7 @@ const paySubcribe = async () => {
       if (getUserWithoutDuration?.length > 0) {
          for (const user of getUserWithoutDuration) {
             bot.sendMessage(user?.chat_id, localText.cronDurationOffEndDate)
-            bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+            bot.kickChatMember(process.env.CHANNEL_ID, user?.chat_id)
                .then(async () => {
                   console.log(`User with ID ${user?.chat_id} has been removed `);
                   await model.editUserSubcribe(user?.chat_id, false)
