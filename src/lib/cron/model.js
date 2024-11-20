@@ -102,25 +102,25 @@ const getUsersBefore1day = () => {
    return fetchALL(QUERY)
 }
 const getUsers = () => {
-   const QUERY = `
-      SELECT 
-         *
-      FROM 
-         users
-      WHERE 
-         duration = true AND subscribe = true;  
-   `;
-
    // const QUERY = `
-   //    SELECT
+   //    SELECT 
    //       *
-   //    FROM
+   //    FROM 
    //       users
-   //    WHERE
-   //       expired::date = CURRENT_DATE
-   //       AND duration = true
-   //       AND subscribe = true;
+   //    WHERE 
+   //       duration = true AND subscribe = true;  
    // `;
+
+   const QUERY = `
+      SELECT
+         *
+      FROM
+         users
+      WHERE
+         expired::date = CURRENT_DATE
+         AND duration = true
+         AND subscribe = true;
+   `;
 
    return fetchALL(QUERY)
 }
