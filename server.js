@@ -667,7 +667,7 @@ bot.on('contact', async (msg) => {
             reply_markup: {
                keyboard: [
                   [{
-                     text: sendContactBtn,
+                     text:localText.sendContactBtn,
                      request_contact: true
                   }]
                ],
