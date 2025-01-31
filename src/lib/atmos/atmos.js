@@ -75,6 +75,8 @@ const bindInit = async (card_number, expiry, token, expired) => {
       expiry: expiry
    }
 
+   console.log(data)
+
    try {
       const response = await axios.post("https://partner.atmos.uz/partner/bind-card/init", data, { headers })
 
