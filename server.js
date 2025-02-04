@@ -1200,7 +1200,7 @@ app.use(express.urlencoded({
 app.use('/public', express.static(path.resolve(__dirname, 'public')))
 app.use("/api/v1", router);
 
-const job = new CronJob('0 15 * * *', async () => {
+const job = new CronJob('0 8 * * *', async () => {
    await sendMessageBefore();
    await paySubcribe();
    console.log('aa');
