@@ -95,6 +95,7 @@ const createUserWithTrial = (
    return fetch(QUERY, chatId, step, source, trial)
 }
 const editStep = (chatId, step) => {
+   console.log(step)
    const QUERY = `
       UPDATE
          users
