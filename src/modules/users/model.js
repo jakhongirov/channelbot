@@ -3,7 +3,7 @@ const {
    fetch
 } = require('../../lib/postgres')
 
-const users = (limit, page, phone) => {
+const users = (limit, page, phone, sort) => {
    const QUERY = `
       SELECT
          *
@@ -17,6 +17,31 @@ const users = (limit, page, phone) => {
             `
          ): ""
       }
+      
+      ${
+         sort  == 'subscribe' ? (
+            `
+               WHERE
+                  subscribe = true
+            `
+         ): sort == 'unsubscribe'? (
+            `
+               WHERE
+                  subscribe = false
+            `
+         ): sort == 'duration' ? (
+            `
+               WHERE
+                  duration = true
+            `
+         ): sort == "unduration" ? (
+            `
+               WHERE
+                  duration = false
+            `
+         ): ''
+      }
+      
       ORDER BY
          id DESC
       LIMIT ${limit}

@@ -9,13 +9,12 @@ const transaction = (limit, page, method) => {
          *
       FROM
          checks
-      ${
-         method ? (
-            `
+      ${method ? (
+         `
                WHERE
                   method = '${method.toUpperCase()}'
             `
-         ) : ""
+      ) : ""
       }
       ORDER BY
          id DESC
@@ -208,7 +207,6 @@ const statisticsIncrease = () => {
          monthly_growth
       ORDER BY
          EXTRACT(MONTH FROM month);
-
    `;
 
    return fetchALL(QUERY)

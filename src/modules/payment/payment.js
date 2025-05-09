@@ -5,7 +5,8 @@ const {
    createOneTimeLink
 } = require('../../lib/bot')
 const {
-   addOneMonthToCurrentDate
+   addOneMonthToCurrentDate,
+   addDayToCurrentDate
 } = require('../../config')
 const localText = require('../../text/text.json')
 
@@ -89,34 +90,66 @@ module.exports = {
 
          if (checkUser) {
             const atmosToken = await model.atmosToken()
-            const atmosOpt = await atmos.bindConfirm(
+            const atmosOtp = await atmos.bindConfirm(
                code,
                transaction_id,
                atmosToken?.token,
                atmosToken?.expires
             )
 
-            console.log(atmosOpt)
+            console.log(atmosOtp)
 
-            if (atmosOpt?.result?.code == "OK") {
+            if (atmosOtp?.result?.code == "OK") {
                const checkUserCards = await model.checkUserCards(chat_id)
                const addCard = await model.addCard(
-                  atmosOpt?.data.pan,
-                  atmosOpt?.data.expiry,
-                  atmosOpt?.data.card_holder,
-                  atmosOpt?.data.phone,
-                  atmosOpt?.data.card_token,
+                  atmosOtp?.data.pan,
+                  atmosOtp?.data.expiry,
+                  atmosOtp?.data.card_holder,
+                  atmosOtp?.data.phone,
+                  atmosOtp?.data.card_token,
                   code,
                   transaction_id,
                   chat_id,
                   checkUserCards?.length > 0 ? false : true,
-                  atmosOpt?.data.card_id
+                  atmosOtp?.data.card_id
                )
 
                const current = new Date().toISOString().split('T')[0];
 
                if (addCard) {
                   if (checkUser?.expired >= current) {
+                     return res.status(200).json({
+                        status: 200,
+                        message: "Add card"
+                     })
+                  } else if (checkUser?.trial == 2) {
+                     const foundTrial = await model.foundTrial(checkUser?.source)
+
+                     if (foundTrial?.day > 0) {
+                        const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
+
+                        if (invateLink) {
+                           bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
+                              reply_markup: {
+                                 keyboard: [
+                                    [{
+                                       text: localText.myCardsBtn,
+                                       // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                    }],
+                                    [{
+                                       text: localText.historyPayBtn,
+                                    }],
+                                    [{
+                                       text: localText.contactAdmin,
+                                    }],
+                                 ],
+                                 resize_keyboard: true
+                              }
+                           }).then(async () => {
+                              await model.editStepTrial(chat_id, "mainSrean", false, addDayToCurrentDate(foundTrial?.day))
+                           })
+                        }
+                     }
                      return res.status(200).json({
                         status: 200,
                         message: "Add card"
@@ -165,7 +198,7 @@ module.exports = {
                               const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
 
                               if (addCheck && editUserExpired) {
-                                 const invateLink = await createOneTimeLink()
+                                 const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                                  if (invateLink) {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
@@ -216,24 +249,24 @@ module.exports = {
                   })
                }
 
-            } else if (atmosOpt?.result?.code == "STPIMS-ERR-133") {
+            } else if (atmosOtp?.result?.code == "STPIMS-ERR-133") {
                let card = {}
-               const foundCard = await model.foundCard(atmosOpt.data.card_id, chat_id)
+               const foundCard = await model.foundCard(atmosOtp.data.card_id, chat_id)
 
                if (foundCard) {
                   card = foundCard
                } else {
                   const addCard = await model.addCard(
-                     atmosOpt?.data.pan,
-                     atmosOpt?.data.expiry,
-                     atmosOpt?.data.card_holder,
-                     atmosOpt?.data.phone,
-                     atmosOpt?.data.card_token,
+                     atmosOtp?.data.pan,
+                     atmosOtp?.data.expiry,
+                     atmosOtp?.data.card_holder,
+                     atmosOtp?.data.phone,
+                     atmosOtp?.data.card_token,
                      code,
                      transaction_id,
                      chat_id,
                      checkUserCards?.length > 0 ? false : true,
-                     atmosOpt?.data.card_id
+                     atmosOtp?.data.card_id
                   )
 
                   card = addCard
@@ -244,6 +277,38 @@ module.exports = {
 
                if (card) {
                   if (checkUser?.expired >= current) {
+                     return res.status(200).json({
+                        status: 200,
+                        message: "Add card"
+                     })
+                  } else if (checkUser?.trial == 2) {
+                     const foundTrial = await model.foundTrial(checkUser?.source)
+
+                     if (foundTrial?.day > 0) {
+                        const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
+
+                        if (invateLink) {
+                           bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
+                              reply_markup: {
+                                 keyboard: [
+                                    [{
+                                       text: localText.myCardsBtn,
+                                       // web_app: { url: `https://web-page-one-theta.vercel.app/${chatId}` }
+                                    }],
+                                    [{
+                                       text: localText.historyPayBtn,
+                                    }],
+                                    [{
+                                       text: localText.contactAdmin,
+                                    }],
+                                 ],
+                                 resize_keyboard: true
+                              }
+                           }).then(async () => {
+                              await model.editStepTrial(chat_id, "mainSrean", false, addDayToCurrentDate(foundTrial?.day))
+                           })
+                        }
+                     }
                      return res.status(200).json({
                         status: 200,
                         message: "Add card"
@@ -295,7 +360,7 @@ module.exports = {
                               const editUserExpired = await model.editUserExpired(chat_id, expirationTimestamp, true)
 
                               if (addCheck && editUserExpired) {
-                                 const invateLink = await createOneTimeLink()
+                                 const invateLink = 'https://t.me/+mu0fD0VgGfZkMDc6'
 
                                  if (invateLink) {
                                     bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
@@ -340,14 +405,14 @@ module.exports = {
                      }
                   }
                } else {
-                  return res.status(400).json({
-                     status: 400,
-                     message: "Card cannot add"
+                  return res.status(302).json({
+                     status: 302,
+                     message: "Card found"
                   })
                }
 
             } else {
-               return res.status(400).json(atmosOpt.result)
+               return res.status(400).json(atmosOtp.result)
             }
          } else {
             return res.status(404).json({

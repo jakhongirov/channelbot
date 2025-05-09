@@ -4,6 +4,9 @@ const {
    bot
 } = require('../bot')
 const localText = require('../../text/text.json')
+const {
+   addOneMonthToCurrentDate
+} = require('../../config')
 
 
 const pay = async (user, userCard) => {
@@ -47,8 +50,8 @@ const pay = async (user, userCard) => {
                apply?.ofd_url
             )
 
-            const expirationTimestamp = addOneMonthToCurrentDate()
-            const editUserExpired = await model.editUserExpired(user?.chat_id, expirationTimestamp, true)
+            const expirationTimestamp = await addOneMonthToCurrentDate()
+            const editUserExpired = await model.editUserExpired(user?.chat_id, expirationTimestamp)
 
             if (addCheck && editUserExpired) {
                return "Success"
@@ -111,7 +114,7 @@ const paySubcribe = async () => {
                         const payed = await pay(user, card);
                         console.log(payed)
 
-                        if (payed === 'Success') {
+                        if (payed == 'Success') {
                            console.log(`Payment successful for user ${user.chat_id} with card ${card}`);
                            success = true; // Set success to true to stop further processing for this user
                         }
@@ -194,7 +197,7 @@ const paySubcribe = async () => {
                      }
 
                      if (!success) {
-                        bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+                        bot.kickChatMember(process.env.CHANNEL_ID, user?.chat_id)
                            .then(async () => {
                               console.log(`User with ID ${user?.chat_id} has been removed `);
                               await model.editUserSubcribe(user?.chat_id, false)
@@ -218,7 +221,7 @@ const paySubcribe = async () => {
       if (getUserWithoutDuration?.length > 0) {
          for (const user of getUserWithoutDuration) {
             bot.sendMessage(user?.chat_id, localText.cronDurationOffEndDate)
-            bot.banChatMember(process.env.CHANNEL_ID, user?.chat_id)
+            bot.kickChatMember(process.env.CHANNEL_ID, user?.chat_id)
                .then(async () => {
                   console.log(`User with ID ${user?.chat_id} has been removed `);
                   await model.editUserSubcribe(user?.chat_id, false)

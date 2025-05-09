@@ -2,6 +2,7 @@ CREATE TABLE admins (
    admin_id bigserial PRiMARY KEY,
    admin_email text not null,
    admin_password text not null,
+   admin_role text DEFAULT 'admin',
    admin_create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -14,6 +15,7 @@ CREATE TABLE users (
    subscribe boolean DEFAULT false,
    expired text,
    source text,
+   trial int DEFAULT 1,
    duration boolean DEFAULT false,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );

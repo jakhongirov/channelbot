@@ -9,11 +9,12 @@ module.exports = {
          const {
             limit,
             page,
-            phone
+            phone,
+            sort
          } = req.query
 
          if (limit && page) {
-            const users = await model.users(limit, page, phone)
+            const users = await model.users(limit, page, phone, sort)
 
             if (users?.length > 0) {
                return res.status(200).json({

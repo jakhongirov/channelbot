@@ -50,24 +50,23 @@ const users = (user_subcribe, source) => {
          *
       FROM
          users
-      ${
-         user_subcribe != 'all' && source != 'all' ? (
-            `
+      ${user_subcribe != 'all' && source != 'all' ? (
+         `
                WHERE
                   subscribe = ${user_subcribe}
                   AND source = '${source}'
             `
-         ) : user_subcribe != 'all' && source == 'all' ? (
-            `
+      ) : user_subcribe != 'all' && source == 'all' ? (
+         `
                WHERE
                   subscribe = ${user_subcribe}
             `
-         ): user_subcribe == 'all' && source != 'all' ? (
-            `
+      ) : user_subcribe == 'all' && source != 'all' ? (
+         `
                WHERE
                   source = '${source}'
             `
-         ) : ''
+      ) : ''
       };
    `;
 
@@ -131,9 +130,9 @@ const addNewUser = (
             $1, 
             $2, 
             $3, 
-            ARRAY[ $4 ] 
+            ARRAY[ $4 ]::bigint[] 
          ) RETURNING *;
-   `;
+`;
 
    return fetch(
       QUERY,
