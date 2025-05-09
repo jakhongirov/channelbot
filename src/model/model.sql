@@ -79,7 +79,7 @@ CREATE TABLE news (
 
 CREATE TABLE trial (
    id bigserial PRIMARY KEY,
-   source text,
+   source text UNIQUE,
    day int,
    create_at timestamptz DEFAULT CURRENT_TIMESTAMP
 );

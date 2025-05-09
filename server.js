@@ -167,7 +167,7 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
                      [{
                         text: localText?.ofertaLink,
                         web_app: {
-                           url: `https://atmos.uz/documents/`
+                           url: `https://telegra.ph/FOYDALANISH-SHARTLARI-ommaviy-oferta---TOP-TALANTS-05-03`
                         }
                      }],
                      [{
@@ -197,7 +197,7 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
                      [{
                         text: localText?.ofertaLink,
                         web_app: {
-                           url: `https://atmos.uz/documents/`
+                           url: `https://telegra.ph/FOYDALANISH-SHARTLARI-ommaviy-oferta---TOP-TALANTS-05-03`
                         }
                      }],
                      [{
@@ -225,7 +225,7 @@ bot.onText(/\/start ?(.*)?/, async (msg, match) => {
                   [{
                      text: localText?.ofertaLink,
                      web_app: {
-                        url: `https://atmos.uz/documents/`
+                        url: `https://telegra.ph/FOYDALANISH-SHARTLARI-ommaviy-oferta---TOP-TALANTS-05-03`
                      }
                   }],
                   [{
@@ -286,7 +286,7 @@ bot.on('chat_join_request', async (msg) => {
                [{
                   text: localText?.ofertaLink,
                   web_app: {
-                     url: `https://atmos.uz/documents/`
+                     url: `https://telegra.ph/FOYDALANISH-SHARTLARI-ommaviy-oferta---TOP-TALANTS-05-03`
                   }
                }],
                [{
@@ -871,7 +871,7 @@ bot.on('message', async (msg) => {
          if (checksUser?.length > 0) {
             const checks = checksUser.map(
                (check, index) =>
-               `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+                  `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
             ).join("\n\n");
 
             bot.sendMessage(chatId, checks, {
@@ -946,7 +946,7 @@ bot.on('message', async (msg) => {
       if (checksUser?.length > 0) {
          const checks = checksUser.map(
             (check, index) =>
-            `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
+               `${index + 1}. Sana: ${check?.formatted_time}\nSumma: ${formatBalanceWithSpaces(check?.amount)} sum\n${check?.ofd_url}`
          ).join("\n\n");
 
          bot.sendMessage(chatId, checks, {

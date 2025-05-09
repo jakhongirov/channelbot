@@ -1,7 +1,7 @@
 {
 	"startTextFromTrial": "Sizga %day% bepul",
-	"startTextFromChannel": "Assalomu alaykum! Siz Aziz Rahimov Yopiq klubiga qo'shilish uchun ushbu xabarni oldingiz!. Pastdagi tugmalar orqali oferta bilan tanishib chiqing va davom eting:",
-	"startTextFromBot": "Assalomu alaykum! Aziz Rahimov yopiq klubi botiga hush kelibsiz - oferta bilan tanishib chiqib, davom etishingiz mumkin!",
+	"startTextFromChannel": "Assalomu alaykum! Siz \"Top talants\" kanaliga qo'shilish uchun ushbu xabarni oldingiz!. Pastdagi tugmalar orqali oferta bilan tanishib chiqing va davom eting:",
+	"startTextFromBot": "Assalomu alaykum! \"Top talants\" yopiq klubi botiga hush kelibsiz - oferta bilan tanishib chiqib, davom etishingiz mumkin!",
 	"mainScreen": "Obunani boshqarish:",
 	"ofertaLink": "🔗 Ommaviy oferta",
 	"agree": "✅ Ofertaga roziman",
@@ -36,10 +36,11 @@
 	"unsubscribeText": "Obunangiz to'xtatildi. Muddati tugaganidan so'ng kanaldan chiqarilasiz",
 	"waitText": "Biroz kutib turing...",
 	"addCardActivatingSubscriptionText": "Obunani faollashtirish uchun karta qo'shishingiz lozim..",
-	"askFullContact": "Full Contact haqida bilasizmi? bilmasez bilvolin!!!",
+	
+	"askFullContact": "Siz \"Top Talants\" kanali haqida bilasizmi ?",
 	"askFullContactYesBtn": "Ha, bilaman",
-	"askFullContactNoBtn": "Bilishni hohliman",
-	"aboutFullContact": "nimadr nimadir nimadrdeeee qanaqadir uzuuuuuuun text",
+	"askFullContactNoBtn": "Bilishni hohlayman",
+	"aboutFullContact": "Top talants - frilanserlar uchun yopiq hamjamiyat bo'lib, bu yerda daromadni karra o'stirish, yangi mijozlar topish va professional karyerada yuksak marralarga chiqish uchun birlashamiz!",
 
 	"cronTextBefore2day": "Sizning obunangiz yangilanishiga 2 kun qoldi. Kartangizda mablag' yetarli bo'lsa, avtomatik yangilanadi..",
 	"cronTextBefore1day": "Sizning obunangiz tugashiga 1 kun qoldi.  Kartangizda mablag' yetarli bo'lsa, avtomatik yangilanadi..",
