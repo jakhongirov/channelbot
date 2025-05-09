@@ -126,7 +126,7 @@ module.exports = {
                      const foundTrial = await model.foundTrial(checkUser?.source)
 
                      if (foundTrial?.day > 0) {
-                        const invateLink = 'https://t.me/+X_i758cEkphkYTQy'
+                        const invateLink = 'https://t.me/+nDmXWvOKO6BhYjJi'
 
                         if (invateLink) {
                            bot.sendMessage(chat_id, `${localText.getLinkText} ${invateLink}`, {
