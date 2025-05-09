@@ -297,7 +297,7 @@ bot.on('chat_join_request', async (msg) => {
 
          if (!foundUser) {
             await model.createUser(
-               chatId,
+               userId,
                "start",
                "channel_link"
             )
@@ -667,7 +667,7 @@ bot.on('contact', async (msg) => {
             reply_markup: {
                keyboard: [
                   [{
-                     text:localText.sendContactBtn,
+                     text: localText.sendContactBtn,
                      request_contact: true
                   }]
                ],
